@@ -1,0 +1,162 @@
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate
+} from "react-router-dom";
+
+import "./App.css";
+import DashboardLayout
+  from "./layouts/DashboardLayout";
+
+import ProtectedRoute
+  from "./components/ProtectedRoute";
+
+import Dashboard
+  from "./pages/Dashboard";
+
+import Invitations
+  from "./pages/Invitations";
+
+import Templates
+  from "./pages/Templates";
+
+import Guests
+  from "./pages/Guests";
+
+import Analytics
+  from "./pages/Analytics";
+
+import Favorites
+  from "./pages/Favorites";
+
+import Drafts
+  from "./pages/Drafts";
+
+import Settings
+  from "./pages/Settings";
+
+import CreateInvitation
+  from "./pages/CreateInvitation";
+
+import PublicInvitation
+  from "./pages/PublicInvitation";
+
+import InvitationDetails
+  from "./pages/InvitationDetails";
+
+import Login
+  from "./pages/Login";
+
+import Register
+  from "./pages/Register";
+
+
+function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        {/* Public Authentication */}
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+
+
+        {/* Public Invitation */}
+
+        <Route
+          path="/invite/:slug"
+          element={<PublicInvitation />}
+        />
+
+
+        {/* Protected Routes */}
+
+        <Route element={<ProtectedRoute />}>
+
+          <Route
+            element={
+              <DashboardLayout />
+            }
+          >
+
+            <Route
+  path="/"
+  element={<Navigate to="/login" replace />}
+/>
+
+            <Route
+              path="/dashboard"
+              element={<Dashboard />}
+            />
+
+            <Route
+              path="/invitations"
+              element={<Invitations />}
+            />
+
+            <Route
+              path="/invitations/:id"
+              element={<InvitationDetails />}
+            />
+
+            <Route
+              path="/invitations/create"
+              element={<CreateInvitation />}
+            />
+
+            <Route
+              path="/invitations/create/:templateId"
+              element={<CreateInvitation />}
+            />
+
+            <Route
+              path="/templates"
+              element={<Templates />}
+            />
+
+            <Route
+              path="/guests"
+              element={<Guests />}
+            />
+
+            <Route
+              path="/analytics"
+              element={<Analytics />}
+            />
+
+            <Route
+              path="/favorites"
+              element={<Favorites />}
+            />
+
+            <Route
+              path="/drafts"
+              element={<Drafts />}
+            />
+
+            <Route
+              path="/settings"
+              element={<Settings />}
+            />
+
+          </Route>
+
+        </Route>
+
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
+
+export default App;
