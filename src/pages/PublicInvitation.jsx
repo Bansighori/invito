@@ -4,7 +4,7 @@ import {
   useState
 } from "react";
 
-import axios from "axios";
+import api from "../api/axios";
 
 import {
   LoaderCircle
@@ -86,8 +86,8 @@ function PublicInvitation() {
         setError("");
 
         const response =
-          await axios.get(
-            `http://localhost:5000/api/invitations/public/${slug}`
+          await api.get(
+            `/invitations/public/${slug}`
           );
 
         setInvitation(

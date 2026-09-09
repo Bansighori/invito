@@ -7,7 +7,7 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import axios from "axios";
+import { login } from "../api/authApi";
 
 
 function Login() {
@@ -60,12 +60,11 @@ function Login() {
 
 
     try {
+      localStorage.removeItem("invitoToken");
+      localStorage.removeItem("invitoUser");
 
       const response =
-        await axios.post(
-          "http://localhost:5000/api/auth/login",
-          formData
-        );
+        await login(formData);
 
 
       /*

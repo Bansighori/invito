@@ -10,7 +10,7 @@ import {
   Plus
 } from "lucide-react";
 
-import axios from "axios";
+import api from "../api/axios";
 
 import {
   useNavigate
@@ -59,8 +59,8 @@ function Templates() {
         setError("");
 
         const response =
-          await axios.get(
-            "http://localhost:5000/api/templates"
+          await api.get(
+            "/templates"
           );
 
         setTemplates(

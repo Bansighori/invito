@@ -3,7 +3,7 @@ import {
   useState
 } from "react";
 
-import axios from "axios";
+import api from "../api/axios";
 
 import {
   ArrowLeft,
@@ -54,8 +54,8 @@ function InvitationDetails() {
       // Get invitation
 
       const invitationResponse =
-        await axios.get(
-          `http://localhost:5000/api/invitations/${id}`
+        await api.get(
+          `/invitations/${id}`
         );
 
 
@@ -71,8 +71,8 @@ function InvitationDetails() {
       // Get guests
 
       const guestsResponse =
-        await axios.get(
-          `http://localhost:5000/api/guests/invitation/${id}`
+        await api.get(
+          `/guests/invitation/${id}`
         );
 
 

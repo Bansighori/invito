@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 
 function RSVPForm({ invitationId }) {
@@ -44,8 +44,8 @@ function RSVPForm({ invitationId }) {
     try {
 
       const response =
-        await axios.post(
-          "http://localhost:5000/api/guests",
+        await api.post(
+          "/guests",
           {
             invitationId,
 

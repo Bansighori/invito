@@ -3,7 +3,7 @@ import {
   useState
 } from "react";
 
-import axios from "axios";
+import api from "../api/axios";
 
 import TemplateCard from "../components/TemplateCard";
 
@@ -73,8 +73,8 @@ function Favorites() {
 
 
       const response =
-        await axios.get(
-          "http://localhost:5000/api/templates"
+        await api.get(
+          "/templates"
         );
 
 

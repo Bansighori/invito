@@ -7,7 +7,7 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import axios from "axios";
+import { register } from "../api/authApi";
 
 
 function Register() {
@@ -61,12 +61,11 @@ function Register() {
 
 
     try {
+      localStorage.removeItem("invitoToken");
+      localStorage.removeItem("invitoUser");
 
       const response =
-        await axios.post(
-          "http://localhost:5000/api/auth/register",
-          formData
-        );
+        await register(formData);
 
 
       /*

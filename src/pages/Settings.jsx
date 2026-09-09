@@ -11,7 +11,10 @@ import {
   KeyRound
 } from "lucide-react";
 
-import api from "../api/axios";
+import {
+  updateProfile,
+  changePassword
+} from "../api/authApi";
 
 
 function Settings() {
@@ -142,13 +145,10 @@ function Settings() {
       // Send updated name to backend
 
       const response =
-        await api.put(
-          "/auth/profile",
-          {
-            name:
-              user.name.trim()
-          }
-        );
+        await updateProfile({
+          name:
+            user.name.trim()
+        });
 
 
       // Get updated user
@@ -300,19 +300,16 @@ function Settings() {
 
 
       const response =
-        await api.put(
-          "/auth/change-password",
-          {
-            currentPassword:
-              passwordData.currentPassword,
+        await changePassword({
+          currentPassword:
+            passwordData.currentPassword,
 
-            newPassword:
-              passwordData.newPassword,
+          newPassword:
+            passwordData.newPassword,
 
-            confirmPassword:
-              passwordData.confirmPassword
-          }
-        );
+          confirmPassword:
+            passwordData.confirmPassword
+        });
 
 
 
