@@ -217,6 +217,17 @@ function Login() {
               : "Login"}
 
           </button>
+          <p
+  className="auth-switch"
+  style={{
+    textAlign: "right",
+    marginTop: "10px"
+  }}
+>
+  <Link to="/forgot-password">
+    Forgot Password?
+  </Link>
+</p>
 
         </form>
 

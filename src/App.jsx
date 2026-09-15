@@ -32,6 +32,7 @@ import Favorites
 
 import Drafts
   from "./pages/Drafts";
+  import PaymentHistory from "./pages/PaymentHistory";
 
 import Settings
   from "./pages/Settings";
@@ -45,12 +46,13 @@ import PublicInvitation
 import InvitationDetails
   from "./pages/InvitationDetails";
 
+
 import Login
   from "./pages/Login";
 
 import Register
   from "./pages/Register";
-
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -69,7 +71,10 @@ function App() {
           path="/register"
           element={<Register />}
         />
-
+        <Route
+  path="/forgot-password"
+  element={<ForgotPassword />}
+/>
 
         {/* Public Invitation */}
 
@@ -143,7 +148,10 @@ function App() {
               path="/drafts"
               element={<Drafts />}
             />
-
+<Route
+  path="/payment-history"
+  element={<PaymentHistory />}
+/>
             <Route
               path="/settings"
               element={<Settings />}

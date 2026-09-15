@@ -8,7 +8,7 @@ import {
   FileText,
   Settings,
   LogOut,
-  Sparkles
+  Sparkles,CreditCard
 } from "lucide-react";
 
 import {
@@ -160,13 +160,30 @@ function Sidebar() {
             <span>
               Drafts
             </span>
-
+            
           </NavLink>
-
+          
         </nav>
 
       </div>
+      <button
+  className="settings-payment-history"
+  onClick={() =>
+    navigate("/payment-history")
+  }
+>
+  <CreditCard size={18} />
 
+  <div>
+    <strong>
+      Payment History
+    </strong>
+
+    <span>
+      View your successful and failed payments
+    </span>
+  </div>
+</button>
 
       <div className="sidebar-bottom">
 

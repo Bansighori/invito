@@ -1,12 +1,33 @@
 import { MapPin } from "lucide-react";
 
 function RoyalWedding({ data, onRSVP }) {
+
+  const locationText = [
+    data.venue,
+    data.address
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const locationUrl = locationText
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        locationText
+      )}`
+    : null;
+
   return (
     <>
       <style>{`
+
+        /* =========================================
+           ROYAL WEDDING
+        ========================================= */
+
         .royal-wedding {
           width: 650px;
-          min-height: 850px;
+          height: 850px;
+          max-width: 100%;
+
           box-sizing: border-box;
           position: relative;
           overflow: hidden;
@@ -25,152 +46,236 @@ function RoyalWedding({ data, onRSVP }) {
             );
 
           color: #342516;
-          font-family: Georgia, "Times New Roman", serif;
+
+          font-family:
+            Georgia,
+            "Times New Roman",
+            serif;
 
           display: flex;
+
           justify-content: center;
+
           align-items: center;
 
-          padding: 55px;
+          padding: 45px 50px;
         }
+
+
+        /* =========================================
+           BORDERS
+        ========================================= */
 
         .royal-wedding::before {
           content: "";
+
           position: absolute;
+
           inset: 20px;
 
-          border: 2px solid #b18a45;
+          border:
+            2px solid
+            #b18a45;
 
           pointer-events: none;
         }
 
         .royal-wedding::after {
           content: "";
-          position: absolute;
-          inset: 30px;
 
-          border: 1px solid rgba(177, 138, 69, 0.55);
+          position: absolute;
+
+          inset: 29px;
+
+          border:
+            1px solid
+            rgba(177, 138, 69, 0.55);
 
           pointer-events: none;
         }
 
+
+        /* =========================================
+           CORNERS
+        ========================================= */
+
         .royal-corner {
           position: absolute;
 
-          width: 95px;
-          height: 95px;
+          width: 75px;
+
+          height: 75px;
 
           border-color: #b18a45;
+
           border-style: solid;
 
           opacity: 0.7;
+
+          pointer-events: none;
         }
 
         .royal-corner-one {
-          top: 35px;
-          left: 35px;
+          top: 30px;
+          left: 30px;
 
-          border-width: 3px 0 0 3px;
+          border-width:
+            3px 0 0 3px;
         }
 
         .royal-corner-two {
-          top: 35px;
-          right: 35px;
+          top: 30px;
+          right: 30px;
 
-          border-width: 3px 3px 0 0;
+          border-width:
+            3px 3px 0 0;
         }
 
         .royal-corner-three {
-          bottom: 35px;
-          left: 35px;
+          bottom: 30px;
+          left: 30px;
 
-          border-width: 0 0 3px 3px;
+          border-width:
+            0 0 3px 3px;
         }
 
         .royal-corner-four {
-          bottom: 35px;
-          right: 35px;
+          bottom: 30px;
+          right: 30px;
 
-          border-width: 0 3px 3px 0;
+          border-width:
+            0 3px 3px 0;
         }
+
+
+        /* =========================================
+           CONTENT
+        ========================================= */
 
         .royal-wedding-content {
           width: 100%;
-          max-width: 480px;
+
+          max-width: 450px;
 
           text-align: center;
 
           position: relative;
+
           z-index: 2;
+
+          display: flex;
+
+          flex-direction: column;
+
+          align-items: center;
         }
+
+
+        /* =========================================
+           CROWN
+        ========================================= */
 
         .royal-crown {
-          font-size: 42px;
-          margin-bottom: 15px;
+          font-size: 34px;
+
+          margin-bottom: 9px;
 
           color: #b18a45;
+
+          line-height: 1;
         }
 
+
+        /* =========================================
+           SMALL TITLE
+        ========================================= */
+
         .royal-small-title {
-          margin: 0 0 25px;
+          margin: 0 0 17px;
 
           font-family: Arial, sans-serif;
-          font-size: 11px;
+
+          font-size: 9px;
+
           font-weight: 600;
 
-          letter-spacing: 5px;
+          letter-spacing: 4px;
 
           color: #8d6b35;
         }
 
+
+        /* =========================================
+           TITLE
+        ========================================= */
+
         .royal-wedding-title {
           margin: 0;
 
-          font-size: 23px;
+          font-size: 20px;
+
           font-weight: normal;
 
-          letter-spacing: 6px;
+          letter-spacing: 5px;
+
           text-transform: uppercase;
 
           color: #5d4425;
         }
 
+
+        /* =========================================
+           DIVIDER
+        ========================================= */
+
         .royal-divider {
           display: flex;
+
           align-items: center;
+
           justify-content: center;
 
-          gap: 13px;
+          gap: 10px;
 
-          margin: 25px auto;
+          margin: 18px auto;
         }
 
         .royal-divider span {
           display: block;
 
-          width: 70px;
+          width: 55px;
+
           height: 1px;
 
           background: #b18a45;
         }
 
         .royal-divider b {
-          font-size: 18px;
+          font-size: 15px;
+
           font-weight: normal;
 
           color: #b18a45;
         }
 
+
+        /* =========================================
+           NAMES
+        ========================================= */
+
         .royal-names {
           margin: 0;
 
           display: flex;
+
           flex-direction: column;
 
-          gap: 8px;
+          gap: 4px;
 
-          font-size: 53px;
-          line-height: 1.05;
+          font-size: 48px;
+
+          line-height: 0.98;
+
           font-weight: normal;
 
           color: #38281a;
@@ -181,46 +286,61 @@ function RoyalWedding({ data, onRSVP }) {
         }
 
         .royal-names em {
-          font-size: 25px;
+          font-size: 22px;
+
           font-style: italic;
 
           color: #b18a45;
         }
 
+
+        /* =========================================
+           INVITATION TEXT
+        ========================================= */
+
         .royal-invitation-text {
-          margin: 28px auto 0;
+          margin: 19px auto 0;
 
-          max-width: 380px;
+          max-width: 360px;
 
-          font-size: 15px;
-          line-height: 1.8;
+          font-size: 13px;
+
+          line-height: 1.65;
 
           color: #725d42;
         }
 
+
+        /* =========================================
+           DATE / TIME
+        ========================================= */
+
         .royal-details {
           display: flex;
+
           justify-content: center;
 
-          gap: 45px;
+          gap: 40px;
 
-          margin-top: 35px;
+          margin-top: 24px;
         }
 
         .royal-detail {
-          min-width: 135px;
+          min-width: 115px;
         }
 
         .royal-detail small {
           display: block;
 
-          margin-bottom: 8px;
+          margin-bottom: 5px;
 
           font-family: Arial, sans-serif;
-          font-size: 9px;
+
+          font-size: 8px;
+
           font-weight: 700;
 
-          letter-spacing: 3px;
+          letter-spacing: 2.5px;
 
           color: #9a7842;
         }
@@ -228,107 +348,156 @@ function RoyalWedding({ data, onRSVP }) {
         .royal-detail strong {
           display: block;
 
-          font-size: 17px;
+          font-size: 15px;
+
           font-weight: normal;
 
           color: #3d2b1b;
         }
 
+
+        /* =========================================
+           LOCATION
+        ========================================= */
+
         .royal-location {
-          margin-top: 32px;
+          margin-top: 22px;
+
+          text-align: center;
         }
 
         .royal-location strong {
           display: block;
 
-          font-size: 20px;
+          font-size: 18px;
+
           font-weight: normal;
 
           color: #4a341f;
         }
 
-        .royal-location span {
+        .royal-location-address {
           display: block;
 
-          margin-top: 7px;
+          margin-top: 5px;
 
           font-family: Arial, sans-serif;
-          font-size: 11px;
-          letter-spacing: 1px;
+
+          font-size: 10px;
+
+          letter-spacing: 0.5px;
 
           color: #8b765d;
         }
 
+
+        /* =========================================
+           GOOGLE MAP LINK
+        ========================================= */
+
         .royal-location-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+          display: inline-flex;
 
-  margin-top: 12px;
+          align-items: center;
 
-  color: #9a7842;
-  text-decoration: none;
+          justify-content: center;
 
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 600;
+          gap: 5px;
 
-  letter-spacing: 1px;
+          margin-top: 8px;
 
-  transition: all 0.2s ease;
-}
+          color: #9a7842;
 
-.royal-location-link:hover {
-  color: #765625;
-  transform: translateY(-1px);
-}
+          text-decoration: none;
 
-.royal-location-link svg {
-  flex-shrink: 0;
-}
+          font-family: Arial, sans-serif;
+
+          font-size: 10px;
+
+          font-weight: 600;
+
+          letter-spacing: 0.8px;
+
+          transition:
+            color 0.2s ease,
+            transform 0.2s ease;
+        }
+
+        .royal-location-link:hover {
+          color: #765625;
+
+          transform: translateY(-1px);
+        }
+
+        .royal-location-link svg {
+          flex-shrink: 0;
+        }
+
+
+        /* =========================================
+           MESSAGE
+        ========================================= */
 
         .royal-message {
-          max-width: 390px;
+          max-width: 360px;
 
-          margin: 22px auto 0;
+          margin: 13px auto 0;
 
-          font-size: 13px;
-          line-height: 1.7;
+          font-size: 11px;
+
+          line-height: 1.55;
 
           font-style: italic;
 
           color: #765f43;
         }
 
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
         .royal-footer {
-          margin-top: 28px;
+          margin-top: 15px;
 
           font-family: Arial, sans-serif;
-          font-size: 10px;
+
+          font-size: 8px;
+
           font-weight: 600;
 
-          letter-spacing: 4px;
+          letter-spacing: 3px;
 
           color: #9a7842;
         }
 
+
+        /* =========================================
+           RSVP
+        ========================================= */
+
         .royal-rsvp-button {
-          margin-top: 25px;
+          margin-top: 13px;
 
-          padding: 13px 38px;
+          padding: 10px 30px;
 
-          border: 1px solid #9b7537;
+          border:
+            1px solid
+            #9b7537;
+
           border-radius: 0;
 
           background: #9b7537;
+
           color: white;
 
           font-family: Arial, sans-serif;
-          font-size: 11px;
+
+          font-size: 9px;
+
           font-weight: 700;
 
-          letter-spacing: 3px;
+          letter-spacing: 2.5px;
 
           cursor: pointer;
 
@@ -339,15 +508,25 @@ function RoyalWedding({ data, onRSVP }) {
 
         .royal-rsvp-button:hover {
           background: #765625;
+
           transform: translateY(-2px);
         }
 
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
         @media (max-width: 700px) {
+
           .royal-wedding {
             width: 100%;
+
+            height: auto;
+
             min-height: 100vh;
 
-            padding: 45px 30px;
+            padding: 40px 25px;
           }
 
           .royal-wedding::before {
@@ -359,7 +538,7 @@ function RoyalWedding({ data, onRSVP }) {
           }
 
           .royal-names {
-            font-size: 42px;
+            font-size: 40px;
           }
 
           .royal-details {
@@ -367,17 +546,32 @@ function RoyalWedding({ data, onRSVP }) {
           }
 
           .royal-detail strong {
-            font-size: 15px;
+            font-size: 14px;
+          }
+
+          .royal-corner {
+            width: 55px;
+            height: 55px;
           }
         }
+
       `}</style>
+
 
       <div className="royal-wedding">
 
+        {/* Decorative corners */}
+
         <div className="royal-corner royal-corner-one" />
+
         <div className="royal-corner royal-corner-two" />
+
         <div className="royal-corner royal-corner-three" />
+
         <div className="royal-corner royal-corner-four" />
+
+
+        {/* Main content */}
 
         <div className="royal-wedding-content">
 
@@ -385,21 +579,32 @@ function RoyalWedding({ data, onRSVP }) {
             ♕
           </div>
 
+
           <p className="royal-small-title">
             TOGETHER WITH THEIR FAMILIES
           </p>
+
 
           <h2 className="royal-wedding-title">
             The Wedding Celebration
           </h2>
 
+
           <div className="royal-divider">
+
             <span />
-            <b>✦</b>
+
+            <b>
+              ✦
+            </b>
+
             <span />
+
           </div>
 
+
           <h1 className="royal-names">
+
             <span>
               {data.brideName || "Bride"}
             </span>
@@ -411,7 +616,9 @@ function RoyalWedding({ data, onRSVP }) {
             <span>
               {data.groomName || "Groom"}
             </span>
+
           </h1>
+
 
           <p className="royal-invitation-text">
             Request the pleasure of your company
@@ -419,9 +626,11 @@ function RoyalWedding({ data, onRSVP }) {
             as they begin their beautiful journey together.
           </p>
 
+
           <div className="royal-details">
 
             <div className="royal-detail">
+
               <small>
                 DATE
               </small>
@@ -429,9 +638,12 @@ function RoyalWedding({ data, onRSVP }) {
               <strong>
                 {data.eventDate || "DATE"}
               </strong>
+
             </div>
 
+
             <div className="royal-detail">
+
               <small>
                 TIME
               </small>
@@ -439,45 +651,58 @@ function RoyalWedding({ data, onRSVP }) {
               <strong>
                 {data.eventTime || "TIME"}
               </strong>
+
             </div>
 
           </div>
 
+
           <div className="royal-location">
 
-  <strong>
-    {data.venue || "VENUE"}
-  </strong>
+            <strong>
+              {data.venue || "VENUE"}
+            </strong>
 
-  <span>
-    {data.address || "ADDRESS"}
-  </span>
+            <span className="royal-location-address">
+              {data.address || "ADDRESS"}
+            </span>
 
-  {data.venue && (
-    <a
-      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        `${data.venue}, ${data.address || ""}`
-      )}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="royal-location-link"
-    >
-      <MapPin size={16} />
-      <span>View Location</span>
-    </a>
-  )}
 
-</div>
+            {locationUrl && (
+
+              <a
+                href={locationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="royal-location-link"
+              >
+
+                <MapPin size={15} />
+
+                <span>
+                  View Location
+                </span>
+
+              </a>
+
+            )}
+
+          </div>
+
 
           {data.message && (
+
             <p className="royal-message">
               {data.message}
             </p>
+
           )}
+
 
           <p className="royal-footer">
             WITH LOVE • WITH JOY • FOREVER
           </p>
+
 
           <button
             type="button"

@@ -24,14 +24,19 @@ const authMiddleware = (req, res, next) => {
       });
     }
 
-    const decoded =
-      jwt.verify(
-        token,
-        process.env.JWT_SECRET
-      );
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    // JWT contains "id"
+    // Provide both properties because
+    // different controllers currently use
+    // req.user.id and req.user.userId
 
     req.user = {
-      userId: decoded.userId
+      id: decoded.id,
+      userId: decoded.id
     };
 
     next();

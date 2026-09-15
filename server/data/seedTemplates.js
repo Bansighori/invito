@@ -1,27 +1,40 @@
 const dotenv = require("dotenv");
+const path = require("path");
 
 const connectDB = require("../config/db");
+const {
+  syncTemplates
+} = require("../config/seedTemplatesIfEmpty");
 const Template = require("../models/Template");
 const templates = require("./templates");
 
-dotenv.config();
-
-/* =========================
-   SEED TEMPLATES
-========================= */
+dotenv.config({
+  path: path.join(__dirname, "..", ".env")
+});
 
 const seedTemplates = async () => {
   try {
     await connectDB();
 
-    await Template.deleteMany();
+    const shouldReset =
+      process.argv.includes("--reset");
 
-    await Template.insertMany(
-      templates
-    );
+    if (shouldReset) {
+      await Template.deleteMany();
+      await Template.insertMany(templates);
+
+      console.log(
+        `Reset complete. Inserted ${templates.length} templates.`
+      );
+
+      process.exit(0);
+      return;
+    }
+
+    const added = await syncTemplates();
 
     console.log(
-      "Templates inserted successfully"
+      `Templates synced. Added ${added} new template(s). Total available: ${templates.length}.`
     );
 
     process.exit(0);

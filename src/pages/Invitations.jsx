@@ -24,9 +24,7 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import WeddingClassic from "../templates/WeddingClassic";
-import BirthdayModern from "../templates/BirthdayModern";
-import EngagementForever from "../templates/EngagementForever";
+import TemplateRenderer from "../components/TemplateRenderer";
 
 
 function Invitations() {
@@ -59,76 +57,15 @@ function Invitations() {
   // =========================================
 
   const getTemplatePreview =
-    (invitation) => {
-
-      const template =
-        invitation.templateId;
-
-      const component =
-        template?.component;
-
-
-      if (
-        component === "WeddingClassic" ||
-        invitation.category === "Wedding"
-      ) {
-
-        return (
-          <WeddingClassic
-            data={
-              invitation.data || {}
-            }
-          />
-        );
-
-      }
-
-
-      if (
-        component === "BirthdayModern" ||
-        invitation.category === "Birthday"
-      ) {
-
-        return (
-          <BirthdayModern
-            data={
-              invitation.data || {}
-            }
-          />
-        );
-
-      }
-
-
-      if (
-        component === "EngagementForever" ||
-        invitation.category === "Engagement"
-      ) {
-
-        return (
-          <EngagementForever
-            data={
-              invitation.data || {}
-            }
-          />
-        );
-
-      }
-
-
-      return (
-        <div className="invitation-preview-fallback">
-
-          <FileText size={38} />
-
-          <span>
-            Invitation Preview
-          </span>
-
-        </div>
-      );
-
-    };
+    (invitation) => (
+      <TemplateRenderer
+        component={
+          invitation.templateId?.component
+        }
+        category={invitation.category}
+        data={invitation.data || {}}
+      />
+    );
 
 
   // =========================================

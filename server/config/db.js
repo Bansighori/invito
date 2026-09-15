@@ -14,14 +14,25 @@ const connectDB = async () => {
     return cached.conn;
   }
 
-  if (!process.env.MONGO_URI) {
+  const mongoUri = process.env.MONGO_URI;
+
+  if (!mongoUri) {
     throw new Error("MONGO_URI is not defined");
   }
 
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(
-      process.env.MONGO_URI
+  if (
+    mongoUri.includes("127.0.0.1") ||
+    mongoUri.includes("localhost")
+  ) {
+    throw new Error(
+      "MONGO_URI points to localhost and cannot be used on Vercel"
     );
+  }
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(mongoUri, {
+      serverSelectionTimeoutMS: 10000
+    });
   }
 
   cached.conn = await cached.promise;

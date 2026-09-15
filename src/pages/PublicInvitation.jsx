@@ -15,34 +15,7 @@ import {
 } from "react-router-dom";
 
 
-// ==========================================
-// ORIGINAL TEMPLATES
-// ==========================================
-
-import WeddingClassic from "../templates/WeddingClassic";
-import BirthdayModern from "../templates/BirthdayModern";
-import EngagementForever from "../templates/EngagementForever";
-
-
-// ==========================================
-// NEW TEMPLATES
-// ==========================================
-
-import RoyalWedding from "../templates/RoyalWedding";
-import GardenWedding from "../templates/GardenWedding";
-import MinimalWedding from "../templates/MinimalWedding";
-
-import BirthdayPop from "../templates/BirthdayPop";
-import BirthdayElegant from "../templates/BirthdayElegant";
-
-import BabyBloom from "../templates/BabyBloom";
-import LittleStar from "../templates/LittleStar";
-
-import PartyNight from "../templates/PartyNight";
-
-import EngagementRose from "../templates/EngagementRose";
-
-import CorporateEvent from "../templates/CorporateEvent";
+import TemplateRenderer from "../components/TemplateRenderer";
 
 
 import html2canvas from "html2canvas";
@@ -251,276 +224,24 @@ if (locationLink) {
 };
 
   const getTemplateComponent = () => {
-
     if (!invitation) {
       return null;
     }
 
-
     const template =
       invitation.templateId;
-
 
     const templateData =
       invitation.data || {};
 
-
-    switch (template?.component) {
-
-
-      // ======================================
-      // ORIGINAL WEDDING
-      // ======================================
-
-      case "WeddingClassic":
-
-        return (
-          <WeddingClassic
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // ORIGINAL BIRTHDAY
-      // ======================================
-
-      case "BirthdayModern":
-
-        return (
-          <BirthdayModern
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // ORIGINAL ENGAGEMENT
-      // ======================================
-
-      case "EngagementForever":
-
-        return (
-          <EngagementForever
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // ROYAL WEDDING
-      // ======================================
-
-      case "RoyalWedding":
-
-        return (
-          <RoyalWedding
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // GARDEN WEDDING
-      // ======================================
-
-      case "GardenWedding":
-
-        return (
-          <GardenWedding
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // MINIMAL WEDDING
-      // ======================================
-
-      case "MinimalWedding":
-
-        return (
-          <MinimalWedding
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // BIRTHDAY POP
-      // ======================================
-
-      case "BirthdayPop":
-
-        return (
-          <BirthdayPop
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // BIRTHDAY ELEGANT
-      // ======================================
-
-      case "BirthdayElegant":
-
-        return (
-          <BirthdayElegant
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // BABY BLOOM
-      // ======================================
-
-      case "BabyBloom":
-
-        return (
-          <BabyBloom
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // LITTLE STAR
-      // ======================================
-
-      case "LittleStar":
-
-        return (
-          <LittleStar
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // PARTY NIGHT
-      // ======================================
-
-      case "PartyNight":
-
-        return (
-          <PartyNight
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // ENGAGEMENT ROSE
-      // ======================================
-
-      case "EngagementRose":
-
-        return (
-          <EngagementRose
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // CORPORATE EVENT
-      // ======================================
-
-      case "CorporateEvent":
-
-        return (
-          <CorporateEvent
-            data={templateData}
-            onRSVP={() =>
-              setShowRSVP(true)
-            }
-          />
-        );
-
-
-      // ======================================
-      // DEFAULT
-      // ======================================
-
-      default:
-
-        return (
-          <div
-            style={{
-              minHeight: "400px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              gap: "10px",
-              padding: "40px",
-              textAlign: "center"
-            }}
-          >
-
-            <h2>
-              Template not available
-            </h2>
-
-            <p>
-              This invitation template
-              is not available.
-            </p>
-
-            <p
-              style={{
-                fontSize: "13px",
-                opacity: 0.6
-              }}
-            >
-              Template:
-              {" "}
-              {template?.component || "Unknown"}
-            </p>
-
-          </div>
-        );
-
-    }
-
+    return (
+      <TemplateRenderer
+        component={template?.component}
+        category={invitation.category}
+        data={templateData}
+        onRSVP={() => setShowRSVP(true)}
+      />
+    );
   };
 
 

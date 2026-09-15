@@ -21,25 +21,7 @@ import {
   useSearchParams
 } from "react-router-dom";
 
-import WeddingClassic from "../templates/WeddingClassic";
-import BirthdayModern from "../templates/BirthdayModern";
-import EngagementForever from "../templates/EngagementForever";
-
-import RoyalWedding from "../templates/RoyalWedding";
-import GardenWedding from "../templates/GardenWedding";
-import MinimalWedding from "../templates/MinimalWedding";
-
-import BirthdayPop from "../templates/BirthdayPop";
-import BirthdayElegant from "../templates/BirthdayElegant";
-
-import BabyBloom from "../templates/BabyBloom";
-import LittleStar from "../templates/LittleStar";
-
-import PartyNight from "../templates/PartyNight";
-
-import EngagementRose from "../templates/EngagementRose";
-
-import CorporateEvent from "../templates/CorporateEvent";
+import TemplateRenderer from "../components/TemplateRenderer";
 
 
 function CreateInvitation() {
@@ -327,156 +309,18 @@ function CreateInvitation() {
 
 
   const getTemplateComponent = () => {
-
     if (!template) {
       return null;
     }
 
-
-    switch (template.component) {
-
-      case "WeddingClassic":
-
-        return (
-          <WeddingClassic
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-
-      case "BirthdayModern":
-
-        return (
-          <BirthdayModern
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-
-      case "EngagementForever":
-
-        return (
-          <EngagementForever
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-      case "RoyalWedding":
-
-        return (
-          <RoyalWedding
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-
-      case "GardenWedding":
-
-        return (
-          <GardenWedding
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-
-      case "MinimalWedding":
-
-        return (
-          <MinimalWedding
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-      case "BirthdayPop":
-
-        return (
-          <BirthdayPop
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-
-      case "BirthdayElegant":
-
-        return (
-          <BirthdayElegant
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-      case "BabyBloom":
-
-        return (
-          <BabyBloom
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-
-      case "LittleStar":
-
-        return (
-          <LittleStar
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-      case "PartyNight":
-
-        return (
-          <PartyNight
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-      case "EngagementRose":
-
-        return (
-          <EngagementRose
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-      case "CorporateEvent":
-
-        return (
-          <CorporateEvent
-            data={formData}
-            onRSVP={() => {}}
-          />
-        );
-
-      default:
-
-        return (
-          <div className="template-not-available">
-
-            <h3>
-              Template design not available
-            </h3>
-
-            <p>
-              The design for this template
-              has not been created yet.
-            </p>
-
-          </div>
-        );
-
-    }
-
+    return (
+      <TemplateRenderer
+        component={template.component}
+        category={template.category}
+        data={formData}
+        onRSVP={() => {}}
+      />
+    );
   };
 
   useEffect(() => {

@@ -16,7 +16,7 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import api from "../api/axios";
+import TemplateRenderer from "../components/TemplateRenderer";
 
 
 function Drafts() {
@@ -431,7 +431,17 @@ function Drafts() {
 
                 <div className="invitation-card-preview">
 
-                  <FileText size={38} />
+                  <div className="invitation-card-template">
+
+                    <TemplateRenderer
+                      component={
+                        draft.templateId?.component
+                      }
+                      category={draft.category}
+                      data={draft.data || {}}
+                    />
+
+                  </div>
 
                 </div>
 

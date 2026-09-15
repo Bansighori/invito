@@ -2,7 +2,8 @@ const express = require("express");
 
 const {
   updateProfile,
-  changePassword
+  changePassword,
+  getCurrentUser
 } = require("../controllers/authController");
 
 const authMiddleware =
@@ -10,9 +11,42 @@ const authMiddleware =
 
 const router = express.Router();
 
+
+// ========================================
+// AUTHENTICATION MIDDLEWARE
+// ========================================
+
 router.use(authMiddleware);
 
-router.put("/profile", updateProfile);
-router.put("/change-password", changePassword);
+
+// ========================================
+// GET CURRENT USER
+// ========================================
+
+router.get(
+  "/me",
+  getCurrentUser
+);
+
+
+// ========================================
+// UPDATE PROFILE
+// ========================================
+
+router.put(
+  "/profile",
+  updateProfile
+);
+
+
+// ========================================
+// CHANGE PASSWORD
+// ========================================
+
+router.put(
+  "/change-password",
+  changePassword
+);
+
 
 module.exports = router;

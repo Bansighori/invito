@@ -3,13 +3,13 @@ import {
   useState
 } from "react";
 
+import TemplateRenderer from "./TemplateRenderer";
+import getTemplateSampleData from "../utils/templateSampleData";
+
 import {
   Heart,
   Crown,
-  ArrowUpRight,
-  Sparkles,
-  Cake,
-  Gem
+  ArrowUpRight
 } from "lucide-react";
 
 
@@ -100,48 +100,22 @@ function TemplateCard({
 
 
   const getPreviewClass = () => {
-
     if (template.category === "Wedding") {
       return "template-mini-wedding";
     }
-
     if (template.category === "Birthday") {
       return "template-mini-birthday";
     }
-
     if (template.category === "Engagement") {
       return "template-mini-engagement";
     }
-
     if (template.category === "Baby Shower") {
       return "template-mini-baby";
     }
-
     if (template.category === "Party") {
       return "template-mini-party";
     }
-
     return "template-mini-default";
-
-  };
-
-
-  const getIcon = () => {
-
-    if (template.category === "Wedding") {
-      return <Sparkles size={22} />;
-    }
-
-    if (template.category === "Birthday") {
-      return <Cake size={22} />;
-    }
-
-    if (template.category === "Engagement") {
-      return <Gem size={22} />;
-    }
-
-    return <Sparkles size={22} />;
-
   };
 
 
@@ -149,37 +123,14 @@ function TemplateCard({
     <div className="template-card">
 
       <div
-        className={`template-preview ${getPreviewClass()}`}
+        className={`template-preview template-preview-live ${getPreviewClass()}`}
       >
 
-        <div className="template-decoration decoration-one">
-          ✦
-        </div>
-
-        <div className="template-decoration decoration-two">
-          ✧
-        </div>
-
-        <div className="template-mini-content">
-
-          <div className="template-mini-icon">
-            {getIcon()}
-          </div>
-
-          <p className="template-mini-category">
-            {template.category}
-          </p>
-
-          <h3 className="template-mini-title">
-            {template.title}
-          </h3>
-
-          <div className="template-mini-line" />
-
-          <p className="template-mini-subtitle">
-            Create your invitation
-          </p>
-
+        <div className="template-preview-scaler">
+          <TemplateRenderer
+            component={template.component}
+            data={getTemplateSampleData(template)}
+          />
         </div>
 
 

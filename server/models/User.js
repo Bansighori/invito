@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -21,6 +20,74 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6
+    },
+
+
+    // =========================
+    // EMAIL VERIFICATION
+    // =========================
+
+    isEmailVerified: {
+      type: Boolean,
+      default: false
+    },
+
+    // OTP is stored temporarily
+    emailOtp: {
+      type: String,
+      default: null
+    },
+
+    // OTP expiration time
+    emailOtpExpires: {
+      type: Date,
+      default: null
+    },
+
+
+    // =========================
+    // PASSWORD RESET
+    // =========================
+
+    resetOtp: {
+      type: String,
+      default: null
+    },
+
+    resetOtpExpires: {
+      type: Date,
+      default: null
+    },
+
+
+    // =========================
+    // SUBSCRIPTION
+    // =========================
+
+    plan: {
+      type: String,
+      enum: [
+        "free",
+        "premium",
+        "premium_plus"
+      ],
+      default: "free"
+    },
+
+    planExpiresAt: {
+  type: Date,
+  default: null
+},
+
+    
+    // =========================
+    // FREE INVITATIONS
+    // =========================
+
+    freeInvitationsUsed: {
+      type: Number,
+      default: 0,
+      min: 0
     }
   },
   {

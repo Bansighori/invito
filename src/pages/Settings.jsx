@@ -13,7 +13,7 @@ import {
 
 import {
   updateProfile,
-  changePassword
+  
 } from "../api/authApi";
 
 
@@ -44,27 +44,7 @@ function Settings() {
     useState(false);
 
 
-  // ==========================================
-  // PASSWORD STATE
-  // ==========================================
-
-  const [passwordData, setPasswordData] =
-    useState({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: ""
-    });
-
-
-  const [passwordMessage, setPasswordMessage] =
-    useState("");
-
-  const [passwordError, setPasswordError] =
-    useState("");
-
-  const [passwordLoading, setPasswordLoading] =
-    useState(false);
-
+  
 
   // ==========================================
   // LOAD LOGGED-IN USER
@@ -210,155 +190,18 @@ function Settings() {
 
   };
 
-  const handlePasswordChange = (event) => {
+  
 
-    const {
-      name,
-      value
-    } = event.target;
+  
 
 
-    setPasswordData({
-
-      ...passwordData,
-
-      [name]: value
-
-    });
-
-  };
+   
 
 
-  // ==========================================
-  // CHANGE PASSWORD
-  // ==========================================
+    
 
-  const handlePasswordSave = async (event) => {
+    
 
-    event.preventDefault();
-
-    setPasswordMessage("");
-    setPasswordError("");
-
-
-    // ========================================
-    // VALIDATE FIELDS
-    // ========================================
-
-    if (
-      !passwordData.currentPassword ||
-      !passwordData.newPassword ||
-      !passwordData.confirmPassword
-    ) {
-
-      setPasswordError(
-        "Please fill in all password fields."
-      );
-
-      return;
-
-    }
-
-
-    // ========================================
-    // PASSWORD LENGTH
-    // ========================================
-
-    if (
-      passwordData.newPassword.length < 6
-    ) {
-
-      setPasswordError(
-        "New password must be at least 6 characters."
-      );
-
-      return;
-
-    }
-
-
-    // ========================================
-    // PASSWORD MATCH
-    // ========================================
-
-    if (
-      passwordData.newPassword !==
-      passwordData.confirmPassword
-    ) {
-
-      setPasswordError(
-        "New passwords do not match."
-      );
-
-      return;
-
-    }
-
-    try {
-
-      setPasswordLoading(true);
-
-
-      const response =
-        await changePassword({
-          currentPassword:
-            passwordData.currentPassword,
-
-          newPassword:
-            passwordData.newPassword,
-
-          confirmPassword:
-            passwordData.confirmPassword
-        });
-
-
-
-      setPasswordMessage(
-        response.data.message ||
-        "Password changed successfully."
-      );
-
-
-      // Clear fields
-
-      setPasswordData({
-
-        currentPassword: "",
-
-        newPassword: "",
-
-        confirmPassword: ""
-
-      });
-
-
-      setTimeout(() => {
-
-        setPasswordMessage("");
-
-      }, 3000);
-
-
-    } catch (error) {
-
-      console.error(
-        "Change password error:",
-        error
-      );
-
-
-      setPasswordError(
-        error.response?.data?.message ||
-        "Failed to change password."
-      );
-
-    } finally {
-
-      setPasswordLoading(false);
-
-    }
-
-  };
 
 
   // ==========================================
@@ -589,195 +432,7 @@ function Settings() {
       </div>
 
 
-      {/* ======================================
-          CHANGE PASSWORD CARD
-      ====================================== */}
-
-      <div className="settings-card settings-security-card">
-
-        <div className="settings-card-header">
-
-          <div className="settings-security-title">
-
-            <div className="settings-section-icon">
-
-              <KeyRound size={18} />
-
-            </div>
-
-
-            <div>
-
-              <h2>
-                Change Password
-              </h2>
-
-
-              <p>
-                Update your password to keep
-                your account secure.
-              </p>
-
-            </div>
-
-          </div>
-
         </div>
-
-
-        {/* ====================================
-            PASSWORD FORM
-        ==================================== */}
-
-        <form
-          className="settings-form"
-          onSubmit={handlePasswordSave}
-        >
-
-          {/* CURRENT PASSWORD */}
-
-          <div className="settings-field">
-
-            <label>
-              Current Password
-            </label>
-
-
-            <div className="settings-input-wrapper">
-
-              <Lock size={17} />
-
-
-              <input
-                type="password"
-                name="currentPassword"
-                value={
-                  passwordData.currentPassword
-                }
-                onChange={handlePasswordChange}
-                placeholder="Enter current password"
-                required
-              />
-
-            </div>
-
-          </div>
-
-
-          {/* NEW PASSWORD */}
-
-          <div className="settings-field">
-
-            <label>
-              New Password
-            </label>
-
-
-            <div className="settings-input-wrapper">
-
-              <Lock size={17} />
-
-
-              <input
-                type="password"
-                name="newPassword"
-                value={
-                  passwordData.newPassword
-                }
-                onChange={handlePasswordChange}
-                placeholder="Minimum 6 characters"
-                minLength="6"
-                required
-              />
-
-            </div>
-
-          </div>
-
-
-          {/* CONFIRM PASSWORD */}
-
-          <div className="settings-field">
-
-            <label>
-              Confirm New Password
-            </label>
-
-
-            <div className="settings-input-wrapper">
-
-              <Lock size={17} />
-
-
-              <input
-                type="password"
-                name="confirmPassword"
-                value={
-                  passwordData.confirmPassword
-                }
-                onChange={handlePasswordChange}
-                placeholder="Confirm new password"
-                minLength="6"
-                required
-              />
-
-            </div>
-
-          </div>
-
-
-          {/* PASSWORD SUCCESS */}
-
-          {passwordMessage && (
-
-            <div className="settings-success">
-
-              {passwordMessage}
-
-            </div>
-
-          )}
-
-
-          {/* PASSWORD ERROR */}
-
-          {passwordError && (
-
-            <div className="settings-error">
-
-              {passwordError}
-
-            </div>
-
-          )}
-
-
-          {/* CHANGE PASSWORD */}
-
-          <button
-            type="submit"
-            className="settings-save-button"
-            disabled={passwordLoading}
-          >
-
-            <Lock size={17} />
-
-
-            <span>
-
-              {passwordLoading
-                ? "Changing..."
-                : "Change Password"}
-
-            </span>
-
-          </button>
-
-        </form>
-
-      </div>
-
-    </div>
 
   );
 

@@ -1,4 +1,6 @@
 const Invitation = require("../models/Invitation");
+const Template = require("../models/Template");
+const User = require("../models/User");
 
 // =========================================
 // CREATE INVITATION
@@ -23,7 +25,110 @@ const createInvitation = async (req, res) => {
       });
     }
 
-    // Create invitation
+    // =========================================
+    // GET LOGGED-IN USER
+    // =========================================
+
+    const user = await User.findById(
+      req.user.userId
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+    console.log("CHECKING LIMIT:", {
+  plan: user.plan,
+  used: user.freeInvitationsUsed
+});
+
+if (user.plan !== "premium" && user.freeInvitationsUsed >= 3) {
+  console.log("🚫 FREE LIMIT REACHED");
+
+  return res.status(403).json({
+    success: false,
+    message: "Free users can create only 3 invitations. Upgrade to premium.",
+    code: "FREE_LIMIT_REACHED"
+  });
+}
+
+ 
+    // =========================================
+    // GET TEMPLATE
+    // =========================================
+
+    const template =
+      await Template.findById(templateId);
+
+    if (!template) {
+      return res.status(404).json({
+        success: false,
+        message: "Template not found"
+      });
+    }
+
+    // =========================================
+    // PREMIUM USER
+    // =========================================
+
+    if (user.plan === "premium") {
+
+      const invitation =
+        await Invitation.create({
+          title,
+          templateId,
+          category,
+          data: data || {},
+          status: status || "draft",
+
+          userId: req.user.userId
+        });
+
+      return res.status(201).json({
+        success: true,
+        message:
+          "Invitation created successfully",
+        invitation
+      });
+    }
+
+    // =========================================
+    // FREE USER + PREMIUM TEMPLATE
+    // =========================================
+
+    if (template.isPremium) {
+      return res.status(403).json({
+        success: false,
+        code: "PREMIUM_TEMPLATE",
+        message:
+          "This is a premium template. Please upgrade to premium to use it."
+      });
+    }
+
+    // =========================================
+    // FREE USER LIMIT
+    // =========================================
+
+    const FREE_INVITATION_LIMIT = 3;
+
+    if (
+      user.freeInvitationsUsed >=
+      FREE_INVITATION_LIMIT
+    ) {
+      return res.status(403).json({
+        success: false,
+        code: "FREE_LIMIT_REACHED",
+        message:
+          "You have used all 3 free invitations. Please upgrade to premium to create more."
+      });
+    }
+
+    // =========================================
+    // CREATE FREE INVITATION
+    // =========================================
+
     const invitation =
       await Invitation.create({
         title,
@@ -32,17 +137,35 @@ const createInvitation = async (req, res) => {
         data: data || {},
         status: status || "draft",
 
-        // IMPORTANT:
-        // Attach invitation to logged-in user
         userId: req.user.userId
       });
 
-    // Send response
+    // =========================================
+    // INCREMENT FREE USAGE
+    // =========================================
+
+    user.freeInvitationsUsed += 1;
+
+    await user.save();
+
+    // =========================================
+    // SEND RESPONSE
+    // =========================================
+
     res.status(201).json({
       success: true,
       message:
         "Invitation created successfully",
-      invitation
+      invitation,
+
+      freeUsage: {
+        used:
+          user.freeInvitationsUsed,
+
+        remaining:
+          FREE_INVITATION_LIMIT -
+          user.freeInvitationsUsed
+      }
     });
 
   } catch (error) {
@@ -74,14 +197,12 @@ const updateInvitation = async (req, res) => {
       status
     } = req.body;
 
-    // Find invitation belonging to logged-in user
     const invitation =
       await Invitation.findOne({
         _id: req.params.id,
         userId: req.user.userId
       });
 
-    // Check if invitation exists
     if (!invitation) {
       return res.status(404).json({
         success: false,
@@ -90,7 +211,6 @@ const updateInvitation = async (req, res) => {
       });
     }
 
-    // Update only provided values
     if (title !== undefined) {
       invitation.title = title;
     }
@@ -113,10 +233,8 @@ const updateInvitation = async (req, res) => {
       invitation.status = status;
     }
 
-    // Save updated invitation
     await invitation.save();
 
-    // Send response
     res.json({
       success: true,
       message:
@@ -145,14 +263,12 @@ const updateInvitation = async (req, res) => {
 
 const publishInvitation = async (req, res) => {
   try {
-    // Find invitation belonging to logged-in user
     const invitation =
       await Invitation.findOne({
         _id: req.params.id,
         userId: req.user.userId
       });
 
-    // Check if invitation exists
     if (!invitation) {
       return res.status(404).json({
         success: false,
@@ -161,7 +277,6 @@ const publishInvitation = async (req, res) => {
       });
     }
 
-    // Create URL-friendly slug
     const baseSlug =
       invitation.title
         .toLowerCase()
@@ -169,24 +284,18 @@ const publishInvitation = async (req, res) => {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
 
-    // Add last 6 characters of MongoDB ID
-    // so every invitation gets a unique URL
     const slug =
       `${baseSlug}-${invitation._id
         .toString()
         .slice(-6)}`;
 
-    // Save slug
     invitation.slug = slug;
 
-    // Change status
     invitation.status =
       "published";
 
-    // Save invitation
     await invitation.save();
 
-    // Send response
     res.json({
       success: true,
       message:
@@ -219,8 +328,6 @@ const publishInvitation = async (req, res) => {
 
 const getInvitations = async (req, res) => {
   try {
-    // IMPORTANT:
-    // Only get invitations of logged-in user
     const invitations =
       await Invitation.find({
         userId: req.user.userId
@@ -264,8 +371,6 @@ const getInvitations = async (req, res) => {
 const getInvitationById =
   async (req, res) => {
     try {
-
-      // Only allow owner to access invitation
       const invitation =
         await Invitation.findOne({
           _id: req.params.id,
@@ -309,11 +414,7 @@ const getInvitationById =
 
 const getPublicInvitation =
   async (req, res) => {
-
     try {
-
-      // PUBLIC ROUTE
-      // No authentication required here
       const invitation =
         await Invitation.findOne({
           slug: req.params.slug,
@@ -324,44 +425,30 @@ const getPublicInvitation =
           );
 
       if (!invitation) {
-
         return res.status(404).json({
-
           success: false,
-
           message:
             "Published invitation not found"
-
         });
-
       }
 
       res.json({
-
         success: true,
-
         invitation
-
       });
 
     } catch (error) {
-
       console.error(
         "Get public invitation error:",
         error
       );
 
       res.status(500).json({
-
         success: false,
-
         message:
           "Failed to fetch public invitation"
-
       });
-
     }
-
   };
 
 
@@ -371,12 +458,7 @@ const getPublicInvitation =
 
 const deleteInvitation =
   async (req, res) => {
-
     try {
-
-      // IMPORTANT:
-      // Delete only if invitation belongs
-      // to logged-in user
       const invitation =
         await Invitation.findOneAndDelete({
           _id: req.params.id,
@@ -384,13 +466,11 @@ const deleteInvitation =
         });
 
       if (!invitation) {
-
         return res.status(404).json({
           success: false,
           message:
             "Invitation not found"
         });
-
       }
 
       res.json({
@@ -400,7 +480,6 @@ const deleteInvitation =
       });
 
     } catch (error) {
-
       console.error(
         "Delete invitation error:",
         error
@@ -411,9 +490,7 @@ const deleteInvitation =
         message:
           "Failed to delete invitation"
       });
-
     }
-
   };
 
 
@@ -422,19 +499,11 @@ const deleteInvitation =
 // =========================================
 
 module.exports = {
-
   createInvitation,
-
   updateInvitation,
-
   publishInvitation,
-
   getInvitations,
-
   getInvitationById,
-
   getPublicInvitation,
-
   deleteInvitation
-
 };
