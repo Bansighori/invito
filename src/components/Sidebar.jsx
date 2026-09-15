@@ -162,28 +162,25 @@ function Sidebar() {
             </span>
             
           </NavLink>
+          <NavLink
+  to="/payment-history"
+  className={({ isActive }) =>
+    `sidebar-link ${
+      isActive ? "active" : ""
+    }`
+  }
+>
+  <CreditCard size={19} />
+
+  <span>
+    Payment History
+  </span>
+</NavLink>
           
         </nav>
 
       </div>
-      <button
-  className="settings-payment-history"
-  onClick={() =>
-    navigate("/payment-history")
-  }
->
-  <CreditCard size={18} />
-
-  <div>
-    <strong>
-      Payment History
-    </strong>
-
-    <span>
-      View your successful and failed payments
-    </span>
-  </div>
-</button>
+      
 
       <div className="sidebar-bottom">
 
