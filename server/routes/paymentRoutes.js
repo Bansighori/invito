@@ -6,7 +6,8 @@ const {
   verifyPremiumPayment,
   verifyPremiumPlusPayment,
   markPaymentFailed,
-  getPaymentHistory
+  getPaymentHistory,
+  continuePayment
 } = require("../controllers/paymentController");
 
 const authMiddleware = require("../middleware/authMiddleware");
@@ -43,6 +44,11 @@ router.post(
   authMiddleware,
   markPaymentFailed
 );
+router.post(
+  "/continue",
+  authMiddleware,
+  continuePayment
+);
 
 // PAYMENT HISTORY
 router.get(
@@ -50,5 +56,7 @@ router.get(
   authMiddleware,
   getPaymentHistory
 );
+
+
 
 module.exports = router;

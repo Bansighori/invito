@@ -1,171 +1,282 @@
 import { useState } from "react";
+
 import api from "../api/axios";
 
 function UpgradePremium() {
-  const [loading, setLoading] = useState(false);
-  const [paymentFailed, setPaymentFailed] = useState(false);
+
+  const [loading, setLoading] =
+    useState(false);
+
+
+  // ============================================
+  // HANDLE PREMIUM UPGRADE
+  // ============================================
 
   const handleUpgrade = async () => {
+
     try {
+
       setLoading(true);
-      setPaymentFailed(false);
+
 
       // ============================================
       // 1. CREATE ₹199 ONE-TIME ORDER
       // ============================================
 
-      const response = await api.post(
-        "/payment/create-order"
-      );
+      const response =
+        await api.post(
+          "/payment/create-order"
+        );
+
 
       const {
         order,
         key
       } = response.data;
 
+
       if (!order?.id) {
+
         throw new Error(
           "Premium payment order was not created."
         );
+
       }
+
 
       // ============================================
       // 2. OPEN RAZORPAY CHECKOUT
       // ============================================
 
       const options = {
+
         key,
 
-        amount: order.amount,
+        amount:
+          order.amount,
 
-        currency: order.currency,
+        currency:
+          order.currency,
 
-        name: "Invito",
+        name:
+          "Invito",
 
         description:
           "Invito Premium - ₹199 for 30 days",
 
-        order_id: order.id,
+        order_id:
+          order.id,
 
-        handler: async function (
-          paymentResponse
-        ) {
-          try {
 
-            // ======================================
-            // 3. VERIFY PAYMENT ON SERVER
-            // ======================================
+        // ==========================================
+        // PAYMENT SUCCESS
+        // ==========================================
 
-            const verifyResponse =
-              await api.post(
-                "/payment/verify",
-                {
-                  razorpay_payment_id:
-                    paymentResponse.razorpay_payment_id,
+        handler:
+          async function (
+            paymentResponse
+          ) {
 
-                  razorpay_order_id:
-                    paymentResponse.razorpay_order_id,
+            try {
 
-                  razorpay_signature:
-                    paymentResponse.razorpay_signature
-                }
+              // ======================================
+              // 3. VERIFY PAYMENT
+              // ======================================
+
+              const verifyResponse =
+                await api.post(
+                  "/payment/verify",
+                  {
+                    razorpay_payment_id:
+                      paymentResponse
+                        .razorpay_payment_id,
+
+                    razorpay_order_id:
+                      paymentResponse
+                        .razorpay_order_id,
+
+                    razorpay_signature:
+                      paymentResponse
+                        .razorpay_signature
+                  }
+                );
+
+
+              if (
+                verifyResponse.data.success
+              ) {
+
+                alert(
+                  "🎉 Premium activated for 30 days!"
+                );
+
+
+                // Refresh user/plan information
+
+                window.location.reload();
+
+              } else {
+
+                alert(
+                  verifyResponse.data.message ||
+                    "Payment verification failed."
+                );
+
+              }
+
+            } catch (error) {
+
+              console.error(
+                "Premium verification error:",
+                error
               );
 
-            if (
-              verifyResponse.data.success
-            ) {
+
               alert(
-                "🎉 Premium activated for 30 days!"
+                error.response?.data?.message ||
+                  "Payment verification failed. Please check Payment History."
               );
 
-              window.location.reload();
+            } finally {
+
+              setLoading(false);
+
             }
 
-          } catch (error) {
+          },
 
-            console.error(
-              "Premium verification error:",
-              error
-            );
 
-            setPaymentFailed(true);
-
-          } finally {
-
-            setLoading(false);
-
-          }
-        },
+        // ==========================================
+        // PREFILL
+        // ==========================================
 
         prefill: {
+
           name: "",
+
           email: ""
+
         },
+
+
+        // ==========================================
+        // RAZORPAY THEME
+        // ==========================================
 
         theme: {
-          color: "#6c63ff"
+
+          color:
+            "#6c63ff"
+
         },
 
+
+        // ==========================================
+        // CLOSE CHECKOUT
+        // ==========================================
+
         modal: {
-          confirm_close: true,
+
+          confirm_close:
+            true,
 
           ondismiss: () => {
+
             setLoading(false);
+
           }
+
         }
+
       };
+
 
       // ============================================
       // 4. CREATE RAZORPAY CHECKOUT
       // ============================================
 
       const razorpay =
-        new window.Razorpay(options);
+        new window.Razorpay(
+          options
+        );
+
 
       // ============================================
-      // 5. PAYMENT FAILED EVENT
+      // 5. PAYMENT FAILED
       // ============================================
 
       razorpay.on(
-  "payment.failed",
-  async function (response) {
-    console.error(
-      "Premium payment failed:",
-      response
-    );
+        "payment.failed",
+        async function (
+          response
+        ) {
 
-    try {
-      await api.post(
-        "/payment/failed",
-        {
-          razorpay_order_id:
-            response.error?.metadata?.order_id,
+          console.error(
+            "Premium payment failed:",
+            response
+          );
 
-          error_description:
-            response.error?.description,
 
-          error_code:
-            response.error?.code
+          try {
+
+            await api.post(
+              "/payment/failed",
+              {
+                razorpay_order_id:
+                  response.error
+                    ?.metadata
+                    ?.order_id,
+
+                error_description:
+                  response.error
+                    ?.description ||
+                  "Payment failed.",
+
+                error_code:
+                  response.error
+                    ?.code ||
+                  null
+              }
+            );
+
+
+          } catch (error) {
+
+            console.error(
+              "Unable to record failed payment:",
+              error
+            );
+
+          }
+
+
+          // Close Razorpay window
+
+          razorpay.close();
+
+
+          // Return button to normal
+
+          setLoading(false);
+
+
+          // Tell user where the failed
+          // transaction is available
+
+          alert(
+            "Payment failed. You can retry this payment from Payment History."
+          );
+
         }
       );
-    } catch (error) {
-      console.error(
-        "Unable to record failed payment:",
-        error
-      );
-    }
 
-    razorpay.close();
-    setLoading(false);
-    setPaymentFailed(true);
-  }
-);
 
       // ============================================
       // 6. OPEN PAYMENT WINDOW
       // ============================================
 
       razorpay.open();
+
 
     } catch (error) {
 
@@ -174,77 +285,41 @@ function UpgradePremium() {
         error
       );
 
+
       setLoading(false);
 
-      setPaymentFailed(true);
+
+      alert(
+        error.response?.data?.message ||
+          "Unable to start Premium payment."
+      );
+
     }
+
   };
 
 
-  // ================================================
-  // PAYMENT FAILED SCREEN
-  // ================================================
-
-  if (paymentFailed) {
-    return (
-      <div className="premium-payment-failed">
-
-        <div className="premium-failed-icon">
-          ❌
-        </div>
-
-        <h3>
-          Payment Failed
-        </h3>
-
-        <p>
-          Your ₹199 Premium payment
-          was not completed.
-        </p>
-
-        <div className="premium-failed-actions">
-
-          <button
-            className="premium-retry"
-            onClick={() => {
-              setPaymentFailed(false);
-              handleUpgrade();
-            }}
-          >
-            Retry Payment
-          </button>
-
-          <button
-            className="premium-back"
-            onClick={() =>
-              setPaymentFailed(false)
-            }
-          >
-            Back
-          </button>
-
-        </div>
-
-      </div>
-    );
-  }
-
-
-  // ================================================
+  // ============================================
   // UPGRADE BUTTON
-  // ================================================
+  // ============================================
 
   return (
+
     <button
       className="pricing-button plus-button"
       onClick={handleUpgrade}
       disabled={loading}
     >
+
       {loading
         ? "Opening Payment..."
         : "Upgrade ₹199/month"}
+
     </button>
+
   );
+
 }
+
 
 export default UpgradePremium;

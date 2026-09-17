@@ -101,33 +101,113 @@ function PublicInvitation() {
   // ==========================================
 
   const handleDownloadPDF = async () => {
+
   if (!invitationRef.current) {
     return;
   }
 
-  try {
-   
-    invitationRef.current.classList.add("pdf-generating");
 
-    const canvas = await html2canvas(
-      invitationRef.current,
-      {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff"
-      }
+  try {
+
+    // Add PDF mode class
+    invitationRef.current.classList.add(
+      "pdf-generating"
     );
 
-    const imageData = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "px",
-      format: [
-        canvas.width,
-        canvas.height
-      ]
-    });
+    // ==========================================
+    // WAIT FOR ALL IMAGES
+    // ==========================================
+
+    const images =
+      invitationRef.current.querySelectorAll(
+        "img"
+      );
+
+
+    await Promise.all(
+      Array.from(images).map(
+        (image) => {
+
+          if (image.complete) {
+            return Promise.resolve();
+          }
+
+
+          return new Promise(
+            (resolve) => {
+
+              image.onload =
+                resolve;
+
+              image.onerror =
+                resolve;
+
+            }
+          );
+
+        }
+      )
+    );
+
+
+    // Small delay to make sure
+    // Cloudinary images are rendered
+
+    await new Promise(
+      (resolve) =>
+        setTimeout(resolve, 300)
+    );
+
+
+    // ==========================================
+    // CREATE CANVAS
+    // ==========================================
+
+    const canvas =
+      await html2canvas(
+        invitationRef.current,
+        {
+          scale: 2,
+
+          useCORS: true,
+
+          allowTaint: false,
+
+          backgroundColor:
+            "#ffffff",
+
+          imageTimeout: 15000,
+
+          logging: false
+        }
+      );
+
+
+    const imageData =
+      canvas.toDataURL(
+        "image/png"
+      );
+
+
+    // ==========================================
+    // CREATE PDF
+    // ==========================================
+
+    const pdf =
+      new jsPDF({
+
+        orientation:
+          "portrait",
+
+        unit: "px",
+
+        format: [
+          canvas.width,
+          canvas.height
+        ]
+
+      });
 
 
     pdf.addImage(
@@ -140,63 +220,85 @@ function PublicInvitation() {
     );
 
 
-const locationLink =
-  invitationRef.current.querySelector(
-    'a[href*="google.com/maps"]'
-  );
+    // ==========================================
+    // GOOGLE MAPS LINK
+    // ==========================================
 
-if (locationLink) {
+    const locationLink =
+      invitationRef.current.querySelector(
+        'a[href*="google.com/maps"]'
+      );
 
-  const invitationRect =
-    invitationRef.current.getBoundingClientRect();
 
-  const locationRect =
-    locationLink.getBoundingClientRect();
+    if (locationLink) {
 
-  const canvasScale = 2;
+      const invitationRect =
+        invitationRef.current
+          .getBoundingClientRect();
 
-  const relativeX =
-    locationRect.left -
-    invitationRect.left;
 
-  const relativeY =
-    locationRect.top -
-    invitationRect.top;
+      const locationRect =
+        locationLink
+          .getBoundingClientRect();
 
-  const pdfX =
-    relativeX * canvasScale;
 
-  const pdfY =
-    relativeY * canvasScale;
+      const canvasScale =
+        canvas.width /
+        invitationRect.width;
 
-  const pdfWidth =
-    locationRect.width * canvasScale;
 
-  const pdfHeight =
-    locationRect.height * canvasScale;
+      const relativeX =
+        locationRect.left -
+        invitationRect.left;
 
-  console.log("Google Maps PDF link:", {
-    url: locationLink.href,
-    x: pdfX,
-    y: pdfY,
-    width: pdfWidth,
-    height: pdfHeight
-  });
 
-  pdf.link(
-    pdfX,
-    pdfY,
-    pdfWidth,
-    pdfHeight,
-    {
-      url: locationLink.href
+      const relativeY =
+        locationRect.top -
+        invitationRect.top;
+
+
+      const pdfX =
+        relativeX *
+        canvasScale;
+
+
+      const pdfY =
+        relativeY *
+        canvasScale;
+
+
+      const pdfWidth =
+        locationRect.width *
+        canvasScale;
+
+
+      const pdfHeight =
+        locationRect.height *
+        canvasScale;
+
+
+      pdf.link(
+        pdfX,
+        pdfY,
+        pdfWidth,
+        pdfHeight,
+        {
+          url:
+            locationLink.href
+        }
+      );
+
     }
-  );
-}
+
+
+    // ==========================================
+    // SAVE PDF
+    // ==========================================
 
     pdf.save(
       `${invitation.title || "invitation"}.pdf`
     );
+
 
   } catch (error) {
 
@@ -205,12 +307,13 @@ if (locationLink) {
       error
     );
 
+
     alert(
       "Failed to generate PDF."
     );
 
-  } finally {
 
+  } finally {
 
     if (invitationRef.current) {
 
@@ -221,6 +324,7 @@ if (locationLink) {
     }
 
   }
+
 };
 
   const getTemplateComponent = () => {

@@ -1,0 +1,463 @@
+.photo-floral {
+  position: relative;
+
+  width: 85%;
+  max-width: 580px;
+
+  margin: 35px auto 0;
+
+  box-sizing: border-box;
+
+  padding: 50px 30px 30px;
+
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(215, 183, 125, 0.12),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 85% 85%,
+      rgba(112, 145, 111, 0.10),
+      transparent 28%
+    ),
+    #fffaf4;
+
+  color: #40342d;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  overflow: visible;
+}
+
+
+.photo-floral-border {
+  position: relative;
+
+  padding: 38px 34px 30px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #c9a86a;
+
+  outline: 1px solid rgba(201, 168, 106, 0.45);
+
+  outline-offset: 7px;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      rgba(255, 252, 247, 0.97),
+      rgba(255, 249, 242, 0.97)
+    );
+}
+
+
+/* FLOWERS */
+
+.floral-corner {
+  position: absolute;
+
+  z-index: 5;
+
+  font-size: 68px;
+
+  color: #78916e;
+
+  opacity: 0.72;
+
+  pointer-events: none;
+}
+
+.floral-top-left {
+  top: 4px;
+  left: 4px;
+}
+
+.floral-top-right {
+  top: 4px;
+  right: 4px;
+}
+
+.floral-bottom-left {
+  bottom: 4px;
+  left: 4px;
+  transform: rotate(180deg);
+}
+
+.floral-bottom-right {
+  bottom: 4px;
+  right: 4px;
+  transform: rotate(180deg);
+}
+
+
+/* TITLE */
+
+.photo-floral-small-title {
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 9px;
+
+  letter-spacing: 4px;
+
+  color: #806744;
+
+  font-weight: 600;
+}
+
+
+/* DIVIDER */
+
+.photo-floral-divider {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin: 13px 0 8px;
+
+  color: #b58a4b;
+}
+
+.photo-floral-divider::before,
+.photo-floral-divider::after {
+  content: "";
+
+  width: 55px;
+
+  height: 1px;
+
+  background: #c9a86a;
+}
+
+
+/* NAMES */
+
+.photo-floral-names {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 0;
+
+  margin: 0 0 20px;
+
+  color: #493a31;
+
+  font-size: 42px;
+
+  line-height: 0.95;
+
+  font-weight: 400;
+}
+
+.photo-floral-names small {
+  margin: 4px 0;
+
+  font-size: 20px;
+
+  color: #b58a4b;
+
+  font-style: italic;
+}
+
+
+/* PHOTO */
+
+.photo-floral-photo-frame {
+  width: 48%;
+  max-width: 230px;
+
+  margin: 0 auto 22px;
+
+  padding: 7px;
+
+  box-sizing: border-box;
+
+  background: white;
+
+  border: 1px solid #c9a86a;
+
+  box-shadow:
+    0 8px 25px rgba(65, 45, 25, 0.12);
+}
+
+.photo-floral-photo-inner {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  background: #eee7de;
+}
+
+.photo-floral-photo-inner img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.photo-floral-photo-inner {
+  width: 100%;
+
+  aspect-ratio: 4 / 5;
+
+  overflow: hidden;
+
+  background: #eee7de;
+}
+
+.photo-floral-photo-inner img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* PLACEHOLDER */
+
+.photo-floral-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eee6dc,
+      #ddd3c6
+    );
+
+  color: #967b58;
+}
+
+.photo-floral-placeholder span {
+  font-size: 36px;
+
+  margin-bottom: 8px;
+}
+
+.photo-floral-placeholder p {
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 12px;
+
+  letter-spacing: 1px;
+}
+
+
+/* MESSAGE */
+
+.photo-floral-invitation {
+  max-width: 350px;
+
+  margin: 0 auto 22px;
+
+  font-size: 15px;
+
+  line-height: 1.65;
+
+  color: #5d4b40;
+
+  font-style: italic;
+}
+
+
+/* DATE + TIME */
+
+.photo-floral-details {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 25px;
+
+  margin: 0 auto 22px;
+
+  padding: 15px 20px;
+
+  border-top: 1px solid #ddc89d;
+
+  border-bottom: 1px solid #ddc89d;
+
+  max-width: 360px;
+}
+
+.photo-floral-detail {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.detail-label {
+  font-family: Arial, sans-serif;
+
+  font-size: 8px;
+
+  letter-spacing: 2px;
+
+  color: #a4865c;
+}
+
+.photo-floral-detail strong {
+  font-family: Arial, sans-serif;
+
+  font-size: 11px;
+
+  letter-spacing: 1px;
+
+  color: #584738;
+}
+
+.photo-floral-detail-divider {
+  color: #b58a4b;
+
+  font-size: 10px;
+}
+
+
+/* LOCATION */
+
+.photo-floral-location {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 5px;
+
+  margin-bottom: 20px;
+}
+
+.location-icon {
+  font-size: 20px;
+
+  color: #9d7a48;
+}
+
+.location-label {
+  font-family: Arial, sans-serif;
+
+  font-size: 8px;
+
+  letter-spacing: 3px;
+
+  color: #a4865c;
+}
+
+.photo-floral-location strong {
+  font-family: Arial, sans-serif;
+
+  font-size: 11px;
+
+  letter-spacing: 1.5px;
+
+  color: #514236;
+}
+
+.location-address {
+  font-family: Arial, sans-serif;
+
+  font-size: 10px;
+
+  color: #887567;
+}
+
+
+/* RSVP */
+
+.photo-floral-rsvp {
+  padding: 10px 28px;
+
+  border: 1px solid #a78654;
+
+  background: transparent;
+
+  color: #735936;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  cursor: pointer;
+}
+
+.photo-floral-rsvp:hover {
+  background: #735936;
+
+  color: white;
+}
+
+
+/* BOTTOM */
+
+.photo-floral-bottom-decoration {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+
+  margin-top: 18px;
+
+  color: #9a7b50;
+
+  font-size: 13px;
+}
+.photo-floral-map-link {
+  display: inline-block !important;
+  margin-top: 10px;
+  padding: 6px 12px;
+  color: #9b7742 !important;
+  border: 1px solid #c9a86a;
+  border-radius: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none !important;
+  cursor: pointer;
+  position: relative;
+  z-index: 20;
+}
+
+.photo-floral-map-link:hover {
+  background: #c9a86a;
+  color: white !important;
+}

@@ -17,6 +17,7 @@ import {
 } from "react-router-dom";
 
 import TemplateRenderer from "../components/TemplateRenderer";
+import api from "../api/axios";
 
 
 function Drafts() {
@@ -59,8 +60,30 @@ function Drafts() {
           );
 
 
+        console.log(
+          "ALL INVITATIONS:",
+          response.data
+        );
+
+
         const invitations =
           response.data.invitations || [];
+
+
+        console.log(
+          "INVITATION STATUSES:",
+          invitations.map(
+            (invitation) => ({
+              id: invitation._id,
+              title: invitation.title,
+              status: invitation.status,
+              templateId:
+                invitation.templateId,
+              category:
+                invitation.category
+            })
+          )
+        );
 
 
         const draftInvitations =
@@ -68,6 +91,12 @@ function Drafts() {
             (invitation) =>
               invitation.status === "draft"
           );
+
+
+        console.log(
+          "DRAFT INVITATIONS:",
+          draftInvitations
+        );
 
 
         setDrafts(
@@ -108,6 +137,10 @@ function Drafts() {
 
   }, []);
 
+
+  // =========================================
+  // DELETE DRAFT
+  // =========================================
 
   const handleDelete =
     async (id) => {
@@ -175,6 +208,17 @@ function Drafts() {
         draft.templateId;
 
 
+      if (!templateId) {
+
+        alert(
+          "Template information is missing for this draft."
+        );
+
+        return;
+
+      }
+
+
       navigate(
         `/invitations/create/${templateId}?draftId=${draft._id}`
       );
@@ -203,7 +247,7 @@ function Drafts() {
       try {
 
         const response =
-          await api.put(
+          await api.post(
             `/invitations/${id}/publish`
           );
 
@@ -219,7 +263,9 @@ function Drafts() {
 
 
         alert(
-          `Invitation published successfully!\n\nPublic URL: ${publicUrl}`
+          publicUrl
+            ? `Invitation published successfully!\n\nPublic URL: ${publicUrl}`
+            : "Invitation published successfully!"
         );
 
 
@@ -358,6 +404,7 @@ function Drafts() {
 
         <button
           className="invitations-create-button"
+          type="button"
           onClick={() =>
             navigate("/templates")
           }
@@ -399,6 +446,7 @@ function Drafts() {
 
 
           <button
+            type="button"
             onClick={() =>
               navigate("/templates")
             }
@@ -437,8 +485,12 @@ function Drafts() {
                       component={
                         draft.templateId?.component
                       }
-                      category={draft.category}
-                      data={draft.data || {}}
+                      category={
+                        draft.category
+                      }
+                      data={
+                        draft.data || {}
+                      }
                     />
 
                   </div>

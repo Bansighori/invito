@@ -10,7 +10,11 @@ import {
   CalendarDays,
   LoaderCircle,
   Globe,
-  MapPin
+  MapPin,
+  Image,
+  X,
+  Lock,
+  Plus
 } from "lucide-react";
 
 import api from "../api/axios";
@@ -30,10 +34,19 @@ function CreateInvitation() {
 
   const { templateId } = useParams();
 
+  const photoTemplates = [
+  "PhotoWeddingFloral",
+  "PhotoWeddingRomantic",
+  "PhotoWeddingRoyal"
+];
+
+
+
   const [
     searchParams
   ] = useSearchParams();
-
+  const [couplePhoto, setCouplePhoto] = useState("");
+  const [photoUploading, setPhotoUploading] = useState(false);   
 
   const draftId =
     searchParams.get("draftId");
@@ -45,8 +58,14 @@ function CreateInvitation() {
   const [template, setTemplate] =
     useState(null);
 
+  const isPhotoTemplate =
+  photoTemplates.includes(template?.component);
+
   const [formData, setFormData] =
     useState({});
+
+  const [user, setUser] =
+    useState(null);
 
   const [loading, setLoading] =
     useState(true);
@@ -62,7 +81,66 @@ function CreateInvitation() {
       invitationId
     );
 
+const handleCouplePhotoUpload = async (e) => {
+  const file = e.target.files[0];
 
+  if (!file) return;
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Photo must be less than 5MB.");
+    return;
+  }
+
+  try {
+    setPhotoUploading(true);
+
+    const uploadData = new FormData();
+
+    uploadData.append("photo", file);
+
+    const response = await api.post(
+      "/invitations/upload-template-photo",
+      uploadData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }
+    );
+
+    const imageUrl =
+  response.data.image.url;
+
+setCouplePhoto(imageUrl);
+
+setFormData((previousData) => ({
+  ...previousData,
+  couplePhoto: imageUrl
+}));  
+
+  } catch (error) {
+    console.error(
+      "Photo upload error:",
+      error
+    );
+
+    if (
+      error.response?.data?.code ===
+      "PREMIUM_PLUS_REQUIRED"
+    ) {
+      navigate("/pricing");
+      return;
+    }
+
+    alert(
+      error.response?.data?.message ||
+      "Photo upload failed."
+    );
+
+  } finally {
+    setPhotoUploading(false);
+  }
+};
   const saveDraft = async () => {
 
     try {
@@ -80,12 +158,12 @@ function CreateInvitation() {
           template?.category,
 
         data:
-          formData,
-
-        status:
-          invitationId
-            ? "published"
-            : "draft"
+  formData,
+couplePhoto: couplePhoto,
+status:
+  invitationId
+    ? "published"
+    : "draft"
 
       };
 
@@ -205,13 +283,15 @@ function CreateInvitation() {
             template?._id,
 
           category:
-            template?.category,
+  template?.category,
 
-          data:
-            formData,
+data: {
+  ...formData,
+  couplePhoto: couplePhoto
+},
 
-          status:
-            "draft"
+status:
+  "draft"
 
         };
 
@@ -356,6 +436,12 @@ function CreateInvitation() {
           selectedTemplate
         );
 
+        const userResponse =
+  await api.get("/auth/me");
+
+setUser(
+  userResponse.data.user
+);
         const initialData = {};
 
 
@@ -369,6 +455,9 @@ function CreateInvitation() {
         );
 
         initialData.venue = "";
+
+        // PREMIUM PLUS PHOTO GALLERY
+        initialData.gallery = [];
 
         const existingId =
           invitationId ||
@@ -403,13 +492,17 @@ function CreateInvitation() {
 
           }
 
-          setFormData({
+          const savedData =
+  savedInvitation.data || {};
 
-            ...initialData,
+setFormData({
+  ...initialData,
+  ...savedData
+});
 
-            ...(savedInvitation.data || {})
-
-          });
+setCouplePhoto(
+  savedData.couplePhoto || ""
+);
 
         } else {
 
@@ -472,6 +565,233 @@ function CreateInvitation() {
       );
 
     };
+
+  /* =========================
+     PREMIUM PLUS GALLERY
+  ========================= */
+
+  const now = new Date();
+
+  const isPremiumPlus =
+    user?.plan === "premium_plus" &&
+    user?.planExpiresAt &&
+    new Date(user.planExpiresAt) > now;
+const [uploadingGallery, setUploadingGallery] =
+  useState(false);
+
+const [galleryUploadError, setGalleryUploadError] =
+  useState("");
+
+
+
+  // ==========================================
+// PHOTO GALLERY
+// ==========================================
+
+const handleGalleryUpload = async (event) => {
+  const files = Array.from(
+    event.target.files || []
+  );
+
+  if (files.length === 0) {
+    return;
+  }
+
+  if (files.length > 10) {
+    setGalleryUploadError(
+      "You can upload a maximum of 10 photos."
+    );
+
+    event.target.value = "";
+    return;
+  }
+
+  const invalidFile = files.find(
+    (file) => {
+      const validTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ];
+
+      return (
+        !validTypes.includes(
+          file.type
+        ) ||
+        file.size > 5 * 1024 * 1024
+      );
+    }
+  );
+
+  if (invalidFile) {
+    setGalleryUploadError(
+      "Only JPG, PNG or WEBP images up to 5MB are allowed."
+    );
+
+    event.target.value = "";
+    return;
+  }
+
+  try {
+
+    setUploadingGallery(true);
+
+    setGalleryUploadError("");
+
+
+    const uploadData =
+      new FormData();
+
+    files.forEach(
+      (file) => {
+        uploadData.append(
+          "gallery",
+          file
+        );
+      }
+    );
+
+
+    const response =
+      await api.post(
+        "/invitations/upload-gallery",
+        uploadData,
+        {
+          headers: {
+            "Content-Type":
+              "multipart/form-data"
+          }
+        }
+      );
+
+
+    const uploadedImages =
+      response.data.images || [];
+
+
+    setFormData(
+      (previousData) => ({
+        ...previousData,
+
+        gallery: [
+          ...(Array.isArray(
+            previousData.gallery
+          )
+            ? previousData.gallery
+            : []),
+
+          ...uploadedImages
+        ]
+      })
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Gallery upload error:",
+      error
+    );
+
+
+    setGalleryUploadError(
+      error.response?.data?.message ||
+      "Failed to upload photos."
+    );
+
+
+  } finally {
+
+    setUploadingGallery(false);
+
+    event.target.value = "";
+
+  }
+};
+
+
+// ==========================================
+// REMOVE GALLERY IMAGE
+// ==========================================
+
+const removeGalleryImage = async (
+  index
+) => {
+
+  const gallery =
+    Array.isArray(formData.gallery)
+      ? formData.gallery
+      : [];
+
+
+  const image =
+    gallery[index];
+
+
+  if (!image) {
+    return;
+  }
+
+
+  const publicId =
+    typeof image === "string"
+      ? null
+      : image?.publicId;
+
+
+  console.log(
+    "REMOVING IMAGE:",
+    image
+  );
+
+
+  try {
+
+    if (publicId) {
+
+      await api.delete(
+        "/invitations/gallery-image",
+        {
+          data: {
+            publicId
+          }
+        }
+      );
+
+    }
+
+
+    setFormData(
+      (previousData) => ({
+
+        ...previousData,
+
+        gallery:
+          previousData.gallery.filter(
+            (_, imageIndex) =>
+              imageIndex !== index
+          )
+
+      })
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Remove gallery image error:",
+      error
+    );
+
+
+    setGalleryUploadError(
+      error.response?.data?.message ||
+      "Failed to delete gallery image."
+    );
+
+  }
+
+};
 
   if (loading) {
 
@@ -856,6 +1176,262 @@ function CreateInvitation() {
             />
 
           </div>
+          {isPhotoTemplate && (
+  <div className="couple-photo-section">
+
+    <h3>Couple Photo</h3>
+
+    <p>
+      Upload your main couple photo.
+      <br />
+      Premium Plus only • JPG, PNG, WEBP • Max 5MB
+    </p>
+
+    <input
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      onChange={handleCouplePhotoUpload}
+      disabled={photoUploading}
+    />
+
+    {photoUploading && (
+      <p className="uploading-text">
+        Uploading photo...
+      </p>
+    )}
+
+    {couplePhoto && (
+      <div className="couple-photo-preview">
+
+        <img
+          src={couplePhoto}
+          alt="Couple"
+        />
+
+      </div>
+    )}
+
+  </div>
+)}
+
+
+{/* =========================================
+    PREMIUM PLUS PHOTO GALLERY
+========================================= */}
+
+<div className="premium-gallery-section">
+
+  <div className="premium-gallery-header">
+
+    <div>
+
+      <p className="premium-gallery-eyebrow">
+        PREMIUM PLUS
+      </p>
+
+      <h3>
+        Photo Gallery
+      </h3>
+
+      <span>
+        Add beautiful photos to your invitation.
+      </span>
+
+    </div>
+
+  </div>
+
+
+  {isPremiumPlus ? (
+
+    <>
+
+      {/* =================================
+          UPLOADED IMAGE PREVIEW
+      ================================= */}
+
+      <div className="premium-gallery-preview">
+
+        {(formData.gallery || []).length > 0 ? (
+
+          <div className="premium-gallery-grid">
+
+            {formData.gallery.map(
+              (image, index) => {
+
+                const imageUrl =
+                  typeof image === "string"
+                    ? image
+                    : image?.url;
+
+
+                if (!imageUrl) {
+                  return null;
+                }
+
+
+                return (
+
+                  <div
+                    className="premium-gallery-preview-item"
+                    key={
+                      image?.publicId ||
+                      `${imageUrl}-${index}`
+                    }
+                  >
+
+                    <img
+                      src={imageUrl}
+                      alt={`Gallery ${index + 1}`}
+                    />
+
+
+                    {/* IMAGE NUMBER */}
+
+                    <div className="premium-gallery-image-number">
+                      {index + 1}
+                    </div>
+
+
+                    {/* REMOVE IMAGE */}
+
+                    <button
+                      type="button"
+                      className="premium-gallery-remove"
+                      onClick={() =>
+                        removeGalleryImage(index)
+                      }
+                      title="Remove photo"
+                    >
+                      <X size={15} />
+                    </button>
+
+                  </div>
+
+                );
+
+              }
+            )}
+
+          </div>
+
+        ) : (
+
+          <div className="premium-gallery-empty">
+
+            <Image size={24} />
+
+            <span>
+              Your uploaded photos will appear here.
+            </span>
+
+          </div>
+
+        )}
+
+      </div>
+
+
+      {/* =================================
+          FILE INPUT
+      ================================= */}
+
+      <input
+        type="file"
+        id="gallery-upload"
+        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+        multiple
+        onChange={handleGalleryUpload}
+        disabled={uploadingGallery}
+        style={{
+          display: "none"
+        }}
+      />
+
+
+      {/* =================================
+          UPLOAD BUTTON
+      ================================= */}
+
+      <label
+        htmlFor="gallery-upload"
+        className="premium-gallery-add"
+      >
+
+        <Plus size={17} />
+
+        {uploadingGallery
+          ? "Uploading..."
+          : "Upload Photos"}
+
+      </label>
+
+
+      {/* =================================
+          ERROR
+      ================================= */}
+
+      {galleryUploadError && (
+
+        <p
+          className="premium-gallery-error"
+          style={{
+            marginTop: "10px",
+            color: "#dc2626",
+            fontSize: "13px"
+          }}
+        >
+          {galleryUploadError}
+        </p>
+
+      )}
+
+
+      {/* =================================
+          NOTE
+      ================================= */}
+
+      <small className="premium-gallery-note">
+        JPG, PNG or WEBP · Maximum 10 photos · Maximum 5MB each
+      </small>
+
+    </>
+
+  ) : (
+
+    <div className="premium-gallery-locked">
+
+      <div className="premium-gallery-lock">
+        <Lock size={18} />
+      </div>
+
+      <div>
+
+        <strong>
+          Premium Plus feature
+        </strong>
+
+        <p>
+          Upgrade to Premium Plus to add a
+          photo gallery to your invitation.
+        </p>
+        <button
+  type="button"
+  className="gallery-upgrade-btn"
+  onClick={() =>
+    navigate("/pricing")
+  }
+>
+  ✨ Upgrade to Premium Plus
+</button>
+
+      </div>
+
+    </div>
+
+  )}
+
+</div>
 
 
           <div className="editor-form-note">

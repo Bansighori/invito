@@ -1,0 +1,604 @@
+/* =========================================
+   PHOTO WEDDING ROYAL
+========================================= */
+
+.photo-royal {
+  position: relative;
+
+  width: 85%;
+  max-width: 580px;
+
+  margin: 40px auto 0;
+
+  padding: 25px;
+
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(210, 181, 112, 0.12),
+      transparent 30%
+    ),
+    #0d2925;
+
+  color: #eee1bb;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  overflow: visible;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.royal-card {
+  position: relative;
+
+  padding: 38px 28px 30px;
+
+  text-align: center;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      #12352f,
+      #0a211e
+    );
+
+  border: 1px solid #c7a65e;
+
+  box-shadow:
+    inset 0 0 0 6px rgba(199, 166, 94, 0.08),
+    0 18px 45px rgba(8, 35, 30, 0.25);
+}
+
+
+/* =========================================
+   INNER FRAME
+========================================= */
+
+.royal-card::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 10px;
+
+  border: 1px solid rgba(199, 166, 94, 0.38);
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   CORNER ORNAMENTS
+========================================= */
+
+.royal-card::after {
+  content: "❧                         ❧";
+
+  position: absolute;
+
+  top: 14px;
+  left: 0;
+  right: 0;
+
+  color: #b99550;
+
+  font-size: 17px;
+
+  white-space: pre;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   TOP ORNAMENT
+========================================= */
+
+.royal-top-ornament {
+  position: relative;
+
+  z-index: 2;
+
+  margin-bottom: 8px;
+
+  color: #d1b36c;
+
+  font-size: 25px;
+}
+
+
+/* =========================================
+   LABEL
+========================================= */
+
+.royal-label {
+  position: relative;
+
+  z-index: 2;
+
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 8px;
+
+  letter-spacing: 4px;
+
+  color: #c5a45d;
+
+  font-weight: 600;
+}
+
+
+/* =========================================
+   NAMES
+========================================= */
+
+.royal-names {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 0;
+
+  margin: 15px 0 9px;
+
+  color: #f1e5c6;
+
+  font-size: 41px;
+
+  font-weight: 400;
+
+  line-height: 0.95;
+}
+
+
+.royal-names small {
+  margin: 4px 0;
+
+  color: #c7a65e;
+
+  font-size: 18px;
+
+  font-style: italic;
+}
+
+
+/* =========================================
+   TITLE LINE
+========================================= */
+
+.royal-title-line {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  margin: 15px 0 20px;
+}
+
+
+.royal-title-line i {
+  width: 65px;
+
+  height: 1px;
+
+  background: #8d743f;
+}
+
+
+.royal-title-line b {
+  color: #d0ae62;
+
+  font-size: 9px;
+}
+
+
+/* =========================================
+   PHOTO
+========================================= */
+
+.royal-photo-wrapper {
+  position: relative;
+
+  z-index: 2;
+
+  width: 48%;
+
+  max-width: 225px;
+
+  margin: 0 auto 22px;
+
+  padding: 6px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d7bb78,
+      #92743a,
+      #d8bd7b
+    );
+
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+
+.royal-photo {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  background: #192c28;
+
+  border: 3px solid #12352f;
+}
+
+
+.royal-photo img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* =========================================
+   PLACEHOLDER
+========================================= */
+
+.royal-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #c7a65e;
+}
+
+
+.royal-placeholder span {
+  font-size: 35px;
+
+  margin-bottom: 7px;
+}
+
+
+.royal-placeholder p {
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.royal-message {
+  position: relative;
+
+  z-index: 2;
+
+  margin: 0 auto 21px;
+
+  color: #d8cba9;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  font-style: italic;
+}
+
+
+/* =========================================
+   DATE / TIME
+========================================= */
+
+.royal-details {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 25px;
+
+  max-width: 390px;
+
+  margin: 0 auto 21px;
+
+  padding: 14px 18px;
+
+  border-top: 1px solid #55482c;
+
+  border-bottom: 1px solid #55482c;
+}
+
+
+.royal-detail {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+.royal-detail span {
+  font-family: Arial, sans-serif;
+
+  font-size: 7px;
+
+  letter-spacing: 2px;
+
+  color: #aa8b4c;
+}
+
+
+.royal-detail strong {
+  font-family: Arial, sans-serif;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+
+  color: #eee1bb;
+}
+
+
+.royal-detail-symbol {
+  color: #c7a65e;
+
+  font-size: 9px;
+}
+
+
+/* =========================================
+   VENUE
+========================================= */
+
+.royal-venue {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 5px;
+
+  margin-bottom: 20px;
+}
+
+
+.royal-venue-symbol {
+  color: #c7a65e;
+
+  font-size: 19px;
+}
+
+
+.royal-venue > span {
+  font-family: Arial, sans-serif;
+
+  font-size: 7px;
+
+  letter-spacing: 3px;
+
+  color: #aa8b4c;
+}
+
+
+.royal-venue strong {
+  font-family: Arial, sans-serif;
+
+  font-size: 11px;
+
+  letter-spacing: 2px;
+
+  color: #eee1bb;
+}
+
+
+.royal-venue small {
+  font-family: Arial, sans-serif;
+
+  font-size: 9px;
+
+  color: #a99c7e;
+}
+
+
+/* =========================================
+   RSVP
+========================================= */
+
+.royal-rsvp {
+  position: relative;
+
+  z-index: 2;
+
+  padding: 10px 28px;
+
+  border: 1px solid #c7a65e;
+
+  background: transparent;
+
+  color: #d6ba72;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+.royal-rsvp:hover {
+  background: #c7a65e;
+
+  color: #0d2925;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.royal-footer {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  margin-top: 19px;
+}
+
+
+.royal-footer span {
+  color: #aa8b4c;
+
+  font-size: 12px;
+}
+
+
+.royal-footer p {
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 7px;
+
+  letter-spacing: 2px;
+
+  color: #9f9275;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .photo-royal {
+    width: 90%;
+
+    padding: 18px;
+  }
+
+  .royal-card {
+    padding: 34px 20px 25px;
+  }
+
+  .royal-names {
+    font-size: 33px;
+  }
+
+  .royal-photo-wrapper {
+    width: 52%;
+  }
+
+}
+.royal-map-link {
+  margin-top: 5px;
+
+  color: #d6ba72;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  text-decoration: underline;
+
+  cursor: pointer;
+}
+
+.royal-map-link:hover {
+  color: #f0d899;
+}
+.royal-map-link {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin-top: 10px;
+  padding: 6px 12px;
+  color: #c7a65e !important;
+  background: transparent;
+  border: 1px solid #c7a65e;
+  border-radius: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none !important;
+  cursor: pointer;
+  position: relative;
+  z-index: 20;
+}
+
+.royal-map-link:hover {
+  background: #c7a65e;
+  color: #0d2925 !important;
+}

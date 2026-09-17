@@ -6,6 +6,13 @@ import {
 
 import api from "../api/axios";
 
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+import {
+  useNavigate
+} from "react-router-dom";
+
 import {
   Users,
   UserCheck,
@@ -21,7 +28,10 @@ function Guests() {
   // ==========================================
   // STATE
   // ==========================================
+  const navigate = useNavigate();
 
+const [user, setUser] =
+  useState(null);
   const [invitations, setInvitations] =
     useState([]);
 
@@ -46,6 +56,313 @@ function Guests() {
   const [error, setError] =
     useState("");
 
+  useEffect(() => {
+  const fetchCurrentUser = async () => {
+    try {
+      const response =
+  await api.get(
+    "/auth/me"
+  );
+
+      setUser(
+        response.data.user
+      );
+
+    } catch (error) {
+      console.error(
+        "Failed to fetch current user:",
+        error
+      );
+
+      setUser(null);
+    }
+  };
+
+  fetchCurrentUser();
+}, []);
+
+const isPremiumPlus =
+  user?.plan === "premium_plus" &&
+  user?.planExpiresAt &&
+  new Date(user.planExpiresAt) > new Date();
+
+const downloadGuestPDF = (type) => {
+  if (!isPremiumPlus) {
+    alert(
+      "🔒 Guest PDF Export is available only for Premium Plus users."
+    );
+    return;
+  }
+
+  let filteredGuests = [];
+  let pdfTitle = "";
+  let fileName = "";
+
+  // =========================
+  // COMING
+  // =========================
+
+  if (type === "coming") {
+    filteredGuests = guests.filter(
+      (guest) =>
+        String(guest.attendance).toLowerCase() ===
+        "yes"
+    );
+
+    pdfTitle = "COMING GUEST LIST";
+    fileName = "coming-guests";
+  }
+
+  // =========================
+  // MAYBE
+  // =========================
+
+  if (type === "maybe") {
+    filteredGuests = guests.filter(
+      (guest) =>
+        String(guest.attendance).toLowerCase() ===
+        "maybe"
+    );
+
+    pdfTitle = "MAYBE GUEST LIST";
+    fileName = "maybe-guests";
+  }
+
+  // =========================
+  // DECLINED
+  // =========================
+
+  if (type === "declined") {
+    filteredGuests = guests.filter(
+      (guest) =>
+        String(guest.attendance).toLowerCase() ===
+        "no"
+    );
+
+    pdfTitle = "DECLINED GUEST LIST";
+    fileName = "declined-guests";
+  }
+
+  // =========================
+  // NO DATA
+  // =========================
+
+  if (filteredGuests.length === 0) {
+    alert(
+      `No ${type} guests found.`
+    );
+    return;
+  }
+
+  const pdf = new jsPDF();
+
+  const invitationName =
+    selectedInvitationData?.title ||
+    "Invitation";
+
+  const eventDate =
+    selectedInvitationData?.data?.date ||
+    selectedInvitationData?.data?.eventDate ||
+    "-";
+
+  const generatedDate =
+    new Date().toLocaleDateString(
+      "en-IN"
+    );
+
+  // =========================
+  // TOTAL PEOPLE
+  // =========================
+
+  const totalPeople =
+    filteredGuests.reduce(
+      (total, guest) =>
+        total +
+        Number(
+          guest.numberOfGuests || 0
+        ),
+      0
+    );
+
+  // =========================
+  // HEADER
+  // =========================
+
+  pdf.setFontSize(24);
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  pdf.text(
+    "INVITO",
+    14,
+    20
+  );
+
+  pdf.setFontSize(17);
+
+  pdf.text(
+    pdfTitle,
+    14,
+    32
+  );
+
+  pdf.setFontSize(10);
+
+  pdf.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  pdf.text(
+    `Invitation: ${invitationName}`,
+    14,
+    42
+  );
+
+  pdf.text(
+    `Event Date: ${eventDate}`,
+    14,
+    49
+  );
+
+  pdf.text(
+    `Generated: ${generatedDate}`,
+    14,
+    56
+  );
+
+  // =========================
+  // SUMMARY
+  // =========================
+
+  pdf.setFontSize(12);
+
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  pdf.text(
+    `Total Responses: ${filteredGuests.length}`,
+    14,
+    69
+  );
+
+  pdf.text(
+    `Total People: ${totalPeople}`,
+    14,
+    76
+  );
+
+  // =========================
+  // TABLE
+  // =========================
+
+  const rows =
+    filteredGuests.map(
+      (guest, index) => [
+        index + 1,
+
+        guest.name || "-",
+
+        guest.numberOfGuests || 0,
+
+        guest.message || "-"
+      ]
+    );
+
+  autoTable(pdf, {
+    startY: 85,
+
+    head: [
+      [
+        "No.",
+        "Guest Name",
+        "Guests",
+        "Message"
+      ]
+    ],
+
+    body: rows,
+
+    theme: "grid",
+
+    styles: {
+      font: "helvetica",
+      fontSize: 9,
+      cellPadding: 4,
+      valign: "middle"
+    },
+
+    headStyles: {
+      fontSize: 10,
+      fontStyle: "bold"
+    },
+
+    columnStyles: {
+      0: {
+        cellWidth: 15
+      },
+
+      1: {
+        cellWidth: 50
+      },
+
+      2: {
+        cellWidth: 25,
+        halign: "center"
+      },
+
+      3: {
+        cellWidth: "auto"
+      }
+    },
+
+    margin: {
+      left: 14,
+      right: 14,
+      bottom: 20
+    }
+  });
+
+  // =========================
+  // PAGE NUMBERS
+  // =========================
+
+  const pageCount =
+    pdf.internal.getNumberOfPages();
+
+  for (
+    let page = 1;
+    page <= pageCount;
+    page++
+  ) {
+    pdf.setPage(page);
+
+    pdf.setFontSize(9);
+
+    pdf.setFont(
+      "helvetica",
+      "normal"
+    );
+
+    pdf.text(
+      `Invito • ${pdfTitle} • Page ${page} of ${pageCount}`,
+      14,
+      pdf.internal.pageSize.height - 10
+    );
+  }
+
+  // =========================
+  // DOWNLOAD
+  // =========================
+
+  pdf.save(
+    `${fileName}.pdf`
+  );
+};
 
   // ==========================================
   // GET INVITATIONS
@@ -643,7 +960,73 @@ function Guests() {
 
       </div>
 
+      {isPremiumPlus ? (
+  <div className="guest-pdf-actions">
 
+    <button
+      type="button"
+      className="guest-pdf-btn coming"
+      onClick={() =>
+        downloadGuestPDF("coming")
+      }
+    >
+      📗 Coming Guests PDF
+    </button>
+
+    <button
+      type="button"
+      className="guest-pdf-btn maybe"
+      onClick={() =>
+        downloadGuestPDF("maybe")
+      }
+    >
+      📙 Maybe Guests PDF
+    </button>
+
+    <button
+      type="button"
+      className="guest-pdf-btn declined"
+      onClick={() =>
+        downloadGuestPDF("declined")
+      }
+    >
+      📕 Declined Guests PDF
+    </button>
+
+  </div>
+) : (
+  <div className="guest-pdf-locked">
+
+    <div className="guest-pdf-lock-icon">
+      🔒
+    </div>
+
+    <div className="guest-pdf-lock-content">
+
+      <h3>
+        Guest PDF Export
+      </h3>
+
+      <p>
+        Export Coming, Maybe and
+        Declined guest lists with
+        Premium Plus.
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      className="guest-pdf-upgrade"
+      onClick={() =>
+        navigate("/pricing")
+      }
+    >
+      ✨ Upgrade to Premium Plus
+    </button>
+
+  </div>
+)}
       {/* ======================================
           GUEST TABLE
       ====================================== */}

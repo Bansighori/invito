@@ -162,6 +162,17 @@ function Sidebar() {
             </span>
             
           </NavLink>
+          
+          <NavLink
+  to="/pricing"
+  className={({ isActive }) =>
+    isActive ? "active" : ""
+  }
+>
+  <CreditCard size={18} />
+  <span>Pricing</span>
+</NavLink>
+          
           <NavLink
   to="/payment-history"
   className={({ isActive }) =>

@@ -32,6 +32,7 @@ import Favorites
 
 import Drafts
   from "./pages/Drafts";
+  import Pricing from "./pages/Pricing";
   import PaymentHistory from "./pages/PaymentHistory";
 
 import Settings
@@ -148,6 +149,10 @@ function App() {
               path="/drafts"
               element={<Drafts />}
             />
+            <Route
+  path="/pricing"
+  element={<Pricing />}
+/>
 <Route
   path="/payment-history"
   element={<PaymentHistory />}

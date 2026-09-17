@@ -20,6 +20,17 @@ import EngagementGold from "../templates/EngagementGold";
 import BabySafari from "../templates/BabySafari";
 import CocktailParty from "../templates/CocktailParty";
 import GraduationDay from "../templates/GraduationDay";
+import PhotoWeddingFloral
+  from "../templates/PhotoWeddingFloral";
+
+import PhotoWeddingRomantic
+  from "../templates/PhotoWeddingRomantic";
+
+import PhotoWeddingRoyal
+  from "../templates/PhotoWeddingRoyal"; 
+
+import InvitationGallery from "./InvitationGallery";
+
 
 function TemplateRenderer({
   component,
@@ -27,6 +38,7 @@ function TemplateRenderer({
   data = {},
   onRSVP = () => {}
 }) {
+
   const resolvedComponent =
     component ||
     (category === "Wedding"
@@ -37,175 +49,267 @@ function TemplateRenderer({
           ? "EngagementForever"
           : null);
 
+
+  let invitationComponent;
+
+
   switch (resolvedComponent) {
+
     case "WeddingClassic":
-      return (
+      invitationComponent = (
         <WeddingClassic
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "BirthdayModern":
-      return (
+      invitationComponent = (
         <BirthdayModern
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "EngagementForever":
-      return (
+      invitationComponent = (
         <EngagementForever
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "RoyalWedding":
-      return (
+      invitationComponent = (
         <RoyalWedding
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "GardenWedding":
-      return (
+      invitationComponent = (
         <GardenWedding
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "MinimalWedding":
-      return (
+      invitationComponent = (
         <MinimalWedding
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "BirthdayPop":
-      return (
+      invitationComponent = (
         <BirthdayPop
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "BirthdayElegant":
-      return (
+      invitationComponent = (
         <BirthdayElegant
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "BabyBloom":
-      return (
+      invitationComponent = (
         <BabyBloom
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "LittleStar":
-      return (
+      invitationComponent = (
         <LittleStar
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "PartyNight":
-      return (
+      invitationComponent = (
         <PartyNight
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "EngagementRose":
-      return (
+      invitationComponent = (
         <EngagementRose
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "CorporateEvent":
-      return (
+      invitationComponent = (
         <CorporateEvent
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "SunsetWedding":
-      return (
+      invitationComponent = (
         <SunsetWedding
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "VintageWedding":
-      return (
+      invitationComponent = (
         <VintageWedding
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "BirthdayKids":
-      return (
+      invitationComponent = (
         <BirthdayKids
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "EngagementGold":
-      return (
+      invitationComponent = (
         <EngagementGold
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "BabySafari":
-      return (
+      invitationComponent = (
         <BabySafari
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "CocktailParty":
-      return (
+      invitationComponent = (
         <CocktailParty
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
 
     case "GraduationDay":
-      return (
+      invitationComponent = (
         <GraduationDay
           data={data}
           onRSVP={onRSVP}
         />
       );
+      break;
+
+      case "PhotoWeddingFloral":
+  invitationComponent = (
+    <PhotoWeddingFloral
+      data={data}
+      onRSVP={onRSVP}
+    />
+  );
+  break;
+
+case "PhotoWeddingRomantic":
+  invitationComponent = (
+    <PhotoWeddingRomantic
+      data={data}
+      onRSVP={onRSVP}
+    />
+  );
+  break;
+
+case "PhotoWeddingRoyal":
+  invitationComponent = (
+    <PhotoWeddingRoyal
+      data={data}
+      onRSVP={onRSVP}
+    />
+  );
+  break;
+
 
     default:
       return (
         <div className="invitation-preview-fallback">
+
           <FileText size={38} />
-          <span>Invitation Preview</span>
+
+          <span>
+            Invitation Preview
+          </span>
+
         </div>
       );
+
   }
+
+
+  return (
+    <div className="invitation-renderer">
+
+      {invitationComponent}
+
+      <InvitationGallery
+        gallery={data.gallery}
+      />
+
+    </div>
+  );
 }
+
 
 export default TemplateRenderer;

@@ -1,0 +1,542 @@
+/* =========================================
+   PHOTO WEDDING ROMANTIC
+========================================= */
+
+.photo-romantic {
+  position: relative;
+
+  width: 85%;
+  max-width: 580px;
+
+  margin: 40px auto 0;
+
+  padding: 28px;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f6e9eb,
+      #ead7dc
+    );
+
+  color: #533c45;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  overflow: visible;
+}
+
+
+/* =========================================
+   DECORATIVE SHAPES
+========================================= */
+
+.romantic-top-shape {
+  position: absolute;
+
+  top: -8px;
+  left: 12%;
+
+  width: 76%;
+  height: 45px;
+
+  border-radius: 0 0 50% 50%;
+
+  border-bottom: 1px solid #b77f8e;
+
+  opacity: 0.45;
+}
+
+.romantic-bottom-shape {
+  position: absolute;
+
+  bottom: -8px;
+  left: 12%;
+
+  width: 76%;
+  height: 45px;
+
+  border-radius: 50% 50% 0 0;
+
+  border-top: 1px solid #b77f8e;
+
+  opacity: 0.45;
+}
+
+
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.romantic-card {
+  position: relative;
+
+  padding: 38px 28px 28px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  background: #fffaf8;
+
+  border: 1px solid #c99ca7;
+
+  box-shadow:
+    0 18px 45px rgba(91, 53, 65, 0.14);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.romantic-label {
+  margin: 0 0 13px;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 8px;
+
+  letter-spacing: 4px;
+
+  color: #9d6373;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   NAMES
+========================================= */
+
+.romantic-names {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 0;
+
+  margin: 0;
+
+  color: #593b44;
+
+  font-size: 42px;
+
+  line-height: 0.95;
+
+  font-weight: 400;
+}
+
+.romantic-names em {
+  margin: 5px 0;
+
+  color: #b67585;
+
+  font-size: 22px;
+
+  font-style: italic;
+}
+
+
+/* =========================================
+   LINE
+========================================= */
+
+.romantic-line {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin: 15px 0 20px;
+}
+
+.romantic-line span {
+  width: 55px;
+
+  height: 1px;
+
+  background: #d5aeb7;
+}
+
+.romantic-line b {
+  color: #b67585;
+
+  font-size: 11px;
+}
+
+
+/* =========================================
+   PHOTO
+========================================= */
+
+.romantic-photo-wrap {
+  position: relative;
+
+  width: 52%;
+
+  max-width: 240px;
+
+  margin: 0 auto 23px;
+}
+
+
+.romantic-photo {
+  width: 100%;
+
+  aspect-ratio: 4 / 5;
+
+  overflow: hidden;
+
+  border-radius: 48% 48% 8px 8px;
+
+  border: 7px solid white;
+
+  outline: 1px solid #c99ca7;
+
+  box-shadow:
+    0 12px 28px rgba(91, 53, 65, 0.18);
+
+  background: #eadde0;
+}
+
+
+.romantic-photo img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* =========================================
+   PLACEHOLDER
+========================================= */
+
+.romantic-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ead8dc,
+      #dbc3c9
+    );
+
+  color: #9b6472;
+}
+
+.romantic-placeholder span {
+  font-size: 35px;
+
+  margin-bottom: 8px;
+}
+
+.romantic-placeholder p {
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================
+   PHOTO DECORATION
+========================================= */
+
+.romantic-photo-flower {
+  position: absolute;
+
+  right: -15px;
+  bottom: 18px;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fffaf8;
+
+  border: 1px solid #c99ca7;
+
+  color: #b67585;
+
+  font-size: 22px;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.romantic-message {
+  margin: 0 auto 22px;
+
+  color: #765861;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  font-style: italic;
+}
+
+
+/* =========================================
+   EVENT
+========================================= */
+
+.romantic-event {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 25px;
+
+  max-width: 370px;
+
+  margin: 0 auto 22px;
+
+  padding: 15px 18px;
+
+  border-top: 1px solid #dfbec6;
+
+  border-bottom: 1px solid #dfbec6;
+}
+
+.romantic-event-item {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.romantic-event-item span {
+  font-family: Arial, sans-serif;
+
+  font-size: 7px;
+
+  letter-spacing: 2px;
+
+  color: #a56b79;
+}
+
+.romantic-event-item strong {
+  font-family: Arial, sans-serif;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+
+  color: #593b44;
+}
+
+.romantic-event-middle {
+  color: #b67585;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   VENUE
+========================================= */
+
+.romantic-venue {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 5px;
+
+  margin-bottom: 20px;
+}
+
+.romantic-venue-icon {
+  color: #b67585;
+
+  font-size: 20px;
+}
+
+.romantic-venue > span {
+  font-family: Arial, sans-serif;
+
+  font-size: 7px;
+
+  letter-spacing: 3px;
+
+  color: #a56b79;
+}
+
+.romantic-venue strong {
+  font-family: Arial, sans-serif;
+
+  font-size: 11px;
+
+  letter-spacing: 1.5px;
+
+  color: #593b44;
+}
+
+.romantic-venue small {
+  font-family: Arial, sans-serif;
+
+  font-size: 9px;
+
+  color: #92737b;
+}
+
+
+/* =========================================
+   RSVP
+========================================= */
+
+.romantic-rsvp {
+  padding: 10px 28px;
+
+  border: 1px solid #b67585;
+
+  background: #fffaf8;
+
+  color: #9d6373;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.romantic-rsvp:hover {
+  background: #9d6373;
+
+  color: white;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.romantic-footer {
+  margin-top: 18px;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 8px;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+  color: #a56b79;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .photo-romantic {
+    width: 90%;
+
+    padding: 20px;
+  }
+
+  .romantic-card {
+    padding: 32px 20px 25px;
+  }
+
+  .romantic-names {
+    font-size: 34px;
+  }
+
+  .romantic-photo-wrap {
+    width: 55%;
+  }
+
+}
+.romantic-map-link {
+  margin-top: 5px;
+
+  color: #9d6373;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  text-decoration: underline;
+
+  cursor: pointer;
+}
+
+.romantic-map-link:hover {
+  color: #6f3f4c;
+} 
+.romantic-map-link {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin-top: 10px;
+  padding: 6px 12px;
+  color: #9d6373 !important;
+  background: transparent;
+  border: 1px solid #9d6373;
+  border-radius: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none !important;
+  cursor: pointer;
+  position: relative;
+  z-index: 20;
+}
+
+.romantic-map-link:hover {
+  background: #9d6373;
+  color: white !important;
+}

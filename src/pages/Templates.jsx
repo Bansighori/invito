@@ -17,8 +17,6 @@ import {
 } from "react-router-dom";
 
 import TemplateCard from "../components/TemplateCard";
-import UpgradePremium from "../components/UpgradePremium";
-import UpgradePremiumPlus from "../components/UpgradePremiumPlus";
 
 
 function Templates() {
@@ -50,6 +48,18 @@ function Templates() {
 
 
   /* =========================
+     PHOTO TEMPLATES
+     PREMIUM PLUS ONLY
+  ========================= */
+
+  const photoTemplates = [
+    "PhotoWeddingFloral",
+    "PhotoWeddingRomantic",
+    "PhotoWeddingRoyal"
+  ];
+
+
+  /* =========================
      FETCH TEMPLATES + USER
   ========================= */
 
@@ -61,7 +71,6 @@ function Templates() {
 
         setLoading(true);
         setError("");
-
 
         // ========================================
         // GET TEMPLATES
@@ -97,6 +106,7 @@ function Templates() {
 
           // Don't stop templates from displaying
           setUser(null);
+
         }
 
       } catch (error) {
@@ -210,27 +220,53 @@ function Templates() {
   const handleUseTemplate =
     (template) => {
 
-
-      // ========================================
-      // PAID USER
-      // ========================================
-
-      if (hasPaidPlan) {
-
-        navigate(
-          `/invitations/create/${template._id}`
+      // Check whether this is
+      // one of the 3 photo templates
+      const isPhotoTemplate =
+        photoTemplates.includes(
+          template.component
         );
 
+
+      // ========================================
+      // PHOTO TEMPLATE
+      // PREMIUM PLUS ONLY
+      // ========================================
+
+      if (
+        isPhotoTemplate &&
+        !isPremiumPlus
+      ) {
+
+        navigate("/pricing");
+
         return;
+
       }
 
 
       // ========================================
-      // FREE USER - 3 INVITATIONS USED
+      // NORMAL PREMIUM TEMPLATE
       // ========================================
 
       if (
-        user?.plan === "free" &&
+        template.isPremium &&
+        !hasPaidPlan
+      ) {
+
+        navigate("/pricing");
+
+        return;
+
+      }
+
+
+      // ========================================
+      // FREE INVITATION LIMIT
+      // ========================================
+
+      if (
+        !hasPaidPlan &&
         user?.freeInvitationsUsed >= 3
       ) {
 
@@ -238,12 +274,15 @@ function Templates() {
           "You have used all 3 free invitations. Please upgrade to Premium to continue."
         );
 
+        navigate("/pricing");
+
         return;
+
       }
 
 
       // ========================================
-      // FREE USER - STILL HAS FREE USES
+      // OPEN TEMPLATE
       // ========================================
 
       navigate(
@@ -371,329 +410,6 @@ function Templates() {
 
 
       {/* =========================
-          PREMIUM SECTION
-      ========================= */}
-
-      {/* =========================
-          PRICING SECTION
-      ========================= */}
-
-      <section className="pricing-section">
-
-        <div className="pricing-heading">
-
-          <p className="pricing-eyebrow">
-            SIMPLE PRICING
-          </p>
-
-          <h2>
-            Choose the perfect plan
-          </h2>
-
-          <p>
-            Create beautiful invitations with the
-            features you need.
-          </p>
-
-        </div>
-
-
-        <div className="pricing-grid">
-
-
-          {/* =========================
-              FREE PLAN
-          ========================= */}
-
-          <div className="pricing-card">
-
-            <div className="pricing-card-top">
-
-              <span className="pricing-plan-name">
-                Free
-              </span>
-
-              <span className="pricing-badge">
-                STARTER
-              </span>
-
-            </div>
-
-
-            <div className="pricing-price">
-
-              <span className="currency">
-                ₹
-              </span>
-
-              <span className="amount">
-                0
-              </span>
-
-              <span className="period">
-                /month
-              </span>
-
-            </div>
-
-
-            <p className="pricing-description">
-              Everything you need to create
-              beautiful invitations.
-            </p>
-
-
-            <div className="pricing-divider"></div>
-
-
-            <ul className="pricing-features">
-
-              <li>
-                <span>✓</span>
-                3 invitations
-              </li>
-
-              <li>
-                <span>✓</span>
-                Free templates
-              </li>
-
-              <li>
-                <span>✓</span>
-                RSVP management
-              </li>
-
-              <li>
-                <span>✓</span>
-                Public invitation URL
-              </li>
-
-              <li>
-                <span>✓</span>
-                Basic sharing
-              </li>
-
-            </ul>
-
-
-            <button
-              className={
-                user?.plan === "free" ||
-                !hasPaidPlan
-                  ? "pricing-button current"
-                  : "pricing-button"
-              }
-              disabled
-            >
-              Current Plan
-            </button>
-
-          </div>
-
-
-          {/* =========================
-              PREMIUM PLAN
-          ========================= */}
-
-          <div className="pricing-card">
-
-            <div className="pricing-card-top">
-
-              <span className="pricing-plan-name">
-                Premium
-              </span>
-
-              <span className="pricing-badge premium">
-                PRO
-              </span>
-
-            </div>
-
-
-            <div className="pricing-price">
-
-              <span className="currency">
-                ₹
-              </span>
-
-              <span className="amount">
-                199
-              </span>
-
-              <span className="period">
-                /30 days
-              </span>
-
-            </div>
-
-
-            <p className="pricing-description">
-              Unlimited invitations with powerful
-              premium features.
-            </p>
-
-
-            <div className="pricing-divider"></div>
-
-
-            <ul className="pricing-features">
-
-              <li>
-                <span>✓</span>
-                Unlimited invitations
-              </li>
-
-              <li>
-                <span>✓</span>
-                All premium templates
-              </li>
-
-              <li>
-                <span>✓</span>
-                Advanced RSVP
-              </li>
-
-              <li>
-                <span>✓</span>
-                Invitation analytics
-              </li>
-
-              <li>
-                <span>✓</span>
-                WhatsApp sharing
-              </li>
-
-              <li>
-                <span>✓</span>
-                Google Maps location
-              </li>
-
-              <li>
-                <span>✓</span>
-                Custom invitation URL
-              </li>
-
-            </ul>
-
-
-            {isPremium ? (
-  <button
-    className="pricing-button plus-button"
-    disabled
-  >
-    ✓ Current Plan
-  </button>
-) : (
-  <UpgradePremium />
-)}
-          </div>
-
-
-          {/* =========================
-              PREMIUM PLUS PLAN
-          ========================= */}
-
-          <div className="pricing-card plus">
-
-            <div className="pricing-card-top">
-
-              <span className="pricing-plan-name">
-                Premium Plus
-              </span>
-
-              <span className="pricing-badge plus-badge">
-                PLUS
-              </span>
-
-            </div>
-
-
-            <div className="pricing-price">
-
-              <span className="currency">
-                ₹
-              </span>
-
-              <span className="amount">
-                299
-              </span>
-
-              <span className="period">
-                /30 days
-              </span>
-
-            </div>
-
-
-            <p className="pricing-description">
-              The ultimate invitation experience
-              with advanced creative features.
-            </p>
-
-
-            <div className="pricing-divider"></div>
-
-
-            <ul className="pricing-features">
-
-              <li>
-                <span>✓</span>
-                Everything in Premium
-              </li>
-
-              <li>
-                <span>✓</span>
-                Photo gallery
-              </li>
-
-              <li>
-                <span>✓</span>
-                Background music
-              </li>
-
-              <li>
-                <span>✓</span>
-                Advanced analytics
-              </li>
-
-              <li>
-                <span>✓</span>
-                Advanced RSVP
-              </li>
-
-              <li>
-                <span>✓</span>
-                Custom invitation URL
-              </li>
-
-              <li>
-                <span>✓</span>
-                WhatsApp sharing
-              </li>
-
-            </ul>
-
-
-            {isPremiumPlus ? (
-  <button
-    className="pricing-button plus-button"
-    disabled
-  >
-    ✓ Current Plan
-  </button>
-) : (
-  <UpgradePremiumPlus />
-)}
-
-          </div>
-
-
-        </div>
-
-      </section>
-
-
-      {/* =========================
           HEADER
       ========================= */}
 
@@ -738,34 +454,6 @@ function Templates() {
       {/* =========================
           ACTIVE PLAN INFORMATION
       ========================= */}
-
-      {hasPaidPlan &&
-        user?.planExpiresAt && (
-
-        <div className="active-plan-info">
-
-          <strong>
-            ✓{" "}
-            {user.plan === "premium_plus"
-              ? "Premium Plus"
-              : "Premium"}{" "}
-            is active
-          </strong>
-
-          <span>
-            Active until{" "}
-            {new Date(
-              user.planExpiresAt
-            ).toLocaleDateString("en-IN", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            })}
-          </span>
-
-        </div>
-
-      )}
 
 
       {/* =========================
@@ -845,15 +533,6 @@ function Templates() {
       <div className="templates-result-header">
 
         <div>
-
-          <strong>
-            {filteredTemplates.length}
-          </strong>
-
-          <span>
-            {" "}templates
-          </span>
-
         </div>
 
 
@@ -887,17 +566,43 @@ function Templates() {
         <div className="templates-grid">
 
           {filteredTemplates.map(
-            (template) => (
+            (template) => {
 
-              <TemplateCard
-                key={template._id}
-                template={template}
-                onUse={
-                  handleUseTemplate
-                }
-              />
+              const isPhotoTemplate =
+                photoTemplates.includes(
+                  template.component
+                );
 
-            )
+
+              const isLocked =
+                (
+                  template.isPremium &&
+                  !hasPaidPlan
+                ) ||
+                (
+                  isPhotoTemplate &&
+                  !isPremiumPlus
+                );
+
+
+              return (
+
+                <TemplateCard
+                  key={template._id}
+                  template={template}
+                  onUse={handleUseTemplate}
+                  isLocked={isLocked}
+                  isPhotoTemplate={
+                    isPhotoTemplate
+                  }
+                  isPremiumPlus={
+                    isPremiumPlus
+                  }
+                />
+
+              );
+
+            }
           )}
 
         </div>

@@ -891,7 +891,109 @@ const templates = [
     ],
     isPremium: false,
     isActive: true
-  }
+  },
+
+  {
+  title: "Photo Wedding Floral",
+  category: "Wedding",
+  type: "Premium Plus",
+  component: "PhotoWeddingFloral",
+  isPremium: true,
+  fields: [
+    {
+      name: "groomName",
+      label: "Groom Name",
+      type: "text",
+      required: true
+    },
+    {
+      name: "brideName",
+      label: "Bride Name",
+      type: "text",
+      required: true
+    },
+    {
+      name: "date",
+      label: "Wedding Date",
+      type: "date",
+      required: true
+    },
+    {
+      name: "time",
+      label: "Wedding Time",
+      type: "text",
+      required: true
+    }
+  ]
+},
+
+{
+  title: "Photo Wedding Romantic",
+  category: "Wedding",
+  type: "Premium Plus",
+  component: "PhotoWeddingRomantic",
+  isPremium: true,
+  fields: [
+    {
+      name: "groomName",
+      label: "Groom Name",
+      type: "text",
+      required: true
+    },
+    {
+      name: "brideName",
+      label: "Bride Name",
+      type: "text",
+      required: true
+    },
+    {
+      name: "date",
+      label: "Wedding Date",
+      type: "date",
+      required: true
+    },
+    {
+      name: "time",
+      label: "Wedding Time",
+      type: "text",
+      required: true
+    }
+  ]
+},
+
+{
+  title: "Photo Wedding Royal",
+  category: "Wedding",
+  type: "Premium Plus",
+  component: "PhotoWeddingRoyal",
+  isPremium: true,
+  fields: [
+    {
+      name: "groomName",
+      label: "Groom Name",
+      type: "text",
+      required: true
+    },
+    {
+      name: "brideName",
+      label: "Bride Name",
+      type: "text",
+      required: true
+    },
+    {
+      name: "date",
+      label: "Wedding Date",
+      type: "date",
+      required: true
+    },
+    {
+      name: "time",
+      label: "Wedding Time",
+      type: "text",
+      required: true
+    }
+  ]
+}
 ];
 
 module.exports = templates;
