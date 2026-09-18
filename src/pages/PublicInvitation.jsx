@@ -11,7 +11,8 @@ import {
 } from "lucide-react";
 
 import {
-  useParams
+  useParams,
+  useSearchParams
 } from "react-router-dom";
 
 
@@ -27,6 +28,9 @@ import RSVPForm from "../components/RSVPForm";
 function PublicInvitation() {
 
   const { slug } = useParams();
+  
+
+  const [searchParams] = useSearchParams();
 
   const invitationRef =
     useRef(null);
@@ -47,7 +51,11 @@ function PublicInvitation() {
   // ==========================================
   // FETCH PUBLIC INVITATION
   // ==========================================
-
+  useEffect(() => {
+  if (searchParams.get("rsvp") === "true") {
+    setShowRSVP(true);
+  }
+}, [searchParams]);
   useEffect(() => {
 
     const fetchInvitation = async () => {
@@ -218,6 +226,61 @@ function PublicInvitation() {
       canvas.width,
       canvas.height
     );
+
+// ==========================================
+// CLICKABLE RSVP LINK
+// ==========================================
+
+const invitationElement =
+  invitationRef.current;
+
+const rsvpButton =
+  invitationElement.querySelector(
+    ".invitation-rsvp-button"
+  );
+
+if (rsvpButton) {
+  const invitationRect =
+    invitationElement.getBoundingClientRect();
+
+  const buttonRect =
+    rsvpButton.getBoundingClientRect();
+
+  const canvasScale =
+    canvas.width /
+    invitationRect.width;
+
+  const pdfX =
+    (buttonRect.left -
+      invitationRect.left) *
+    canvasScale;
+
+  const pdfY =
+    (buttonRect.top -
+      invitationRect.top) *
+    canvasScale;
+
+  const pdfButtonWidth =
+    buttonRect.width *
+    canvasScale;
+
+  const pdfButtonHeight =
+    buttonRect.height *
+    canvasScale;
+
+  const rsvpUrl =
+  `${window.location.origin}/invite/${slug}?rsvp=true#rsvp`;
+
+  pdf.link(
+  pdfX,
+  pdfY,
+  pdfButtonWidth,
+  pdfButtonHeight,
+  {
+    url: rsvpUrl
+  }
+);
+}
 
 
     // ==========================================
