@@ -477,7 +477,97 @@ router.post(
     }
 
   }
-);      
+); 
+
+router.delete(
+  "/template-photo",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const user = await User.findById(
+        req.user.userId
+      );
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found."
+        });
+      }
+
+      const isPremiumPlus =
+        user.plan === "premium_plus" &&
+        user.planExpiresAt &&
+        new Date(user.planExpiresAt) > new Date();
+
+      if (!isPremiumPlus) {
+        return res.status(403).json({
+          success: false,
+          code: "PREMIUM_PLUS_REQUIRED",
+          message:
+            "Photo templates are available only for Premium Plus users."
+        });
+      }
+
+      const { imageUrl } = req.body;
+
+      if (!imageUrl) {
+        return res.status(400).json({
+          success: false,
+          message: "Image URL is required."
+        });
+      }
+
+      const uploadIndex =
+        imageUrl.indexOf("/upload/");
+
+      if (uploadIndex === -1) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid Cloudinary image URL."
+        });
+      }
+
+      let publicId =
+        imageUrl.substring(
+          uploadIndex + 8
+        );
+
+      publicId =
+        publicId.replace(
+          /^v\d+\//,
+          ""
+        );
+
+      publicId =
+        publicId.substring(
+          0,
+          publicId.lastIndexOf(".")
+        );
+
+      await cloudinary.uploader.destroy(
+        publicId
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Photo deleted successfully."
+      });
+
+    } catch (error) {
+      console.error(
+        "Template photo delete error:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message: "Failed to delete photo."
+      });
+    }
+  }
+);
+
 router.delete(
   "/:id",
   authMiddleware,

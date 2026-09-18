@@ -141,6 +141,41 @@ setFormData((previousData) => ({
     setPhotoUploading(false);
   }
 };
+
+const handleDeleteCouplePhoto = async () => {
+  if (!couplePhoto) return;
+
+  const confirmDelete = window.confirm(
+    "Are you sure you want to remove this couple photo?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await api.delete(
+      "/invitations/template-photo",
+      {
+        data: {
+          imageUrl: couplePhoto
+        }
+      }
+    );
+
+    setCouplePhoto("");
+
+  } catch (error) {
+    console.error(
+      "Photo delete error:",
+      error
+    );
+
+    alert(
+      error.response?.data?.message ||
+        "Failed to delete photo."
+    );
+  }
+};
+
   const saveDraft = async () => {
 
     try {
@@ -1201,15 +1236,74 @@ const removeGalleryImage = async (
     )}
 
     {couplePhoto && (
-      <div className="couple-photo-preview">
+  <div
+    style={{
+      marginTop: "15px",
+      width: "230px"
+    }}
+  >
+    <img
+      src={couplePhoto}
+      alt="Couple"
+      style={{
+        width: "230px",
+        height: "180px",
+        objectFit: "cover",
+        display: "block",
+        borderRadius: "10px",
+        border: "1px solid #ddd"
+      }}
+    />
 
-        <img
-          src={couplePhoto}
-          alt="Couple"
+    <div
+      style={{
+        display: "flex",
+        gap: "8px",
+        marginTop: "12px"
+      }}
+    >
+      <label
+        style={{
+          display: "inline-block",
+          padding: "8px 12px",
+          background: "#111",
+          color: "#fff",
+          borderRadius: "7px",
+          fontSize: "12px",
+          fontWeight: "600",
+          cursor: "pointer"
+        }}
+      >
+        Replace Photo
+
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          onChange={handleCouplePhotoUpload}
+          disabled={photoUploading}
+          style={{ display: "none" }}
         />
+      </label>
 
-      </div>
-    )}
+      <button
+        type="button"
+        onClick={handleDeleteCouplePhoto}
+        style={{
+          padding: "8px 12px",
+          background: "#fff",
+          color: "#c0392b",
+          border: "1px solid #c0392b",
+          borderRadius: "7px",
+          fontSize: "12px",
+          fontWeight: "600",
+          cursor: "pointer"
+        }}
+      >
+        Delete Photo
+      </button>
+    </div>
+  </div>
+)}
 
   </div>
 )}
