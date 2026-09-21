@@ -15,20 +15,16 @@ import {
   useSearchParams
 } from "react-router-dom";
 
-
 import TemplateRenderer from "../components/TemplateRenderer";
-
 
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 import RSVPForm from "../components/RSVPForm";
 
-
 function PublicInvitation() {
 
   const { slug } = useParams();
-  
 
   const [searchParams] = useSearchParams();
 
@@ -44,9 +40,9 @@ function PublicInvitation() {
   const [error, setError] =
     useState("");
 
-  const [showRSVP, setShowRSVP] =
-    useState(false);
-
+  const [showRSVP, setShowRSVP] = useState(
+  searchParams.get("rsvp") === "true"
+);
 
   // ==========================================
   // FETCH PUBLIC INVITATION
@@ -140,8 +136,6 @@ function PublicInvitation() {
           if (image.complete) {
             return Promise.resolve();
           }
-
-
           return new Promise(
             (resolve) => {
 
@@ -166,7 +160,6 @@ function PublicInvitation() {
       (resolve) =>
         setTimeout(resolve, 300)
     );
-
 
     // ==========================================
     // CREATE CANVAS
@@ -269,7 +262,7 @@ if (rsvpButton) {
     canvasScale;
 
   const rsvpUrl =
-  `${window.location.origin}/invite/${slug}?rsvp=true#rsvp`;
+  `${window.location.origin}/invite/${slug}?rsvp=true`;
 
   pdf.link(
   pdfX,
@@ -517,8 +510,6 @@ if (rsvpButton) {
           {getTemplateComponent()}
 
         </div>
-
-
         {/* ===================================
             RSVP FORM
 
@@ -529,18 +520,11 @@ if (rsvpButton) {
             =================================== */}
 
         {showRSVP && (
-
-          <div className="public-rsvp-container">
-
-            <RSVPForm
-              invitationId={
-                invitation._id
-              }
-            />
-
-          </div>
-
-        )}
+  <RSVPForm
+    invitationId={invitation._id}
+    onClose={() => setShowRSVP(false)}
+  />
+)}
 
       </div>
 
@@ -548,6 +532,4 @@ if (rsvpButton) {
   );
 
 }
-
-
 export default PublicInvitation;

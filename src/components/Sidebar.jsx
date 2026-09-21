@@ -170,7 +170,7 @@ function Sidebar() {
   }
 >
   <CreditCard size={18} />
-  <span>Pricing</span>
+  <span className="nav-label">Pricing</span> 
 </NavLink>
           
           <NavLink

@@ -461,7 +461,13 @@
 
 }
 
-
+@media (max-width: 768px) {
+  .sidebar .pricing-text,
+  .sidebar .nav-label,
+  .sidebar .sidebar-label {
+    display: none !important;
+  }
+}
 @media (max-width: 700px) {
 
   .sidebar {
