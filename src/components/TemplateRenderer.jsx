@@ -36,7 +36,8 @@ function TemplateRenderer({
   component,
   category,
   data = {},
-  onRSVP = () => {}
+  onRSVP = () => {},
+  enableOpeningAnimation = false
 }) {
 
   const resolvedComponent =
@@ -70,6 +71,7 @@ function TemplateRenderer({
         <BirthdayModern
           data={data}
           onRSVP={onRSVP}
+          
         />
       );
       break;
@@ -120,6 +122,7 @@ function TemplateRenderer({
         <BirthdayPop
           data={data}
           onRSVP={onRSVP}
+          enableOpeningAnimation={enableOpeningAnimation}
         />
       );
       break;
@@ -130,6 +133,7 @@ function TemplateRenderer({
         <BirthdayElegant
           data={data}
           onRSVP={onRSVP}
+          enableOpeningAnimation={enableOpeningAnimation}
         />
       );
       break;
@@ -277,6 +281,7 @@ case "PhotoWeddingRoyal":
     <PhotoWeddingRoyal
       data={data}
       onRSVP={onRSVP}
+
     />
   );
   break;

@@ -558,12 +558,12 @@ function Pricing() {
 
               <li>
                 <span>✓</span>
-                Background music
+                Birthday Animation 
               </li>
 
               <li>
                 <span>✓</span>
-                Advanced analytics
+                Guest List pdf
               </li>
 
               <li>
