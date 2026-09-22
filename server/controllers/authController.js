@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const { OAuth2Client } = require("google-auth-library");
 
 const User = require("../models/User");
 const Otp = require("../models/Otp");
@@ -583,6 +584,95 @@ const loginUser = async (req, res) => {
 };
 
 // =====================================================
+// GOOGLE LOGIN
+// =====================================================
+
+const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID
+);
+
+const googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({
+        message: "Google credential is required"
+      });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+
+    const googleEmail = payload.email;
+    const googleName = payload.name;
+
+    if (!googleEmail) {
+      return res.status(400).json({
+        message: "Google email not found"
+      });
+    }
+
+    const normalizedEmail =
+      googleEmail.toLowerCase().trim();
+
+    let user = await User.findOne({
+      email: normalizedEmail
+    });
+
+    // Create new user
+    if (!user) {
+      user = await User.create({
+        name: googleName || "Invito User",
+        email: normalizedEmail,
+        password: await bcrypt.hash(
+          Math.random().toString(36) + Date.now(),
+          10
+        ),
+        isEmailVerified: true,
+        plan: "free"
+      });
+    }
+
+    // Create Invito JWT
+    const token = jwt.sign(
+      {
+        id: user._id
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d"
+      }
+    );
+
+    return res.status(200).json({
+      message: "Google login successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        plan: user.plan
+      }
+    });
+
+  } catch (error) {
+    console.error(
+      "Google Login Error:",
+      error
+    );
+
+    return res.status(401).json({
+      message: "Google authentication failed"
+    });
+  }
+};
+
+// =====================================================
 // UPDATE PROFILE
 // =====================================================
 
@@ -758,6 +848,7 @@ module.exports = {
   verifyForgotPasswordOtp,
   resetPassword,
   loginUser,
+  googleLogin,
   updateProfile,
   changePassword,
   getCurrentUser

@@ -8,7 +8,9 @@ import {
 } from "react-router-dom";
 
 import { login } from "../api/authApi";
+import api from "../api/axios";
 
+import { GoogleLogin } from "@react-oauth/google";
 
 function Login() {
 
@@ -231,6 +233,53 @@ function Login() {
 
         </form>
 
+{/* Google Login */}
+
+<div
+  style={{
+    marginTop: "20px",
+    display: "flex",
+    justifyContent: "center"
+  }}
+>
+  <GoogleLogin
+    onSuccess={async (credentialResponse) => {
+  try {
+    setError("");
+
+    localStorage.removeItem("invitoToken");
+    localStorage.removeItem("invitoUser");
+
+    const response = await api.post("/auth/google", {
+      credential: credentialResponse.credential
+    });
+
+    localStorage.setItem(
+      "invitoToken",
+      response.data.token
+    );
+
+    localStorage.setItem(
+      "invitoUser",
+      JSON.stringify(response.data.user)
+    );
+
+    navigate("/dashboard");
+
+  } catch (error) {
+    console.error("Google Login Error:", error);
+
+    setError(
+      error.response?.data?.message ||
+      "Google login failed. Please try again."
+    );
+  }
+}}
+onError={() => {
+  setError("Google login was cancelled or failed.");
+}}
+  />
+</div>
 
         {/* Register */}
 

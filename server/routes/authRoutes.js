@@ -7,6 +7,7 @@ const {
   verifyForgotPasswordOtp,
   resetPassword,
   loginUser,
+  googleLogin,
   updateProfile,
   changePassword,
   getCurrentUser
@@ -60,6 +61,7 @@ router.post(
   loginUser
 );
 
+router.post("/google", googleLogin);
 // ==========================================
 // PROTECTED ROUTES
 // ==========================================
