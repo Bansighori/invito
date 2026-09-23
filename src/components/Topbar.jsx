@@ -1,7 +1,8 @@
 import {
   Search,
   Bell,
-  Plus
+  Plus,
+  Sparkles
 } from "lucide-react";
 
 import {
@@ -29,6 +30,13 @@ function Topbar() {
 
   return (
     <header className="topbar">
+      <div className="navbar-brand">
+  <div className="navbar-logo">
+    <Sparkles size={18} />
+  </div>
+
+  <span>Invito</span>
+</div>
 
       <div className="topbar-search">
 

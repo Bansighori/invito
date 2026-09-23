@@ -27,6 +27,9 @@ const authRoutes =
 const paymentRoutes =
   require("./routes/paymentRoutes");
 
+const adminRoutes = require("./routes/adminRoutes");
+const adminAuthRoutes = require("./routes/adminAuthRoutes");
+
 dotenv.config({
   path: path.join(__dirname, ".env")
 });
@@ -118,6 +121,11 @@ app.use(
 app.use(
   "/api/payment",
   paymentRoutes
+);
+app.use("/api/admin", adminRoutes);
+app.use(
+  "/api/admin/auth",
+  adminAuthRoutes
 );
 
 module.exports = app;

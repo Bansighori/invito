@@ -24,7 +24,7 @@ import {
   CartesianGrid
 } from "recharts";
 
-
+import "./Analytics.css";
 function Analytics() {
 
   const [invitations, setInvitations] =
@@ -555,38 +555,41 @@ function Analytics() {
 
             <div className="analytics-pie-container">
 
-              <ResponsiveContainer
-                width="100%"
-                height={320}
-              >
+              <div className="analytics-pie-chart">
 
-                <PieChart>
+  <ResponsiveContainer width="100%" height={320}>
 
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={75}
-                    outerRadius={110}
-                    paddingAngle={4}
-                    dataKey="value"
-                  >
+    <PieChart>
 
-                    <Cell fill="#6b7280" />
+      <Pie
+        data={pieData}
+        cx="50%"
+        cy="45%"
+        innerRadius={65}
+        outerRadius={105}
+        paddingAngle={5}
+        dataKey="value"
+        isAnimationActive={false}
+      >
 
-                    <Cell fill="#b59b72" />
+        <Cell fill="#ec4899" />
+        <Cell fill="#8b5cf6" />
+        <Cell fill="#f97316" />
 
-                    <Cell fill="#a66a6a" />
+      </Pie>
 
-                  </Pie>
+      <Tooltip />
 
-                  <Tooltip />
+      <Legend
+        verticalAlign="bottom"
+        height={30}
+      />
 
-                  <Legend />
+    </PieChart>
 
-                </PieChart>
+  </ResponsiveContainer>
 
-              </ResponsiveContainer>
+</div>
 
             </div>
 

@@ -1,0 +1,196 @@
+/* =========================
+   PAGE ANIMATION
+========================= */
+
+.page-animate {
+  animation: pageEnter 0.6s ease both;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================
+   FADE
+========================= */
+
+.fade-in {
+  animation: fadeIn 0.7s ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =========================
+   SLIDE UP
+========================= */
+
+.slide-up {
+  animation: slideUp 0.7s ease both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================
+   FLOAT
+========================= */
+
+.float-animation {
+  animation: floatObject 4s ease-in-out infinite;
+}
+
+@keyframes floatObject {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+
+/* =========================
+   CARD HOVER
+========================= */
+
+.animated-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.animated-card:hover {
+  transform: translateY(-7px) rotate(-0.5deg);
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.animated-button {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.animated-button:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.animated-button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================
+   SCALE
+========================= */
+
+.scale-in {
+  animation: scaleIn 0.5s ease both;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+/* =========================
+   GLOW
+========================= */
+
+.color-glow {
+  animation: colorGlow 3s ease-in-out infinite;
+}
+
+@keyframes colorGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 rgba(236, 72, 153, 0);
+  }
+
+  50% {
+    box-shadow:
+      0 15px 45px rgba(236, 72, 153, 0.18);
+  }
+}
+
+
+/* =========================
+   DELAYS
+========================= */
+
+.delay-1 {
+  animation-delay: 0.1s;
+}
+
+.delay-2 {
+  animation-delay: 0.2s;
+}
+
+.delay-3 {
+  animation-delay: 0.3s;
+}
+
+.delay-4 {
+  animation-delay: 0.4s;
+}
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,940 @@
+/* =========================================================
+   GUESTS PAGE
+========================================================= */
+
+.guests-page {
+  min-height: 100%;
+  padding: 45px 55px;
+  background: #f8f7f9;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   COLORFUL GUESTS BACKGROUND
+========================================================= */
+
+.guests-page {
+  position: relative;
+
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff8fc 0%,
+      #f7f3ff 45%,
+      #fff8ef 100%
+    );
+}
+
+
+/* Decorative glowing circles */
+
+.guests-page::before {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  top: -180px;
+  right: -120px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(236, 72, 153, 0.18),
+      transparent 68%
+    );
+
+  pointer-events: none;
+
+  animation:
+    guestsGlowOne 9s ease-in-out infinite;
+}
+
+
+.guests-page::after {
+  content: "";
+
+  position: absolute;
+
+  width: 480px;
+  height: 480px;
+
+  bottom: -250px;
+  left: -170px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(124, 58, 237, 0.16),
+      transparent 68%
+    );
+
+  pointer-events: none;
+
+  animation:
+    guestsGlowTwo 11s ease-in-out infinite;
+}
+
+
+/* Keep actual content above background */
+
+.guests-page > * {
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes guestsGlowOne {
+
+  0%,
+  100% {
+    transform:
+      translate(0, 0)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate(-45px, 35px)
+      scale(1.08);
+  }
+
+}
+
+
+@keyframes guestsGlowTwo {
+
+  0%,
+  100% {
+    transform:
+      translate(0, 0)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate(40px, -30px)
+      scale(1.1);
+  }
+
+}
+/* =========================================================
+   HEADER
+========================================================= */
+
+.guests-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.guests-page-label {
+  margin: 0 0 7px;
+  color: #a06b91;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.guests-page-header h1 {
+  margin: 0;
+  color: #252129;
+  font-size: 34px;
+  font-weight: 750;
+}
+
+.guests-page-description {
+  margin: 8px 0 0;
+  color: #817983;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
+
+.guests-refresh-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 11px 17px;
+
+  border: 1px solid #e4dce6;
+  border-radius: 10px;
+
+  background: white;
+  color: #403842;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.guests-refresh-button:hover {
+  background: #fff4fa;
+}
+
+.guests-refresh-spin {
+  animation: guestsSpin 1s linear infinite;
+}
+
+@keyframes guestsSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.guests-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 20px;
+
+  margin-bottom: 22px;
+
+  background: white;
+
+  border: 1px solid #e8e2e9;
+  border-radius: 14px;
+}
+
+.guests-invitation-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  width: 320px;
+}
+
+.guests-invitation-selector label {
+  color: #5c535f;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.guests-invitation-selector select {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 12px;
+
+  border: 1px solid #ddd5df;
+  border-radius: 9px;
+
+  background: white;
+
+  color: #38313a;
+
+  outline: none;
+}
+
+.guests-invitation-selector select:focus {
+  border-color: #d85b9b;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.guests-selected-status {
+  display: flex;
+  align-items: center;
+}
+
+.status-published,
+.status-draft {
+  padding: 6px 11px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: capitalize;
+}
+
+.status-published {
+  color: #25845b;
+  background: #eaf9f0;
+}
+
+.status-draft {
+  color: #9a691b;
+  background: #fff5dc;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.guests-error {
+  padding: 13px 16px;
+
+  margin-bottom: 20px;
+
+  border: 1px solid #ffd1dc;
+  border-radius: 10px;
+
+  background: #fff1f4;
+
+  color: #b33c5a;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.guest-stats-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 18px;
+
+  margin-bottom: 20px;
+}
+
+.guest-stat-card {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 20px;
+
+  background: white;
+
+  border: 1px solid #e7e1e8;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 5px 18px rgba(50, 30, 60, 0.04);
+}
+
+.guest-stat-icon {
+  width: 43px;
+  height: 43px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  color: #a43b83;
+
+  background: #f9eafa;
+}
+
+.guest-stat-card p {
+  margin: 0 0 5px;
+
+  color: #817984;
+
+  font-size: 12px;
+}
+
+.guest-stat-card h2 {
+  margin: 0;
+
+  color: #27212a;
+
+  font-size: 25px;
+}
+
+
+/* =========================================================
+   PEOPLE COMING
+========================================================= */
+
+.guests-coming-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 22px 25px;
+
+  margin-bottom: 20px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff0f8,
+      #f4efff
+    );
+
+  border: 1px solid #eee0f0;
+}
+
+.guests-coming-card p {
+  margin: 0 0 4px;
+
+  color: #9b638b;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.guests-coming-card h2 {
+  margin: 0;
+
+  color: #322833;
+
+  font-size: 28px;
+}
+
+.guests-coming-card span {
+  color: #817682;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   PDF ACTIONS
+========================================================= */
+
+.guest-pdf-actions {
+  display: flex;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+
+  flex-wrap: wrap;
+}
+
+.guest-pdf-btn {
+  padding: 11px 16px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  font-size: 12px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.guest-pdf-btn.coming {
+  background: #eaf8ef;
+  color: #23734d;
+}
+
+.guest-pdf-btn.maybe {
+  background: #fff4df;
+  color: #96671d;
+}
+
+.guest-pdf-btn.declined {
+  background: #ffedf1;
+  color: #a8425a;
+}
+
+.guest-pdf-btn:hover {
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   PDF LOCKED
+========================================================= */
+
+.guest-pdf-locked {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 18px 20px;
+
+  margin-bottom: 20px;
+
+  background: white;
+
+  border: 1px solid #e7e1e8;
+  border-radius: 14px;
+}
+
+.guest-pdf-lock-icon {
+  font-size: 25px;
+}
+
+.guest-pdf-lock-content {
+  flex: 1;
+}
+
+.guest-pdf-lock-content h3 {
+  margin: 0 0 4px;
+
+  color: #332b35;
+
+  font-size: 14px;
+}
+
+.guest-pdf-lock-content p {
+  margin: 0;
+
+  color: #867b87;
+
+  font-size: 12px;
+}
+
+.guest-pdf-upgrade {
+  padding: 10px 15px;
+
+  border: none;
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ec4899,
+      #8b5cf6
+    );
+
+  color: white;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   TABLE CARD
+========================================================= */
+
+.guests-table-card {
+  overflow: hidden;
+
+  background: white;
+
+  border: 1px solid #e7e1e8;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 5px 18px rgba(50, 30, 60, 0.04);
+}
+
+.guests-table-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 22px 24px;
+
+  border-bottom: 1px solid #eee9ef;
+}
+
+.guests-table-header h2 {
+  margin: 0 0 5px;
+
+  color: #2c2630;
+
+  font-size: 18px;
+}
+
+.guests-table-header p {
+  margin: 0;
+
+  color: #8a818c;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.guests-filters {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.guests-search {
+  height: 39px;
+
+  width: 190px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #ded6e0;
+
+  border-radius: 9px;
+
+  background: white;
+}
+
+.guests-search svg {
+  color: #9b909e;
+}
+
+.guests-search input {
+  width: 100%;
+
+  border: none;
+
+  outline: none;
+
+  color: #403843;
+
+  font-size: 12px;
+}
+
+.guests-search input::placeholder {
+  color: #aaa1ab;
+}
+
+.guests-filters select {
+  height: 39px;
+
+  padding: 0 10px;
+
+  border: 1px solid #ded6e0;
+
+  border-radius: 9px;
+
+  background: white;
+
+  color: #514852;
+
+  font-size: 12px;
+
+  outline: none;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.guests-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.guests-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 700px;
+}
+
+.guests-table th {
+  padding: 13px 20px;
+
+  text-align: left;
+
+  background: #faf8fb;
+
+  color: #8b808e;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .7px;
+}
+
+.guests-table td {
+  padding: 16px 20px;
+
+  border-top: 1px solid #f0ebf1;
+
+  color: #514852;
+
+  font-size: 13px;
+}
+
+.guests-table tbody tr {
+  transition: background .2s ease;
+}
+
+.guests-table tbody tr:hover {
+  background: #fff9fc;
+}
+
+
+/* =========================================================
+   GUEST NAME
+========================================================= */
+
+.guest-name {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.guest-avatar {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f3d7ff,
+      #ffdce9
+    );
+
+  color: #7c3c74;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.guest-name strong {
+  color: #302933;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   ATTENDANCE
+========================================================= */
+
+.guest-attendance {
+  display: inline-block;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.guest-attendance-yes {
+  color: #23764e;
+  background: #eaf8ef;
+}
+
+.guest-attendance-maybe {
+  color: #9a681e;
+  background: #fff3dc;
+}
+
+.guest-attendance-no {
+  color: #a83e57;
+  background: #ffedf1;
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.guest-message {
+  display: block;
+
+  max-width: 260px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #7d737f;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.guests-empty-state {
+  min-height: 240px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+
+  color: #9b919e;
+}
+
+.guests-empty-state svg {
+  margin-bottom: 10px;
+
+  color: #c0b6c2;
+}
+
+.guests-empty-state h3 {
+  margin: 5px 0;
+
+  color: #49404b;
+
+  font-size: 16px;
+}
+
+.guests-empty-state p {
+  margin: 5px 0;
+
+  color: #918792;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .guests-page {
+    padding: 35px 30px;
+  }
+
+  .guest-stats-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .guests-page {
+    padding: 25px 18px;
+  }
+
+  .guests-page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .guests-toolbar {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .guests-invitation-selector {
+    width: 100%;
+  }
+
+  .guest-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .guests-coming-card {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+  .guests-table-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .guests-filters {
+    width: 100%;
+
+    flex-direction: column;
+  }
+
+  .guests-search,
+  .guests-filters select {
+    width: 100%;
+  }
+
+  .guest-pdf-locked {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+}

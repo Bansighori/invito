@@ -6,9 +6,11 @@ import {
 } from "react-router-dom";
 
 import "./App.css";
+
 import DashboardLayout
   from "./layouts/DashboardLayout";
-
+  import "./styles/animations.css";
+import Home from "./pages/Home";
 import ProtectedRoute
   from "./components/ProtectedRoute";
 
@@ -47,7 +49,6 @@ import PublicInvitation
 import InvitationDetails
   from "./pages/InvitationDetails";
 
-
 import Login
   from "./pages/Login";
 
@@ -55,18 +56,26 @@ import Register
   from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 
+import AdminLogin from "./admin/pages/AdminLogin";
+import AdminDashboard from "./admin/pages/AdminDashboard";
+import AdminProtectedRoute from "./admin/AdminProtectedRoute";
+import AdminUsers from "./admin/pages/AdminUsers";
+import AdminInvitations from "./admin/pages/AdminInvitations";
+
 function App() {
   return (
     <BrowserRouter>
 
       <Routes>
 
-        {/* Public Authentication */}
+        
+        
 
         <Route
           path="/login"
           element={<Login />}
         />
+        
 
         <Route
           path="/register"
@@ -83,6 +92,14 @@ function App() {
           path="/invite/:slug"
           element={<PublicInvitation />}
         />
+        <Route
+  path="/admin/users"
+  element={
+    <AdminProtectedRoute>
+      <AdminUsers />
+    </AdminProtectedRoute>
+  }
+/>
 
 
         {/* Protected Routes */}
@@ -99,7 +116,7 @@ function App() {
   path="/"
   element={<Navigate to="/login" replace />}
 />
-
+<Route path="/home" element={<Home />} />
             <Route
               path="/dashboard"
               element={<Dashboard />}
@@ -165,6 +182,28 @@ function App() {
           </Route>
 
         </Route>
+        <Route
+  path="/admin/login"
+  element={<AdminLogin />}
+/>
+
+<Route
+  path="/admin/dashboard"
+  element={
+    <AdminProtectedRoute>
+      <AdminDashboard />
+    </AdminProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/invitations"
+  element={
+    <AdminProtectedRoute>
+      <AdminInvitations />
+    </AdminProtectedRoute>
+  }
+/>
 
       </Routes>
 

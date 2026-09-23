@@ -1,0 +1,1602 @@
+/* =========================================
+   ADMIN INVITATIONS PAGE
+========================================= */
+
+.admin-invitations-page {
+  position: relative;
+
+  min-height: calc(100vh - 78px);
+
+  padding: 32px 36px 45px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 5% 8%,
+      rgba(139, 92, 246, 0.15),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at 95% 5%,
+      rgba(236, 72, 153, 0.14),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 80% 90%,
+      rgba(59, 130, 246, 0.10),
+      transparent 26%
+    ),
+    linear-gradient(
+      135deg,
+      #faf9ff,
+      #f7f6fb 50%,
+      #fff9fc
+    );
+}
+
+
+/* =========================================
+   BACKGROUND GRID
+========================================= */
+
+.admin-invitations-page::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  opacity: 0.35;
+
+  background-image:
+    linear-gradient(
+      rgba(124, 58, 237, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(124, 58, 237, 0.035) 1px,
+      transparent 1px
+    );
+
+  background-size: 42px 42px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black,
+      transparent 82%
+    );
+}
+
+
+/* =========================================
+   FLOATING GLOW
+========================================= */
+
+.admin-invitations-page::after {
+  content: "";
+
+  position: absolute;
+
+  width: 430px;
+  height: 430px;
+
+  top: -220px;
+  right: -130px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(168, 85, 247, 0.18),
+      rgba(236, 72, 153, 0.07) 42%,
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  animation:
+    adminInvitationGlow 10s ease-in-out infinite;
+}
+
+.admin-invitations-page > * {
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.admin-invitations-heading {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 30px;
+}
+
+.admin-page-eyebrow {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #8b5cf6;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.admin-invitations-heading h1 {
+  margin: 0;
+
+  color: #19151e;
+
+  font-size: 40px;
+
+  font-weight: 750;
+
+  line-height: 1.2;
+
+  letter-spacing: -0.9px;
+}
+
+.admin-invitations-heading p {
+  margin: 9px 0 0;
+
+  color: #77717f;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================
+   TOTAL INVITATIONS
+========================================= */
+
+.admin-invitation-total {
+  min-width: 190px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 14px 17px;
+
+  border: 1px solid #ebe8ef;
+
+  border-radius: 14px;
+
+  background:
+    rgba(255,255,255,.88);
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 6px 20px
+    rgba(35,25,45,.04);
+}
+
+.admin-invitation-total > div {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  color: #7c3aed;
+
+  background: #f1ebff;
+}
+
+.admin-invitation-total section {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.admin-invitation-total strong {
+  color: #29232e;
+
+  font-size: 21px;
+
+  line-height: 1.2;
+}
+
+.admin-invitation-total span {
+  margin-top: 3px;
+
+  color: #99929e;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.admin-invitations-error {
+  margin-bottom: 20px;
+
+  padding: 14px 16px;
+
+  border: 1px solid #fecdd3;
+
+  border-radius: 10px;
+
+  background: #fff1f2;
+
+  color: #be123c;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.admin-invitation-stat-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4,minmax(0,1fr));
+
+  gap: 17px;
+
+  margin-bottom: 22px;
+}
+
+.admin-invitation-stat {
+  position: relative;
+
+  overflow: hidden;
+
+  min-height: 145px;
+
+  padding: 22px;
+
+  border: 1px solid #ebe8ef;
+
+  border-radius: 16px;
+
+  background:
+    rgba(255,255,255,.88);
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 7px 25px
+    rgba(35,25,45,.04);
+
+  transition: .22s ease;
+}
+
+.admin-invitation-stat:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 14px 32px
+    rgba(35,25,45,.07);
+}
+
+.admin-invitation-stat::after {
+  content: "";
+
+  position: absolute;
+
+  width: 105px;
+  height: 105px;
+
+  right: -40px;
+  bottom: -45px;
+
+  border-radius: 50%;
+
+  opacity: .55;
+}
+
+.admin-invitation-stat.total::after {
+  background: #ddd6fe;
+}
+
+.admin-invitation-stat.published::after {
+  background: #bbf7d0;
+}
+
+.admin-invitation-stat.drafts::after {
+  background: #fed7aa;
+}
+
+.admin-invitation-stat.categories::after {
+  background: #fbcfe8;
+}
+
+.admin-invitation-stat-top {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.admin-invitation-stat-top > span {
+  color: #706878;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.admin-invitation-stat-top > div {
+  width: 35px;
+  height: 35px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+}
+
+.total .admin-invitation-stat-top > div {
+  color: #7c3aed;
+
+  background: #f1ebff;
+}
+
+.published .admin-invitation-stat-top > div {
+  color: #159447;
+
+  background: #e8faef;
+}
+
+.drafts .admin-invitation-stat-top > div {
+  color: #c26a16;
+
+  background: #fff2df;
+}
+
+.categories .admin-invitation-stat-top > div {
+  color: #db2777;
+
+  background: #fce8f3;
+}
+
+.admin-invitation-stat strong {
+  position: relative;
+
+  z-index: 2;
+
+  display: block;
+
+  color: #24202a;
+
+  font-size: 32px;
+
+  font-weight: 750;
+
+  line-height: 1.2;
+}
+
+.admin-invitation-stat p {
+  position: relative;
+
+  z-index: 2;
+
+  margin: 6px 0 0;
+
+  color: #9a929f;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   CATEGORY SECTION
+========================================= */
+
+.admin-category-section {
+  margin-bottom: 22px;
+
+  padding: 22px;
+
+  border: 1px solid #e9e5ef;
+
+  border-radius: 17px;
+
+  background:
+    rgba(255,255,255,.82);
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 8px 26px
+    rgba(35,25,45,.035);
+}
+
+.admin-section-title h2 {
+  margin: 0;
+
+  color: #29232e;
+
+  font-size: 19px;
+
+  font-weight: 700;
+}
+
+.admin-section-title p {
+  margin: 5px 0 17px;
+
+  color: #99919e;
+
+  font-size: 13px;
+}
+
+.admin-category-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(6,minmax(0,1fr));
+
+  gap: 11px;
+}
+
+.admin-category-card {
+  padding: 15px;
+
+  border: 1px solid #eeeaf1;
+
+  border-radius: 13px;
+
+  background:
+    rgba(252,251,253,.9);
+
+  transition: .2s ease;
+}
+
+.admin-category-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px
+    rgba(35,25,45,.05);
+}
+
+.admin-category-top {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.admin-category-icon {
+  width: 35px;
+  height: 35px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+}
+
+.admin-category-icon.wedding {
+  color: #db2777;
+
+  background: #fce7f3;
+}
+
+.admin-category-icon.birthday {
+  color: #d97706;
+
+  background: #fff3cd;
+}
+
+.admin-category-icon.baby {
+  color: #0891b2;
+
+  background: #e0f7fa;
+}
+
+.admin-category-icon.party {
+  color: #7c3aed;
+
+  background: #f0e9ff;
+}
+
+.admin-category-icon.other {
+  color: #64748b;
+
+  background: #f1f5f9;
+}
+
+.admin-category-top > div:last-child {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.admin-category-top strong {
+  color: #332c38;
+
+  font-size: 17px;
+}
+
+.admin-category-top span {
+  color: #99919f;
+
+  font-size: 11px;
+}
+
+.admin-category-card h3 {
+  margin: 11px 0 9px;
+
+  color: #57505d;
+
+  font-size: 12px;
+
+  font-weight: 650;
+}
+
+.admin-category-progress {
+  width: 100%;
+
+  height: 5px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  background: #eeeaf0;
+}
+
+.admin-category-progress span {
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #8b5cf6,
+      #ec4899
+    );
+}
+
+.admin-category-empty {
+  grid-column: 1 / -1;
+
+  padding: 25px;
+
+  text-align: center;
+
+  color: #99919f;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   TABLE CARD
+========================================= */
+
+.admin-invitations-card {
+  overflow: visible;
+
+  border: 1px solid #e9e6ed;
+
+  border-radius: 17px;
+
+  background: white;
+
+  box-shadow:
+    0 9px 28px
+    rgba(35,25,45,.045);
+}
+
+.admin-invitations-card-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 22px 24px;
+
+  border-bottom: 1px solid #efedf1;
+}
+
+.admin-invitations-card-header h2 {
+  margin: 0;
+
+  color: #29232e;
+
+  font-size: 19px;
+
+  font-weight: 700;
+}
+
+.admin-invitations-card-header p {
+  margin: 5px 0 0;
+
+  color: #99919f;
+
+  font-size: 13px;
+}
+
+.admin-invitations-filters {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.admin-invitations-search {
+  width: 230px;
+
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0 12px;
+
+  border: 1px solid #e6e2e9;
+
+  border-radius: 9px;
+
+  background: #fafafd;
+
+  box-sizing: border-box;
+}
+
+.admin-invitations-search:focus-within {
+  border-color: #b794f4;
+
+  background: white;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(139,92,246,.07);
+}
+
+.admin-invitations-search svg {
+  color: #99919f;
+
+  flex-shrink: 0;
+}
+
+.admin-invitations-search input {
+  width: 100%;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #3d3542;
+
+  font-size: 13px;
+}
+
+.admin-invitations-search input::placeholder {
+  color: #aaa2ad;
+}
+
+.admin-invitations-filters select {
+  height: 42px;
+
+  padding: 0 11px;
+
+  border: 1px solid #e6e2e9;
+
+  border-radius: 9px;
+
+  outline: none;
+
+  background: #fafafd;
+
+  color: #5e5663;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.admin-invitations-table-scroll {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.admin-invitations-table {
+  width: 100%;
+
+  min-width: 1050px;
+
+  border-collapse: collapse;
+}
+
+.admin-invitations-table th {
+  height: 48px;
+
+  padding: 0 18px;
+
+  text-align: left;
+
+  color: #9b939f;
+
+  background: #fcfbfd;
+
+  border-bottom: 1px solid #efedf1;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.admin-invitations-table td {
+  height: 76px;
+
+  padding: 0 18px;
+
+  border-bottom: 1px solid #f2f0f3;
+
+  font-size: 12px;
+}
+
+.admin-invitations-table tbody tr {
+  transition: .15s ease;
+}
+
+.admin-invitations-table tbody tr:hover {
+  background: #fcfaff;
+}
+
+.admin-invitations-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =========================================
+   INVITATION NAME
+========================================= */
+
+.admin-invitation-name {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.admin-invitation-name > div {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  color: #7c3aed;
+
+  background: #f1ebff;
+}
+
+.admin-invitation-name section,
+.admin-invitation-owner section {
+  min-width: 0;
+}
+
+.admin-invitation-name strong {
+  display: block;
+
+  max-width: 200px;
+
+  overflow: hidden;
+
+  color: #342d39;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.admin-invitation-name span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #aaa2ad;
+
+  font-size: 10px;
+}
+
+
+/* =========================================
+   OWNER
+========================================= */
+
+.admin-invitation-owner {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.admin-invitation-owner > div {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  color: #6d28d9;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f1eaff,
+      #fce8f3
+    );
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.admin-invitation-owner strong {
+  display: block;
+
+  color: #4a424f;
+
+  font-size: 12px;
+
+  font-weight: 650;
+}
+
+.admin-invitation-owner span {
+  display: block;
+
+  max-width: 155px;
+
+  margin-top: 3px;
+
+  overflow: hidden;
+
+  color: #aaa2ad;
+
+  font-size: 10px;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   CATEGORY BADGE
+========================================= */
+
+.admin-category-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 7px 9px;
+
+  border-radius: 7px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.admin-category-badge.wedding {
+  color: #c02670;
+
+  background: #fce7f3;
+}
+
+.admin-category-badge.birthday {
+  color: #b45309;
+
+  background: #fff4d5;
+}
+
+.admin-category-badge.baby {
+  color: #087f9c;
+
+  background: #e2f7fb;
+}
+
+.admin-category-badge.party {
+  color: #6d28d9;
+
+  background: #f0e9ff;
+}
+
+.admin-category-badge.other {
+  color: #64748b;
+
+  background: #f1f5f9;
+}
+
+
+/* =========================================
+   TEMPLATE
+========================================= */
+
+.admin-template-name {
+  display: block;
+
+  max-width: 155px;
+
+  overflow: hidden;
+
+  color: #5d5562;
+
+  font-size: 12px;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.admin-template-premium {
+  display: inline-block;
+
+  margin-top: 5px;
+
+  padding: 3px 6px;
+
+  border-radius: 4px;
+
+  color: #986500;
+
+  background: #fff5ce;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.admin-invitation-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 11px;
+
+  font-weight: 650;
+}
+
+.admin-invitation-status.published {
+  color: #159447;
+}
+
+.admin-invitation-status.draft {
+  color: #c26a16;
+}
+
+
+/* =========================================
+   DATE
+========================================= */
+
+.admin-invitation-date {
+  color: #7f7784;
+
+  font-size: 11px;
+}
+
+
+/* =========================================
+   ACTION
+========================================= */
+
+.admin-invitation-actions {
+  position: relative;
+}
+
+.admin-invitation-more {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #ebe7ee;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: #77707c;
+
+  cursor: pointer;
+}
+
+.admin-invitation-more:hover {
+  color: #7c3aed;
+
+  background: #faf7ff;
+
+  border-color: #d8c7f5;
+}
+
+.admin-invitation-menu {
+  position: absolute;
+
+  top: 39px;
+
+  right: 0;
+
+  z-index: 30;
+
+  width: 155px;
+
+  padding: 5px;
+
+  border: 1px solid #e8e3eb;
+
+  border-radius: 10px;
+
+  background: white;
+
+  box-shadow:
+    0 12px 30px
+    rgba(35,25,45,.12);
+}
+
+.admin-invitation-menu button {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: #59515f;
+
+  font-size: 12px;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.admin-invitation-menu button:hover {
+  background: #f8f5fb;
+
+  color: #7c3aed;
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.admin-invitations-empty {
+  height: 240px;
+
+  text-align: center;
+}
+
+.admin-invitations-empty svg {
+  display: block;
+
+  margin: 0 auto 11px;
+
+  color: #c7bfcd;
+}
+
+.admin-invitations-empty strong {
+  display: block;
+
+  color: #57505d;
+
+  font-size: 15px;
+}
+
+.admin-invitations-empty span {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #aaa2ad;
+
+  font-size: 11px;
+}
+
+
+/* =========================================
+   PAGINATION
+========================================= */
+
+.admin-invitations-pagination {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 15px 22px;
+
+  border-top: 1px solid #efedf1;
+
+  color: #99919e;
+
+  font-size: 11px;
+}
+
+.admin-invitations-pagination > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+}
+
+.admin-invitations-pagination button {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e6e2e9;
+
+  border-radius: 7px;
+
+  background: white;
+
+  color: #6f6774;
+
+  cursor: pointer;
+}
+
+.admin-invitations-pagination button:disabled {
+  opacity: .4;
+
+  cursor: not-allowed;
+}
+
+.admin-invitations-pagination > div > span {
+  min-width: 32px;
+
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  color: white;
+
+  background: #7c3aed;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.admin-invitation-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2000;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(27,20,32,.45);
+
+  backdrop-filter: blur(4px);
+}
+
+.admin-invitation-modal {
+  width: 100%;
+
+  max-width: 500px;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: white;
+
+  box-shadow:
+    0 25px 70px
+    rgba(25,18,30,.20);
+}
+
+.admin-invitation-modal-header {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  padding: 23px;
+
+  border-bottom: 1px solid #eeeaf0;
+}
+
+.admin-invitation-modal-header span {
+  color: #8b5cf6;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.admin-invitation-modal-header h2 {
+  margin: 6px 0 0;
+
+  color: #29232e;
+
+  font-size: 22px;
+}
+
+.admin-invitation-modal-header button {
+  width: 33px;
+  height: 33px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #f6f4f7;
+
+  color: #77707c;
+
+  cursor: pointer;
+}
+
+.admin-invitation-modal-body {
+  padding: 27px;
+
+  text-align: center;
+}
+
+.admin-modal-invitation-icon {
+  width: 62px;
+  height: 62px;
+
+  margin: 0 auto 13px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  color: #7c3aed;
+
+  background: #f1ebff;
+}
+
+.admin-invitation-modal-body h3 {
+  margin: 0;
+
+  color: #332c38;
+
+  font-size: 20px;
+}
+
+.admin-invitation-modal-body > p {
+  margin: 6px 0 21px;
+
+  color: #99919f;
+
+  font-size: 12px;
+}
+
+.admin-invitation-details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap: 1px;
+
+  overflow: hidden;
+
+  border: 1px solid #eeeaf0;
+
+  border-radius: 11px;
+
+  background: #eeeaf0;
+
+  text-align: left;
+}
+
+.admin-invitation-details-grid > div {
+  padding: 15px;
+
+  background: #fcfbfd;
+}
+
+.admin-invitation-details-grid span {
+  display: block;
+
+  color: #a099a5;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: .8px;
+}
+
+.admin-invitation-details-grid strong {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #4c4451;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.admin-invitations-loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(139,92,246,.12),
+      transparent 30%
+    ),
+    #f7f7fa;
+}
+
+.admin-invitations-loader {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: #817986;
+
+  font-size: 14px;
+}
+
+.admin-invitations-loader div {
+  width: 19px;
+  height: 19px;
+
+  border: 2px solid #e7ddf5;
+
+  border-top-color: #8b5cf6;
+
+  border-radius: 50%;
+
+  animation:
+    adminInvitationSpin .7s linear infinite;
+}
+
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes adminInvitationSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes adminInvitationGlow {
+  0%,
+  100% {
+    transform:
+      translate(0,0)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate(-20px,18px)
+      scale(1.08);
+  }
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .admin-invitation-stat-grid {
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .admin-category-grid {
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+  .admin-invitations-card-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .admin-invitations-filters {
+    width: 100%;
+  }
+
+  .admin-invitations-search {
+    flex: 1;
+  }
+}
+
+
+@media (max-width: 700px) {
+
+  .admin-invitations-page {
+    padding: 24px 16px 35px;
+  }
+
+  .admin-invitations-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .admin-invitations-heading h1 {
+    font-size: 32px;
+  }
+
+  .admin-invitations-heading p {
+    font-size: 14px;
+  }
+
+  .admin-invitation-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-category-grid {
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .admin-invitations-filters {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .admin-invitations-search {
+    width: 100%;
+  }
+
+  .admin-invitations-filters select {
+    width: 100%;
+  }
+}

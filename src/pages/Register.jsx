@@ -12,49 +12,43 @@ import {
   verifyRegisterOtp
 } from "../api/authApi";
 
+import {
+  Sparkles,
+  User,
+  Mail,
+  Lock,
+  ShieldCheck,
+  ArrowRight,
+  ArrowLeft
+} from "lucide-react";
+
+import "./Register.css";
+
 
 function Register() {
 
   const navigate = useNavigate();
 
 
-  // ==========================================
-  // FORM DATA
-  // ==========================================
-
-  const [formData, setFormData] =
-    useState({
-      name: "",
-      email: "",
-      password: ""
-    });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: ""
+  });
 
 
-  // ==========================================
-  // OTP
-  // ==========================================
+  const [otp, setOtp] = useState("");
 
-  const [otp, setOtp] =
-    useState("");
+  const [otpSent, setOtpSent] = useState(false);
 
-  const [otpSent, setOtpSent] =
-    useState(false);
+  const [error, setError] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
 
-  // ==========================================
-  // ERROR + LOADING
-  // ==========================================
-
-  const [error, setError] =
-    useState("");
-
-  const [loading, setLoading] =
-    useState(false);
-
-
-  // ==========================================
-  // HANDLE INPUT
-  // ==========================================
+  /* ==========================================
+     HANDLE INPUT
+  ========================================== */
 
   const handleChange = (event) => {
 
@@ -62,7 +56,6 @@ function Register() {
       name,
       value
     } = event.target;
-
 
     setFormData({
       ...formData,
@@ -72,9 +65,9 @@ function Register() {
   };
 
 
-  // ==========================================
-  // SEND REGISTER OTP
-  // ==========================================
+  /* ==========================================
+     SEND OTP
+  ========================================== */
 
   const handleSendOtp = async (event) => {
 
@@ -82,7 +75,6 @@ function Register() {
 
     setError("");
     setLoading(true);
-
 
     try {
 
@@ -111,9 +103,9 @@ function Register() {
   };
 
 
-  // ==========================================
-  // VERIFY OTP + REGISTER
-  // ==========================================
+  /* ==========================================
+     VERIFY OTP
+  ========================================== */
 
   const handleVerifyOtp = async (event) => {
 
@@ -121,7 +113,6 @@ function Register() {
 
     setError("");
     setLoading(true);
-
 
     try {
 
@@ -132,19 +123,11 @@ function Register() {
         });
 
 
-      // ========================================
-      // SAVE JWT
-      // ========================================
-
       localStorage.setItem(
         "invitoToken",
         response.data.token
       );
 
-
-      // ========================================
-      // SAVE USER
-      // ========================================
 
       localStorage.setItem(
         "invitoUser",
@@ -154,11 +137,7 @@ function Register() {
       );
 
 
-      // ========================================
-      // GO TO DASHBOARD
-      // ========================================
-
-      navigate("/dashboard");
+      navigate("/home");
 
     } catch (error) {
 
@@ -181,309 +160,541 @@ function Register() {
   };
 
 
-  // ==========================================
-  // BACK TO REGISTER FORM
-  // ==========================================
+  /* ==========================================
+     BACK
+  ========================================== */
 
   const handleBack = () => {
 
     setOtpSent(false);
+
     setOtp("");
+
     setError("");
 
   };
 
 
   return (
-    <div className="auth-page">
 
-      <div className="auth-card">
+    <div className="register-page">
+
+
+      {/* ==========================================
+          BACKGROUND
+      ========================================== */}
+
+      <div className="register-bg register-bg-one" />
+
+      <div className="register-bg register-bg-two" />
+
+      <div className="register-bg register-bg-three" />
+
+
+      <div className="register-sparkle sparkle-one">
+        ✦
+      </div>
+
+      <div className="register-sparkle sparkle-two">
+        ✧
+      </div>
+
+      <div className="register-sparkle sparkle-three">
+        ✦
+      </div>
+
+
+      {/* ==========================================
+          LEFT SHOWCASE
+      ========================================== */}
+
+      <div className="register-showcase">
+
 
         {/* Logo */}
 
-        <div className="auth-logo">
-          Invito
+        <div className="register-logo">
+
+          <div className="register-logo-icon">
+
+            <Sparkles size={23} />
+
+          </div>
+
+          <span>
+            Invito
+          </span>
+
         </div>
 
 
-        {/* ==================================
-            REGISTER FORM
-            ================================== */}
+        {/* Content */}
 
-        {!otpSent ? (
+        <div className="register-showcase-content">
 
-          <>
+          <p className="register-showcase-label">
+            YOUR CELEBRATION STARTS HERE
+          </p>
 
-            <div className="auth-header">
+          <h1>
 
-              <p className="auth-label">
-                GET STARTED
-              </p>
+            Create.
+            <br />
 
-              <h1>
-                Create your account
-              </h1>
+            <span>
+              Celebrate.
+            </span>
 
-              <p>
-                Start creating beautiful invitations
-                with Invito.
-              </p>
+            <br />
 
-            </div>
+            Remember.
+
+          </h1>
 
 
-            {/* Error */}
+          <p className="register-description">
 
-            {error && (
+            Create beautiful invitations,
+            manage your guests and bring
+            your special moments to life.
 
-              <div className="auth-error">
-                {error}
+          </p>
+
+
+          {/* Feature cards */}
+
+          <div className="register-features">
+
+
+            <div className="register-feature feature-pink">
+
+              <div className="register-feature-icon">
+                🎨
               </div>
 
-            )}
+              <div>
 
-
-            <form
-              onSubmit={handleSendOtp}
-              className="auth-form"
-            >
-
-              {/* Name */}
-
-              <div className="auth-field">
-
-                <label>
-                  Full Name
-                </label>
-
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Enter your name"
-                  required
-                />
-
-              </div>
-
-
-              {/* Email */}
-
-              <div className="auth-field">
-
-                <label>
-                  Email
-                </label>
-
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                  required
-                />
-
-              </div>
-
-
-              {/* Password */}
-
-              <div className="auth-field">
-
-                <label>
-                  Password
-                </label>
-
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Minimum 6 characters"
-                  minLength="6"
-                  required
-                />
-
-              </div>
-
-
-              {/* Send OTP */}
-
-              <button
-                type="submit"
-                className="auth-submit"
-                disabled={loading}
-              >
-
-                {loading
-                  ? "Sending OTP..."
-                  : "Send OTP"}
-
-              </button>
-
-            </form>
-
-
-            {/* Login */}
-
-            <p className="auth-switch">
-
-              Already have an account?
-
-              {" "}
-
-              <Link to="/login">
-                Login
-              </Link>
-
-            </p>
-
-          </>
-
-        ) : (
-
-          /* ==================================
-             OTP FORM
-             ================================== */
-
-          <>
-
-            <div className="auth-header">
-
-              <p className="auth-label">
-                VERIFY EMAIL
-              </p>
-
-              <h1>
-                Enter OTP
-              </h1>
-
-              <p>
-                We sent a 4-digit OTP to
-                <br />
                 <strong>
-                  {formData.email}
+                  Beautiful Designs
                 </strong>
-              </p>
+
+                <small>
+                  Create stunning invitations
+                </small>
+
+              </div>
 
             </div>
 
 
-            {/* Error */}
+            <div className="register-feature feature-purple">
 
-            {error && (
-
-              <div className="auth-error">
-                {error}
+              <div className="register-feature-icon">
+                👥
               </div>
 
-            )}
+              <div>
 
+                <strong>
+                  Manage Guests
+                </strong>
 
-            <form
-              onSubmit={handleVerifyOtp}
-              className="auth-form"
-            >
-
-              {/* OTP */}
-
-              <div className="auth-field">
-
-                <label>
-                  4-Digit OTP
-                </label>
-
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength="4"
-                  value={otp}
-                  onChange={(event) => {
-
-                    const value =
-                      event.target.value.replace(
-                        /\D/g,
-                        ""
-                      );
-
-                    setOtp(value);
-
-                  }}
-                  placeholder="Enter 4-digit OTP"
-                  required
-                />
+                <small>
+                  Keep track of every RSVP
+                </small>
 
               </div>
 
+            </div>
 
-              {/* Verify */}
 
-              <button
-                type="submit"
-                className="auth-submit"
-                disabled={
-                  loading ||
-                  otp.length !== 4
-                }
+            <div className="register-feature feature-orange">
+
+              <div className="register-feature-icon">
+                💌
+              </div>
+
+              <div>
+
+                <strong>
+                  Share Easily
+                </strong>
+
+                <small>
+                  Share your special moments
+                </small>
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+        <div className="register-showcase-footer">
+          Beautifully crafted for your special moments.
+        </div>
+
+
+      </div>
+
+
+      {/* ==========================================
+          RIGHT PANEL
+      ========================================== */}
+
+      <div className="register-panel">
+
+        <div className="register-card">
+
+
+          {/* Mobile logo */}
+
+          <div className="register-mobile-logo">
+
+            <div className="register-mobile-icon">
+              <Sparkles size={19} />
+            </div>
+
+            <span>
+              Invito
+            </span>
+
+          </div>
+
+
+          {!otpSent ? (
+
+            <>
+
+
+              {/* Header */}
+
+              <div className="register-header">
+
+                <p className="register-label">
+                  GET STARTED
+                </p>
+
+                <h2>
+                  Create your account
+                </h2>
+
+                <p>
+                  Start creating beautiful
+                  invitations with Invito.
+                </p>
+
+              </div>
+
+
+              {/* Error */}
+
+              {error && (
+
+                <div className="register-error">
+                  {error}
+                </div>
+
+              )}
+
+
+              {/* Form */}
+
+              <form
+                onSubmit={handleSendOtp}
+                className="register-form"
               >
 
-                {loading
-                  ? "Creating account..."
-                  : "Verify & Create Account"}
 
-              </button>
+                {/* Name */}
+
+                <div className="register-field">
+
+                  <label>
+                    Full Name
+                  </label>
+
+                  <div className="register-input">
+
+                    <User size={18} />
+
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Enter your name"
+                      required
+                    />
+
+                  </div>
+
+                </div>
 
 
-              {/* Back */}
+                {/* Email */}
 
-              <button
-                type="button"
-                className="auth-submit"
-                onClick={handleBack}
-                disabled={loading}
+                <div className="register-field">
+
+                  <label>
+                    Email address
+                  </label>
+
+                  <div className="register-input">
+
+                    <Mail size={18} />
+
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="you@example.com"
+                      required
+                    />
+
+                  </div>
+
+                </div>
+
+
+                {/* Password */}
+
+                <div className="register-field">
+
+                  <label>
+                    Password
+                  </label>
+
+                  <div className="register-input">
+
+                    <Lock size={18} />
+
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Minimum 6 characters"
+                      minLength="6"
+                      required
+                    />
+
+                  </div>
+
+                </div>
+
+
+                {/* Submit */}
+
+                <button
+                  type="submit"
+                  className="register-submit"
+                  disabled={loading}
+                >
+
+                  <span>
+                    {loading
+                      ? "Sending OTP..."
+                      : "Create Account"}
+                  </span>
+
+                  {!loading && (
+                    <ArrowRight size={18} />
+                  )}
+
+                </button>
+
+
+              </form>
+
+
+              {/* Login */}
+
+              <p className="register-switch">
+
+                Already have an account?
+
+                {" "}
+
+                <Link to="/login">
+                  Login
+                </Link>
+
+              </p>
+
+
+            </>
+
+          ) : (
+
+            <>
+
+
+              {/* OTP header */}
+
+              <div className="register-header">
+
+                <div className="otp-icon">
+
+                  <ShieldCheck size={25} />
+
+                </div>
+
+                <p className="register-label">
+                  VERIFY EMAIL
+                </p>
+
+                <h2>
+                  Enter your OTP
+                </h2>
+
+                <p>
+
+                  We sent a 4-digit OTP to
+
+                  <strong>
+                    {formData.email}
+                  </strong>
+
+                </p>
+
+              </div>
+
+
+              {/* Error */}
+
+              {error && (
+
+                <div className="register-error">
+                  {error}
+                </div>
+
+              )}
+
+
+              <form
+                onSubmit={handleVerifyOtp}
+                className="register-form"
               >
-                Back
-              </button>
-
-            </form>
 
 
-            {/* Resend */}
+                {/* OTP */}
 
-            <p className="auth-switch">
+                <div className="register-field">
 
-              Didn't receive the OTP?
+                  <label>
+                    4-Digit OTP
+                  </label>
 
-              {" "}
+                  <div className="register-input otp-input">
 
-              <button
-                type="button"
-                onClick={handleSendOtp}
-                disabled={loading}
-                style={{
-                  background: "none",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  color: "inherit",
-                  font: "inherit",
-                  fontWeight: "600"
-                }}
-              >
-                Resend OTP
-              </button>
+                    <ShieldCheck size={18} />
 
-            </p>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      maxLength="4"
+                      value={otp}
+                      onChange={(event) => {
 
-          </>
+                        const value =
+                          event.target.value.replace(
+                            /\D/g,
+                            ""
+                          );
 
-        )}
+                        setOtp(value);
+
+                      }}
+                      placeholder="Enter 4-digit OTP"
+                      required
+                    />
+
+                  </div>
+
+                </div>
+
+
+                {/* Verify */}
+
+                <button
+                  type="submit"
+                  className="register-submit"
+                  disabled={
+                    loading ||
+                    otp.length !== 4
+                  }
+                >
+
+                  <span>
+
+                    {loading
+                      ? "Creating account..."
+                      : "Verify & Create Account"}
+
+                  </span>
+
+                  {!loading && (
+                    <ArrowRight size={18} />
+                  )}
+
+                </button>
+
+
+                {/* Back */}
+
+                <button
+                  type="button"
+                  className="register-back"
+                  onClick={handleBack}
+                  disabled={loading}
+                >
+
+                  <ArrowLeft size={16} />
+
+                  Back
+
+                </button>
+
+
+              </form>
+
+
+              {/* Resend */}
+
+              <p className="register-switch">
+
+                Didn't receive the OTP?
+
+                {" "}
+
+                <button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={loading}
+                  className="resend-button"
+                >
+                  Resend OTP
+                </button>
+
+              </p>
+
+
+            </>
+
+          )}
+
+        </div>
 
       </div>
 
     </div>
+
   );
 
 }

@@ -1,0 +1,329 @@
+.admin-navbar {
+  position: sticky;
+  top: 0;
+
+  height: 78px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 30px 0 82px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border-bottom: 1px solid #eee8f2;
+
+  backdrop-filter: blur(15px);
+
+  z-index: 800;
+
+  box-sizing: border-box;
+}
+
+/* LEFT */
+
+.admin-navbar-left {
+  flex: 1;
+}
+
+.admin-navbar-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  color: #7c3aed;
+}
+
+.admin-navbar-title > svg {
+  width: 22px;
+  height: 22px;
+}
+
+.admin-navbar-title > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-navbar-title strong {
+  color: #2b2530;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.admin-navbar-title span {
+  margin-top: 3px;
+
+  color: #8d8492;
+
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* SEARCH */
+
+.admin-navbar-center {
+  flex: 1;
+
+  display: flex;
+  justify-content: center;
+}
+
+.admin-search {
+  width: 325px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 13px;
+
+  border: 1px solid #e5dfe9;
+  border-radius: 11px;
+
+  background: #faf9fc;
+
+  box-sizing: border-box;
+
+  transition: 0.2s ease;
+}
+
+.admin-search:focus-within {
+  background: white;
+
+  border-color: #c084fc;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(192, 132, 252, 0.10);
+}
+
+.admin-search > svg {
+  flex-shrink: 0;
+
+  width: 19px;
+  height: 19px;
+
+  color: #918696;
+}
+
+.admin-search input {
+  width: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #332c37;
+
+  font-size: 14px;
+}
+
+.admin-search input::placeholder {
+  color: #aaa2ae;
+}
+
+.search-shortcut {
+  flex-shrink: 0;
+
+  padding: 4px 7px;
+
+  border: 1px solid #e4dfe7;
+  border-radius: 5px;
+
+  background: white;
+
+  color: #96909b;
+
+  font-size: 10px;
+}
+
+/* RIGHT */
+
+.admin-navbar-right {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 18px;
+}
+
+/* NOTIFICATION */
+
+.admin-notification-button {
+  position: relative;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #eee8f0;
+  border-radius: 11px;
+
+  background: white;
+
+  color: #746a7b;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.admin-notification-button:hover {
+  color: #7c3aed;
+
+  background: #faf5ff;
+
+  transform: translateY(-1px);
+}
+
+.admin-notification-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.admin-notification-dot {
+  position: absolute;
+
+  top: 7px;
+  right: 7px;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #ec4899;
+
+  border: 2px solid white;
+}
+
+/* PROFILE */
+
+.admin-navbar-profile {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  cursor: pointer;
+}
+
+.admin-navbar-avatar {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ec4899,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 5px 14px
+    rgba(139, 92, 246, 0.20);
+}
+
+.admin-navbar-user {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 100px;
+}
+
+.admin-navbar-user strong {
+  overflow: hidden;
+
+  color: #332c38;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-navbar-user span {
+  margin-top: 3px;
+
+  overflow: hidden;
+
+  color: #8f8694;
+
+  font-size: 10px;
+  font-weight: 500;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-navbar-profile > svg {
+  width: 17px;
+  height: 17px;
+
+  color: #918795;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .admin-navbar-center {
+    display: none;
+  }
+
+  .admin-navbar-left {
+    flex: 1;
+  }
+
+  .admin-navbar-right {
+    flex: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-navbar {
+    height: 68px;
+
+    padding: 0 14px 0 68px;
+  }
+
+  .admin-navbar-title strong {
+    font-size: 14px;
+  }
+
+  .admin-navbar-title span {
+    display: none;
+  }
+
+  .admin-navbar-user {
+    display: none;
+  }
+
+  .admin-navbar-profile > svg {
+    display: none;
+  }
+
+  .admin-navbar-right {
+    gap: 9px;
+  }
+}

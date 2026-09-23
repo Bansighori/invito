@@ -850,15 +850,15 @@ function Dashboard() {
               <div
                 className="rsvp-donut"
                 style={{
-                  background:
-                    totalRSVP > 0
-                      ? `conic-gradient(
-                          #1d1d1d 0deg ${confirmedDegrees}deg,
-                          #bdbdbd ${confirmedDegrees}deg ${pendingEnd}deg,
-                          #e5e5e5 ${pendingEnd}deg 360deg
-                        )`
-                      : "#e5e5e5"
-                }}
+  background:
+    totalRSVP > 0
+      ? `conic-gradient(
+          #ec4899 0deg ${confirmedDegrees}deg,
+          #8b5cf6 ${confirmedDegrees}deg ${pendingEnd}deg,
+          #f59e0b ${pendingEnd}deg 360deg
+        )`
+      : "linear-gradient(135deg, #ffd6e8, #ddd1ff)"
+}}
               >
 
                 <div className="rsvp-donut-center">
