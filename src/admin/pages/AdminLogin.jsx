@@ -78,6 +78,26 @@ function AdminLogin() {
       <div className="admin-login-glow admin-glow-one" />
       <div className="admin-login-glow admin-glow-two" />
       <div className="admin-login-glow admin-glow-three" />
+      <div className="admin-login-ribbon-one" />
+<div className="admin-login-ribbon-two" />
+
+<div className="admin-login-shape-left" />
+<div className="admin-login-shape-right" />
+
+<div className="admin-login-floating-card" />
+<div className="admin-login-floating-card-two" />
+
+<div className="admin-login-sparkle s1" />
+<div className="admin-login-sparkle s2" />
+<div className="admin-login-sparkle s3" />
+<div className="admin-login-sparkle s4" />
+
+<div className="admin-login-streak one" />
+<div className="admin-login-streak two" />
+
+<div className="admin-login-card">
+  {/* your existing admin login content */}
+</div>
 
       <div className="admin-login-card">
 

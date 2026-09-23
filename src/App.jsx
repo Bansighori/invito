@@ -62,6 +62,7 @@ import AdminProtectedRoute from "./admin/AdminProtectedRoute";
 import AdminUsers from "./admin/pages/AdminUsers";
 import AdminInvitations from "./admin/pages/AdminInvitations";
 
+
 function App() {
   return (
     <BrowserRouter>
