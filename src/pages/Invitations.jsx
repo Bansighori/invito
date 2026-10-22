@@ -414,7 +414,8 @@ function Invitations() {
 .back-button:hover {
   background: #f3f4f6;
   transform: translateX(-3px);
-}`}
+}
+`}
     </style>
 
     <div className="invitations-page">

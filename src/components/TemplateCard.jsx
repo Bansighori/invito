@@ -199,7 +199,33 @@ function TemplateCard({
     transform: translateX(-50%) scale(0.45);
   }
 }
+/* Side background of each template card */
+.template-preview-live {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #ffffff
+    
+  );
+}
 
+/* Keep the invitation centered */
+.template-preview-scaler {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+/* Keep the invitation itself above the side background */
+.template-preview-scaler > .template-design-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 1;
+}
 `}
     </style>
 

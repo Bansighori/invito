@@ -248,15 +248,7 @@
   font-weight: 700;
 }
 
-.payment-plan.premium {
-  background: #f1eaff;
-  color: #7c3aed;
-}
 
-.payment-plan.premium_plus {
-  background: #fff2cc;
-  color: #a16207;
-}
 
 .payment-id-text {
   display: block;
@@ -276,20 +268,6 @@
   font-weight: 700;
 }
 
-.payment-status.success {
-  background: #e9faf1;
-  color: #078453;
-}
-
-.payment-status.failed {
-  background: #fff0f2;
-  color: #d12d50;
-}
-
-.payment-status.created {
-  background: #fff7e8;
-  color: #b76b00;
-}
 
 .payment-view-btn {
   display: inline-flex;

@@ -493,9 +493,9 @@
 .admin-template-info span {
   display: block;
 
-  color: #9a929f;
+  color: #090909;
 
-  font-size: 10px;
+  font-size: 12px;
 }
 
 
@@ -510,13 +510,13 @@
   padding: 6px 10px;
 
   border-radius: 8px;
+  color: #090909;
+  
 
-  background: #f5f3ff;
-
-  color: #6d4bc2;
-
+  
+  
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 
@@ -539,20 +539,7 @@
   white-space: nowrap;
 }
 
-.template-plan.free {
-  background: #e0f2fe;
-  color: #0369a1;
-}
 
-.template-plan.premium {
-  background: #fef3c7;
-  color: #b45309;
-}
-
-.template-plan.premium-plus {
-  background: #fce7f3;
-  color: #be185d;
-}
 
 
 /* =========================================
@@ -571,15 +558,7 @@
   font-weight: 750;
 }
 
-.template-status.published {
-  background: #dcfce7;
-  color: #15803d;
-}
 
-.template-status.draft {
-  background: #f3f4f6;
-  color: #6b7280;
-}
 
 
 /* =========================================
@@ -1039,7 +1018,7 @@
   overflow: auto;
   box-sizing: border-box;
   padding: 20px;
-  border: 1px solid #e8e2ed;
+  border: 1px solid #ffffff;
   border-radius: 18px;
   background: linear-gradient(
     145deg,

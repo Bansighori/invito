@@ -1600,3 +1600,29 @@
     width: 100%;
   }
 }
+
+/* Simple Category Badges */
+.admin-category-badge,
+.admin-category-badge.wedding,
+.admin-category-badge.birthday,
+.admin-category-badge.baby,
+.admin-category-badge.party,
+.admin-category-badge.other,
+.admin-category-badge.engagement {
+  background: #f3f4f6 !important;
+  color: #4b5563 !important;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+/* Keep category icons neutral too */
+.admin-category-badge svg {
+  color: #6b7280 !important;
+}
+
+/* No colorful hover effects */
+.admin-category-badge:hover {
+  background: #f3f4f6 !important;
+  color: #4b5563 !important;
+}

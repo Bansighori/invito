@@ -58,7 +58,6 @@ function AdminRoles() {
         adminsRes.data.admins || []
       );
 
-
       console.log("Loading roles...");
 
       const rolesRes = await axios.get(

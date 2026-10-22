@@ -6512,7 +6512,7 @@ span:not(.recent-table-date) {
 ========================================= */
 
 .invitation-card-preview {
-  height: 190px;
+  height: 170px;
 
   display: flex;
   align-items: center;

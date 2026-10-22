@@ -192,7 +192,7 @@
 
   border-radius: 20px;
 
-  background: #f3e8ff;
+  
   color: #7c3aed;
 
   font-size: 12px;
@@ -211,13 +211,6 @@
   white-space: nowrap;
 }
 
-.status.active {
-  color: #16a34a;
-}
-
-.status.inactive {
-  color: #dc2626;
-}
 
 
 /* Actions */
@@ -231,7 +224,7 @@
 .delete-admin-btn {
   border: none;
 
-  background: #fee2e2;
+  
   color: #dc2626;
 
   padding: 8px 14px;
@@ -262,13 +255,6 @@
   font-weight: 600;
 }
 
-.status.active {
-  color: #16a34a;
-}
-
-.status.inactive {
-  color: #dc2626;
-}
 
 
 /* Modal */
@@ -347,8 +333,6 @@
 
 .delete-admin-btn {
   border: none;
-  background: #fee2e2;
-  color: #dc2626;
   padding: 7px 12px;
   border-radius: 8px;
   font-size: 12px;
