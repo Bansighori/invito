@@ -403,7 +403,7 @@ function SunsetWedding({ data, design = {}, onRSVP }) {
               className="sunset-wedding-rsvp"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
           </div>
         </div>

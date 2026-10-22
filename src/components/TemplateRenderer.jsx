@@ -1,4 +1,5 @@
 import { FileText } from "lucide-react";
+import React, { useEffect, useRef } from "react";
 
 import WeddingClassic from "../templates/WeddingClassic";
 import BirthdayModern from "../templates/BirthdayModern";
@@ -33,168 +34,121 @@ import InvitationGallery from "./InvitationGallery";
 
 import "./TemplateRenderer.css";
 
-
 function getDesignStyle(design = {}) {
+  const background = design.background || {};
+  const typography = design.typography || {};
+  const border = design.border || {};
+  const layout = design.layout || {};
+  const button = design.button || {};
+  const decoration = design.decoration || {};
 
-  const background =
-    design.background || {};
+  let backgroundValue = background.color || "#ffffff";
 
-  const typography =
-    design.typography || {};
-
-  const border =
-    design.border || {};
-
-  const layout =
-    design.layout || {};
-
-  const button =
-    design.button || {};
-
-  const image =
-    design.image || {};
-
-
-  let backgroundValue =
-    background.color ||
-    "#ffffff";
-
-
-  // SOLID
-
-  if (
-    background.type === "solid"
-  ) {
-
-    backgroundValue =
-      background.color ||
-      "#ffffff";
-
+  if (background.type === "gradient") {
+    backgroundValue = `linear-gradient(
+      ${background.direction || "135deg"},
+      ${background.color1 || "#ffffff"},
+      ${background.color2 || "#f8e8ef"}
+    )`;
   }
 
-
-  // GRADIENT
-
-  if (
-    background.type === "gradient"
-  ) {
-
-    backgroundValue =
-      `linear-gradient(
-        ${background.direction || "135deg"},
-        ${background.color1 || "#ffffff"},
-        ${background.color2 || "#f8e8ef"}
-      )`;
-
+  if (background.type === "image" && background.image) {
+    backgroundValue = `url("${background.image}") center / cover no-repeat`;
   }
 
-
-  // IMAGE
-
-  if (
-    background.type === "image" &&
-    background.image
-  ) {
-
-    backgroundValue =
-      `url("${background.image}") center / cover no-repeat`;
-
-  }
-
-
-  return {
-
-    "--template-background":
-      backgroundValue,
-
-    "--template-title-font":
-      typography.titleFont ||
-      "Playfair Display",
-
-    "--template-body-font":
-      typography.bodyFont ||
-      "Poppins",
-
-    "--template-title-size":
-      `${typography.titleSize ?? 32}px`,
-
-    "--template-body-size":
-      `${typography.bodySize ?? 16}px`,
-
-    "--template-title-color":
-      typography.titleColor ||
-      "#8b4a62",
-
-    "--template-body-color":
-      typography.bodyColor ||
-      "#555555",
-
-    "--template-title-align":
-      typography.titleAlignment ||
-      "center",
-
-    "--template-body-align":
-      typography.bodyAlignment ||
-      "center",
-
-    "--template-border":
-      border.enabled &&
-      border.style !== "none"
-        ? `${border.width ?? 2}px ${
-            border.style || "solid"
-          } ${
-            border.color || "#c89b3c"
-          }`
-        : "none",
-
-    "--template-radius":
-      `${border.radius ?? 20}px`,
-
-    "--template-padding":
-      `${layout.padding ?? 30}px`,
-
-    "--template-width":
-      `${layout.width ?? 420}px`,
-
-    "--template-height":
-      `${layout.height ?? 650}px`,
-
-    "--template-align":
-      layout.alignment ||
-      "center",
-
-    "--template-button-bg":
-      button.backgroundColor ||
-      "#8b4a62",
-
-    "--template-button-color":
-      button.textColor ||
-      "#ffffff",
-
-    "--template-button-radius":
-      `${button.radius ?? 10}px`,
-
-    "--template-image-width":
-      `${image.width ?? 180}px`,
-
-    "--template-image-height":
-      `${image.height ?? 180}px`,
-
-    "--template-image-radius":
-      `${image.radius ?? 50}%`,
-
-    width:
-      "100%",
-
-    maxWidth:
-      "100%",
-
-    boxSizing:
-      "border-box"
-
+  const decorations = {
+    floral: "❀",
+    hearts: "♥",
+    leaves: "❧",
+    stars: "✦",
+    confetti: "✹",
   };
 
+  return {
+    "--template-background": backgroundValue,
+    "--template-title-font": typography.titleFont || "Playfair Display",
+    "--template-body-font": typography.bodyFont || "Poppins",
+    "--template-title-size": `${typography.titleSize ?? 32}px`,
+    "--template-body-size": `${typography.bodySize ?? 16}px`,
+    "--template-title-color": typography.titleColor || "#8b4a62",
+    "--template-body-color": typography.bodyColor || "#555555",
+    "--template-title-align": typography.titleAlignment || "center",
+    "--template-body-align": typography.bodyAlignment || "center",
+
+    "--template-border":
+      border.enabled && border.style !== "none"
+        ? `${border.width ?? 2}px ${border.style || "solid"} ${border.color || "#c89b3c"}`
+        : "none",
+
+    "--template-radius": `${border.radius ?? 20}px`,
+    "--template-padding": `${layout.padding ?? 30}px`,
+    "--template-width": `${layout.width ?? 420}px`,
+    "--template-height": `${layout.height ?? 650}px`,
+    "--template-align": layout.alignment || "center",
+
+    "--template-button-bg": button.backgroundColor || "#8b4a62",
+    "--template-button-color": button.textColor || "#ffffff",
+    "--template-button-radius": `${button.radius ?? 10}px`,
+    "--template-button-enabled": button.enabled === false ? "none" : "inline-block",
+
+    "--template-decoration":
+      decoration.enabled && decoration.type !== "none"
+        ? `"${decorations[decoration.type] || ""}"`
+        : '""',
+
+    "--template-decoration-color": decoration.color || "#c89b3c",
+
+    width: "100%",
+    maxWidth: `${layout.width ?? 420}px`,
+    boxSizing: "border-box",
+  };
 }
+
+
+function applyButtonSettings(element, button) {
+  if (!element || !button) return element;
+
+  return React.cloneElement(element, {
+    buttonSettings: button,
+  });
+}
+
+
+function useUniversalTemplateSettings(containerRef, design) {
+  useEffect(() => {
+    const root = containerRef.current;
+    if (!root) return;
+
+    const button = design.button || {};
+    const image = design.image || {};
+
+    // Update existing RSVP buttons
+    const buttons = root.querySelectorAll(
+      ".invitation-rsvp-button, .photo-floral-rsvp, .dynamic-rsvp-button"
+    );
+
+    buttons.forEach((element) => {
+      element.textContent = button.text || "RSVP";
+      element.style.display =
+        button.enabled === false ? "none" : "inline-block";
+      element.style.background = button.backgroundColor || "#8b4a62";
+      element.style.color = button.textColor || "#ffffff";
+      element.style.borderRadius = `${button.radius ?? 10}px`;
+    });
+
+    // Apply image settings when enabled
+    if (image.enabled) {
+      root.querySelectorAll("img").forEach((element) => {
+        if (image.url) element.src = image.url;
+        element.style.width = `${image.width ?? 180}px`;
+        element.style.height = `${image.height ?? 180}px`;
+        element.style.objectFit = "cover";
+        element.style.borderRadius = `${image.radius ?? 50}%`;
+      });
+    }
+  }, [containerRef, design]);
+}
+
 
 
 function TemplateRenderer({
@@ -222,6 +176,9 @@ function TemplateRenderer({
 
 
   let invitationComponent;
+  const surfaceRef = useRef(null);
+
+useUniversalTemplateSettings(surfaceRef, design);
 
 
   switch (resolvedComponent) {
@@ -582,28 +539,20 @@ function TemplateRenderer({
 
 
   return (
-
+  <div
+    className="template-design-wrapper"
+    style={getDesignStyle(design)}
+  >
     <div
-      className="template-design-wrapper"
-      style={getDesignStyle(design)}
+      className="template-design-surface"
+      ref={surfaceRef}
     >
-
-      <div className="template-design-surface">
-
-        {invitationComponent}
-
-      </div>
-
-
-      <InvitationGallery
-        gallery={
-          data.gallery || []
-        }
-      />
-
+      {invitationComponent}
     </div>
 
-  );
+    <InvitationGallery gallery={data.gallery || []} />
+  </div>
+);
 
 }
 

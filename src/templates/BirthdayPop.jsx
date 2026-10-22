@@ -2074,7 +2074,7 @@ useEffect(() => {
               "
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
 
 

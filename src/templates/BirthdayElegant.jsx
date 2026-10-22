@@ -1255,7 +1255,7 @@ function BirthdayElegant({
               className="birthday-elegant-rsvp invitation-rsvp-button"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
 
           </div>

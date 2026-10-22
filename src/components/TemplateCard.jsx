@@ -145,6 +145,63 @@ function TemplateCard({
 
 
   return (
+    <>
+    <style>
+      {`
+      /* Increase template card width */
+.template-card {
+  min-width: 0;
+  width: 100%;
+}
+
+/* Increase the card preview height */
+.template-preview-live {
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Make the invitation preview wider */
+.template-preview-scaler {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 600px;
+  transform: translateX(-50%) scale(0.55);
+  transform-origin: top center;
+}
+
+/* Make photo invitations wider */
+.template-mini-photo .template-preview-scaler {
+  width: 600px;
+  transform: translateX(-50%) scale(0.55);
+}
+
+/* Ensure invitation fills the scaler */
+.template-preview-scaler .template-design-wrapper,
+.template-preview-scaler .template-design-surface {
+  width: 600px !important;
+  max-width: 600px !important;
+  box-sizing: border-box;
+}
+
+/* Responsive cards */
+@media (max-width: 600px) {
+  .template-preview-live {
+    height: 260px;
+  }
+
+  .template-preview-scaler {
+    transform: translateX(-50%) scale(0.45);
+  }
+
+  .template-mini-photo .template-preview-scaler {
+    transform: translateX(-50%) scale(0.45);
+  }
+}
+
+`}
+    </style>
 
     <div
       className={`template-card ${
@@ -364,6 +421,7 @@ onRSVP={() => {}}
       </div>
 
     </div>
+    </>
 
   );
 

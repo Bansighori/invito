@@ -387,7 +387,7 @@ function EngagementGold({ data, design = {}, onRSVP }) {
               className="engagement-gold-rsvp"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
           </div>
         </div>

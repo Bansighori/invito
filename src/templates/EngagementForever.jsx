@@ -169,7 +169,7 @@ function EngagementForever({ data, design = {}, onRSVP }) {
               className="engagement-rsvp-button"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
 
           </div>

@@ -158,7 +158,7 @@ function BirthdayModern({
             className="birthday-rsvp-button"
             onClick={onRSVP}
           >
-            RSVP
+            {design?.button?.text || "RSVP"}
           </button>
 
         </div>

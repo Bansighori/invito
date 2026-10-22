@@ -107,7 +107,7 @@ function WeddingClassic({ data, design = {}, onRSVP }) {
             className="wedding-rsvp-button"
             onClick={onRSVP}
           >
-            RSVP
+            {design?.button?.text || "RSVP"}
           </button>
 
         </div>

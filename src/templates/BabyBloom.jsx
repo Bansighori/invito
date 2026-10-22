@@ -437,7 +437,7 @@ function BabyBloom({ data, design = {}, onRSVP }) {
               className="baby-bloom-rsvp"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
 
           </div>

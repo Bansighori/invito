@@ -398,7 +398,7 @@ function CocktailParty({ data, design = {}, onRSVP }) {
               className="cocktail-party-rsvp"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
           </div>
         </div>

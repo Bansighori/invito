@@ -2757,36 +2757,17 @@ function AdminTemplateEdit() {
             <div className="admin-real-template-preview">
 
               <TemplateRenderer
-
-                component={
-                  template.component
-                }
-
-                category={
-                  template.category
-                }
-
-                data={
-                  previewData
-                }
-
-                design={
-                  template.design ||
-                  {}
-                }
-
-                fields={
-                  template.fields ||
-                  []
-                }
-
-                onRSVP={() => {}}
-
-                enableOpeningAnimation={
-                  false
-                }
-
-              />
+  key={JSON.stringify(template.design?.button || {})}
+  component={template.component}
+  category={template.category}
+  data={previewData}
+  design={template.design || {}}
+  fields={template.fields || []}
+  onRSVP={() => {
+    alert("RSVP preview button is working!");
+  }}
+  enableOpeningAnimation={false}
+/>
 
             </div>
 

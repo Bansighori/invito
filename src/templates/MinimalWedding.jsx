@@ -344,7 +344,7 @@ function MinimalWedding({ data, design = {}, onRSVP }) {
               className="minimal-wedding-rsvp"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
 
           </div>

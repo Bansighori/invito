@@ -458,7 +458,7 @@ function LittleStar({ data, design = {}, onRSVP }) {
               className="little-star-rsvp"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
 
           </div>

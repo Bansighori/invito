@@ -12,7 +12,7 @@ import {
   verifyForgotPasswordOtp,
   resetPassword
 } from "../api/authApi";
-
+import "./ForgotPassword.css";
 
 function ForgotPassword() {
 

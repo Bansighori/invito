@@ -914,6 +914,123 @@ const removeGalleryImage = async (
   }
 
   return (
+    <>
+    <style>
+      {`/* Live preview panel */
+      .editor-preview-panel {
+        min-width: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid #e9e4ee;
+        border-radius: 20px;
+        background: #fff;
+      }
+
+      .preview-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 20px 24px;
+        border-bottom: 1px solid #eee8f1;
+        background: #fff;
+      }
+
+      .preview-panel-header p {
+        margin: 0 0 5px;
+        color: #9455c8;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.8px;
+      }
+
+      .preview-panel-header h2 {
+        margin: 0;
+        color: #302238;
+        font-size: 19px;
+      }
+
+      .invitation-preview-wrapper {
+        width: 100%;
+        min-width: 0;
+        min-height: 720px;
+        padding: 30px 20px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        overflow: auto;
+        background:
+          radial-gradient(circle at top left, #f0e7ff, transparent 38%),
+          radial-gradient(circle at bottom right, #fce7f3, transparent 38%),
+          #f7f5fa;
+      }
+
+      .invitation-preview {
+        width: 100%;
+        max-width: 650px;
+        min-width: 0;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      .invitation-preview .template-design-wrapper {
+        width: 100%;
+        max-width: 100% !important;
+        min-width: 0;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+      }
+
+      .invitation-preview .template-design-surface {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0 auto;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+      }
+
+      .invitation-preview .template-design-surface img {
+        max-width: 100%;
+      }
+
+      @media (max-width: 1000px) {
+        .invitation-preview-wrapper {
+          min-height: 650px;
+          padding: 24px 14px;
+        }
+
+        .invitation-preview {
+          max-width: 440px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .preview-panel-header {
+          padding: 16px;
+        }
+
+        .preview-panel-header h2 {
+          font-size: 16px;
+        }
+
+        .invitation-preview-wrapper {
+          min-height: 500px;
+          padding: 16px 10px;
+        }
+
+        .invitation-preview {
+          max-width: 100%;
+        }
+      }`}
+    </style>
 
     <div className="invitation-editor">
 
@@ -1587,6 +1704,7 @@ const removeGalleryImage = async (
       </div>
 
     </div>
+    </>
 
   );
 }

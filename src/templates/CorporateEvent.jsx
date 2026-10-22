@@ -350,7 +350,7 @@ function CorporateEvent({ data, design = {}, onRSVP }) {
               className="corporate-event-rsvp"
               onClick={onRSVP}
             >
-              Confirm Attendance
+              {design?.button?.text || "RSVP"}
             </button>
 
           </div>

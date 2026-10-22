@@ -161,7 +161,7 @@ function PhotoWeddingRomantic({
           className="invitation-rsvp-button romantic-rsvp"
           onClick={onRSVP}
         >
-          RSVP NOW
+         {design?.button?.text || "RSVP"}
         </button>
 
 

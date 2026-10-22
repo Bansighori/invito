@@ -469,7 +469,7 @@ function EngagementRose({ data, design = {}, onRSVP }) {
               className="engagement-rose-rsvp"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
 
           </div>

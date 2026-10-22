@@ -163,7 +163,7 @@ function PhotoWeddingRoyal({
           className="invitation-rsvp-button royal-rsvp"
           onClick={onRSVP}
         >
-          KINDLY RSVP
+          {design?.button?.text || "RSVP"}
         </button>
 
 

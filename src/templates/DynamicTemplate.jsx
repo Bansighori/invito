@@ -324,26 +324,22 @@ function DynamicTemplate({
 
           {/* RSVP */}
 
-          {button.enabled && (
-            <button
-              className="dynamic-rsvp-button"
-              onClick={onRSVP}
-              style={{
-                background:
-                  button.backgroundColor ||
-                  "#8b4a62",
+          
+{design.button?.enabled !== false && (
+  <button
+    type="button"
+    className="dynamic-rsvp-button"
+    style={{
+      backgroundColor: design.button?.backgroundColor || "#8b4a62",
+      color: design.button?.textColor || "#ffffff",
+      borderRadius: `${design.button?.radius ?? 10}px`
+    }}
+    onClick={onRSVP}
+  >
+    {design.button?.text || "RSVP"}
+  </button>
+)}
 
-                color:
-                  button.textColor ||
-                  "#ffffff",
-
-                borderRadius:
-                  `${button.radius || 10}px`
-              }}
-            >
-              {button.text || "RSVP"}
-            </button>
-          )}
 
         </div>
 

@@ -433,7 +433,7 @@ function PartyNight({ data, design = {}, onRSVP }) {
               className="party-night-rsvp"
               onClick={onRSVP}
             >
-              RSVP
+              {design?.button?.text || "RSVP"}
             </button>
 
           </div>

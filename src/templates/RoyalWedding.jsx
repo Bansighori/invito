@@ -709,7 +709,7 @@ function RoyalWedding({ data, design = {}, onRSVP }) {
             className="royal-rsvp-button"
             onClick={onRSVP}
           >
-            RSVP
+            {design?.button?.text || "RSVP"}
           </button>
 
         </div>

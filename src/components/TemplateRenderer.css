@@ -1,102 +1,119 @@
-/* ==========================================
+
+/* =====================================
    UNIVERSAL TEMPLATE DESIGN SYSTEM
-========================================== */
+===================================== */
 
 .template-design-wrapper {
   width: 100%;
   max-width: 100%;
+  margin: 0 auto;
   box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  position: relative;
-
-  background: var(--template-background);
-
-  color: var(--template-body-color);
-
-  font-family:
-    var(--template-body-font),
-    sans-serif;
-
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
+  font-family: var(--template-body-font, Poppins), sans-serif;
+  font-size: var(--template-body-size, 16px);
+  color: var(--template-body-color, #555);
 }
 
-
-/* ==========================================
-   REAL TEMPLATE SURFACE
-========================================== */
-
+/* Main invitation surface */
 .template-design-surface {
-  width: min(
-    var(--template-width),
-    100%
-  );
+  position: relative;
+  isolation: isolate;
 
-  min-height:
-    var(--template-height);
+  width: min(var(--template-width, 420px), 100%);
+  min-height: var(--template-height, 650px);
+  padding: var(--template-padding, 30px);
 
   box-sizing: border-box;
+  border: var(--template-border, none);
+  border-radius: var(--template-radius, 20px);
 
-  padding:
-    var(--template-padding);
-
-  border:
-    var(--template-border);
-
-  border-radius:
-    var(--template-radius);
-
-  background:
-    var(--template-background);
-
-  color:
-    var(--template-body-color);
-
-  text-align:
-    var(--template-body-align);
-
-  position: relative;
+  background: var(--template-background, #fff);
+  color: var(--template-body-color, #555);
+  text-align: var(--template-body-align, center);
 
   overflow: hidden;
-
-  transition:
-    background 0.3s ease,
-    border 0.3s ease,
-    border-radius 0.3s ease;
+  transition: background 0.3s ease, border-radius 0.3s ease;
 }
 
-
-/* ==========================================
-   FORCE ROOT TEMPLATE BACKGROUND
-========================================== */
-
-.template-design-surface > * {
+/* Keep template elements inside the surface */
+.template-design-surface * {
   box-sizing: border-box;
+}
 
+/* Typography */
+.template-design-surface h1,
+.template-design-surface h2,
+.template-design-surface h3,
+.template-design-surface h4,
+.template-design-surface h5,
+.template-design-surface h6 {
+  font-family: var(--template-title-font, "Playfair Display"), serif;
+  font-size: var(--template-title-size, 32px);
+  color: var(--template-title-color, #8b4a62);
+  text-align: var(--template-title-align, center);
+}
+
+.template-design-surface p,
+.template-design-surface li,
+.template-design-surface label {
+  font-family: var(--template-body-font, Poppins), sans-serif;
+  font-size: var(--template-body-size, 16px);
+  color: var(--template-body-color, #555);
+  text-align: var(--template-body-align, center);
+}
+
+/* Shared RSVP buttons */
+.template-design-surface .invitation-rsvp-button,
+.template-design-surface .photo-floral-rsvp,
+.template-design-surface .dynamic-rsvp-button {
+  background: var(--template-button-bg, #8b4a62);
+  color: var(--template-button-color, #fff);
+  border-radius: var(--template-button-radius, 10px);
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s ease, border-radius 0.25s ease;
+}
+
+/* Images */
+.template-design-surface img {
   max-width: 100%;
+  height: auto;
+}
+
+/* Decoration layer */
+.template-design-surface::before {
+  content: var(--template-decoration, "");
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 2;
+  color: var(--template-decoration-color, #c89b3c);
+  font-size: 30px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .template-design-surface {
+    width: 100%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .template-design-surface {
+    min-height: auto;
+    padding: 16px;
+  }
 }
 
 
-/*
-  This makes the admin background work
-  even when an old template has its own
-  background declaration.
-*/
-
-.template-design-surface > * {
-  background:
-    var(--template-background);
-}
-
-
-/* ==========================================
-   TYPOGRAPHY
-========================================== */
+/* UNIVERSAL TYPOGRAPHY OVERRIDES */
 
 .template-design-surface h1,
 .template-design-surface h2,
@@ -104,100 +121,39 @@
 .template-design-surface h4,
 .template-design-surface h5,
 .template-design-surface h6 {
-  font-family:
-    var(--template-title-font),
-    serif !important;
-
-  font-size:
-    var(--template-title-size);
-
-  color:
-    var(--template-title-color);
-
-  text-align:
-    var(--template-title-align);
-
-  transition:
-    color 0.3s ease,
-    font-family 0.3s ease;
+  font-family: var(--template-title-font, "Playfair Display"), serif !important;
+  font-size: var(--template-title-size, 32px) !important;
+  color: var(--template-title-color, #8b4a62) !important;
+  text-align: var(--template-title-align, center) !important;
 }
-
 
 .template-design-surface p,
-.template-design-surface span,
-.template-design-surface label {
-  font-family:
-    var(--template-body-font),
-    sans-serif;
-
-  font-size:
-    var(--template-body-size);
-
-  color:
-    var(--template-body-color);
-
-  text-align:
-    var(--template-body-align);
+.template-design-surface li {
+  font-family: var(--template-body-font, Poppins), sans-serif !important;
+  font-size: var(--template-body-size, 16px) !important;
+  color: var(--template-body-color, #555) !important;
+  text-align: var(--template-body-align, center) !important;
 }
 
+/* UNIVERSAL RSVP BUTTONS */
 
-/* ==========================================
-   BUTTON
-========================================== */
-
-.template-design-surface button {
-  border-radius:
-    var(--template-button-radius);
-
-  transition:
-    all 0.25s ease;
+.template-design-surface .invitation-rsvp-button,
+.template-design-surface .photo-floral-rsvp,
+.template-design-surface .dynamic-rsvp-button {
+  background: var(--template-button-bg, #8b4a62) !important;
+  color: var(--template-button-color, #fff) !important;
+  border-radius: var(--template-button-radius, 10px) !important;
+  cursor: pointer;
 }
 
+/* ENSURE THE SURFACE USES THE ADMIN SETTINGS */
 
-/* ==========================================
-   IMAGES
-========================================== */
-
-.template-design-surface img {
-  max-width: 100%;
-}
-
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
-
-@media (max-width: 700px) {
-
-  .template-design-surface {
-
-    width: 100%;
-
-    min-height:
-      var(--template-height);
-
-    padding:
-      20px;
-
-    border-radius:
-      min(
-        var(--template-radius),
-        18px
-      );
-
-  }
-
-}
-
-
-@media (max-width: 480px) {
-
-  .template-design-surface {
-
-    min-height: auto;
-
-    padding: 16px;
-
-  }
-
+.template-design-surface {
+  background: var(--template-background, #fff);
+  border: var(--template-border, none);
+  border-radius: var(--template-radius, 20px);
+  padding: var(--template-padding, 30px);
+  min-height: var(--template-height, 650px);
+  text-align: var(--template-body-align, center);
+  box-sizing: border-box;
 }

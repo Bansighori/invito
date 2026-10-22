@@ -726,7 +726,7 @@ function GardenWedding({ data, design = {}, onRSVP }) {
             className="garden-rsvp-button"
             onClick={onRSVP}
           >
-            RSVP
+            {design?.button?.text || "RSVP"}
           </button>
 
         </div>

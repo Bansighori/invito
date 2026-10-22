@@ -163,12 +163,11 @@ function PhotoWeddingFloral({
         {/* RSVP */}
 
         <button
-          type="button"
-          className="invitation-rsvp-button photo-floral-rsvp"
-          onClick={onRSVP}
-        >
-          RSVP
-        </button>
+  className="invitation-rsvp-button photo-floral-rsvp"
+  onClick={onRSVP}
+>
+  {design?.button?.text || "RSVP"}
+</button>
 
 
         <div className="photo-floral-bottom-decoration">
