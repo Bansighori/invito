@@ -12,17 +12,20 @@ import autoTable from "jspdf-autotable";
 import {
   useNavigate
 } from "react-router-dom";
-
+import SupportChatButton from "../components/SupportChatButton";
 import {
   Users,
   UserCheck,
   UserX,
   HelpCircle,
   Search,
-  RefreshCw
+  RefreshCw,
+  ArrowLeft
 } from "lucide-react";
 
 import "./Guests.css";
+
+
 function Guests() {
 
   // ==========================================
@@ -669,17 +672,50 @@ const downloadGuestPDF = (type) => {
   // ==========================================
 
   return (
+    <>
+    <style>
+      {`
+      .guests-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border: none;
+  background: transparent;
+  color: #6554ff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
 
+.guests-back-button:hover {
+  color: #4938df;
+}
+
+.guests-back-button svg {
+  flex-shrink: 0;
+}`}
+    </style>
     <div className="guests-page">
-
-
+      
       {/* ======================================
           HEADER
       ====================================== */}
 
       <div className="guests-page-header">
+        <SupportChatButton />
 
         <div>
+
+          <button
+  className="guests-back-button"
+  onClick={() => navigate("/invitations")}
+>
+  <ArrowLeft size={18} />
+  Back
+</button>
 
           <p className="guests-page-label">
             GUEST MANAGEMENT
@@ -1277,6 +1313,7 @@ const downloadGuestPDF = (type) => {
       </div>
 
     </div>
+    </>
 
   );
 

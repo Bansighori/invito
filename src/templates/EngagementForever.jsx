@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function EngagementForever({ data, onRSVP }) {
+function EngagementForever({ data, design = {}, onRSVP }) {
 
   const locationText = [
     data.venue,

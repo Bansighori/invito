@@ -38,7 +38,8 @@ function Sidebar() {
     localStorage.removeItem("invitoToken");
     localStorage.removeItem("invitoUser");
 
-    navigate("/login");
+     navigate("/home", { replace: true });
+     
 
   };
 

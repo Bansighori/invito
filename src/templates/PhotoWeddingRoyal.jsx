@@ -2,6 +2,7 @@ import "./PhotoWeddingRoyal.css";
 
 function PhotoWeddingRoyal({
   data = {},
+  design = {},
   onRSVP
 }) {
   return (

@@ -1,0 +1,916 @@
+/* =========================================
+   COMPLETE TEMPLATE EDITOR
+========================================= */
+
+.admin-template-editor {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+
+  padding: 30px 35px 60px;
+
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(139, 92, 246, 0.08),
+      transparent 35%
+    ),
+    #f8f7fb;
+
+  color: #28232d;
+}
+
+.admin-templates-page {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+.admin-templates-page * {
+  box-sizing: border-box;
+}
+/* =========================================
+   HEADER
+========================================= */
+
+.admin-editor-header {
+  margin-bottom: 25px;
+}
+
+.admin-editor-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  border: none;
+  border-radius: 9px;
+
+  padding: 9px 13px;
+
+  background: white;
+
+  color: #665d70;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.admin-editor-back:hover {
+  color: #7c3aed;
+}
+
+.admin-editor-title {
+  margin-top: 18px;
+}
+
+.admin-editor-title p {
+  margin: 0 0 6px;
+
+  color: #8b5cf6;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.admin-editor-title h1 {
+  margin: 0;
+
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.admin-editor-title span {
+  display: block;
+
+  margin-top: 7px;
+
+  color: #77717f;
+
+  font-size: 14px;
+}
+
+
+/* =========================================
+   MESSAGES
+========================================= */
+
+.admin-editor-error,
+.admin-editor-success {
+  margin-bottom: 18px;
+
+  padding: 13px 16px;
+
+  border-radius: 11px;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-editor-error {
+  background: #fff1f2;
+  color: #b91c1c;
+}
+
+.admin-editor-success {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+
+/* =========================================
+   MAIN LAYOUT
+   50% DETAILS + 50% PREVIEW
+========================================= */
+
+.admin-editor-layout {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 25px;
+
+  width: 100%;
+
+  align-items: start;
+}
+
+
+/* =========================================
+   LEFT PANEL
+========================================= */
+
+.admin-editor-panel {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.admin-editor-section {
+  overflow: hidden;
+
+  border: 1px solid #ebe6f0;
+
+  border-radius: 15px;
+
+  background: rgba(
+    255,
+    255,
+    255,
+    0.92
+  );
+
+  box-shadow:
+    0 8px 25px
+    rgba(72, 55, 90, 0.05);
+}
+
+
+/* =========================================
+   SECTION HEADER
+========================================= */
+
+.admin-editor-section-header {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 18px;
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  color: #302936;
+}
+
+.admin-editor-section-header > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.admin-editor-section-header span {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f3edff;
+
+  font-size: 16px;
+}
+
+.admin-editor-section-header strong {
+  font-size: 14px;
+  font-weight: 750;
+}
+
+
+/* =========================================
+   SECTION BODY
+========================================= */
+
+.admin-editor-section-body {
+  padding: 0 18px 20px;
+
+  border-top: 1px solid #f0ecf3;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+
+/* =========================================
+   FIELD
+========================================= */
+
+.admin-editor-field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.admin-editor-field label {
+  color: #514958;
+
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.admin-editor-field input:not([type="checkbox"]):not([type="color"]),
+.admin-editor-field select,
+.admin-editor-field textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #e3dfe8;
+
+  border-radius: 9px;
+
+  outline: none;
+
+  background: #fff;
+
+  color: #342e39;
+
+  font-size: 13px;
+}
+
+.admin-editor-field input:not([type="checkbox"]):not([type="color"]),
+.admin-editor-field select {
+  height: 43px;
+
+  padding: 0 12px;
+}
+
+.admin-editor-field textarea {
+  padding: 11px 12px;
+
+  resize: vertical;
+}
+
+.admin-editor-field input:focus,
+.admin-editor-field select:focus,
+.admin-editor-field textarea:focus {
+  border-color: #a78bfa;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(139, 92, 246, 0.1);
+}
+
+.admin-editor-field input[type="color"] {
+  width: 70px;
+  height: 42px;
+
+  padding: 3px;
+
+  border: 1px solid #e3dfe8;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
+   TEMPLATE FIELDS
+========================================= */
+
+.field-section-top {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.field-section-top p {
+  margin: 0;
+
+  color: #88808f;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.add-field-btn {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  flex-shrink: 0;
+
+  padding: 8px 11px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #8b5cf6;
+
+  color: white;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.add-field-btn:hover {
+  background: #7c3aed;
+}
+
+
+/* =========================================
+   FIELD CARD
+========================================= */
+
+.template-field-card {
+  padding: 15px;
+
+  border: 1px solid #e8e2ed;
+
+  border-radius: 12px;
+
+  background: #faf9fc;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.field-card-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+}
+
+.field-card-header strong {
+  color: #4a4251;
+
+  font-size: 12px;
+}
+
+.field-card-header button {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #fff1f2;
+
+  color: #dc2626;
+
+  cursor: pointer;
+}
+
+.field-card-header button:hover {
+  background: #fee2e2;
+}
+
+.field-required {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: #5c5463;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.field-required input {
+  accent-color: #8b5cf6;
+}
+
+
+/* =========================================
+   CHECKBOX
+========================================= */
+
+.admin-editor-checkbox {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 11px;
+
+  border: 1px solid #e8e2ed;
+
+  border-radius: 9px;
+
+  background: #faf9fc;
+
+  color: #4f4757;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.admin-editor-checkbox input {
+  width: 17px;
+  height: 17px;
+
+  accent-color: #8b5cf6;
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.empty-fields {
+  padding: 25px;
+
+  border: 1px dashed #dcd5e5;
+
+  border-radius: 10px;
+
+  text-align: center;
+
+  color: #99919f;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+.admin-editor-save {
+  width: 100%;
+
+  min-height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  margin-top: 5px;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #ec4899
+    );
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 25px
+    rgba(139, 92, 246, 0.2);
+}
+
+.admin-editor-save:hover {
+  transform: translateY(-1px);
+}
+
+.admin-editor-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* ==========================================
+   LIVE PREVIEW PANEL
+========================================== */
+
+.admin-editor-preview-panel {
+  width: 100%;
+  min-width: 0;
+
+  position: sticky;
+
+  top: 20px;
+
+  align-self: flex-start;
+}
+
+
+/* =========================================
+   PREVIEW HEADER
+========================================= */
+
+.admin-editor-preview-header {
+  min-height: 68px;
+
+  padding: 16px 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  border-radius: 16px 16px 0 0;
+}
+
+
+/* =========================================
+   PREVIEW CONTAINER
+========================================= */
+
+.admin-editor-preview {
+  width: 100%;
+
+  height: 560px;
+
+  min-height: 560px;
+
+  max-height: 560px;
+
+  padding: 15px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+  overflow: auto;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   ACTUAL INVITATION PREVIEW
+========================================= */
+
+.admin-real-template-preview {
+  width: 100%;
+
+  max-width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   TEMPLATE RENDERER
+========================================= */
+
+.admin-real-template-preview .template-design-wrapper {
+  width: 100%;
+
+  max-width: 620px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================================
+   INVITATION SURFACE
+========================================= */
+
+.admin-real-template-preview .template-design-surface {
+  width: 100%;
+
+  max-width: 620px;
+
+  min-height: 480px;
+
+  box-sizing: border-box;
+
+  margin: 0 auto;
+}
+
+
+/* =========================================
+   INVITATION IMAGES
+========================================= */
+
+.admin-real-template-preview img {
+  max-width: 100%;
+
+  height: auto;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.admin-template-edit-loading {
+  min-height: 100vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #746c7c;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   ERROR PAGE
+========================================= */
+
+.admin-template-edit-error {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 15px;
+}
+
+.admin-template-edit-error button {
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 9px;
+
+  background: #8b5cf6;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================
+   LARGE SCREEN
+========================================= */
+
+@media (min-width: 1400px) {
+
+  .admin-editor-layout {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 30px;
+  }
+
+  .admin-real-template-preview .template-design-wrapper {
+    max-width: 680px;
+  }
+
+  .admin-real-template-preview .template-design-surface {
+    max-width: 680px;
+  }
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+
+  .admin-template-editor {
+    padding: 25px 25px 50px;
+  }
+
+  .admin-editor-layout {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+  }
+
+  .admin-editor-preview-panel {
+    position: sticky;
+
+    top: 15px;
+  }
+
+  .admin-editor-preview {
+    height: 520px;
+
+    min-height: 520px;
+
+    max-height: 520px;
+
+    padding: 12px;
+  }
+
+  .admin-real-template-preview .template-design-wrapper,
+  .admin-real-template-preview .template-design-surface {
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================
+   SMALL TABLET
+========================================= */
+
+@media (max-width: 850px) {
+
+  .admin-editor-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-editor-preview-panel {
+    position: relative;
+
+    top: 0;
+  }
+
+  .admin-editor-preview {
+    height: 550px;
+
+    min-height: 550px;
+
+    max-height: 550px;
+
+    padding: 15px;
+  }
+
+  .admin-real-template-preview {
+    max-width: 700px;
+  }
+
+  .admin-real-template-preview .template-design-wrapper,
+  .admin-real-template-preview .template-design-surface {
+    max-width: 700px;
+  }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 650px) {
+
+  .admin-template-editor {
+    padding: 22px 15px 40px;
+  }
+
+  .admin-editor-header {
+    margin-bottom: 20px;
+  }
+
+  .admin-editor-title h1 {
+    font-size: 27px;
+  }
+
+  .admin-editor-title span {
+    font-size: 13px;
+  }
+
+  .field-section-top {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .add-field-btn {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .admin-editor-preview {
+    height: 500px;
+
+    min-height: 500px;
+
+    max-height: 500px;
+
+    padding: 10px;
+  }
+
+  .admin-real-template-preview {
+    width: 100%;
+
+    max-width: 100%;
+  }
+
+  .admin-real-template-preview .template-design-wrapper,
+  .admin-real-template-preview .template-design-surface {
+    width: 100%;
+
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================
+   VERY SMALL MOBILE
+========================================= */
+
+@media (max-width: 400px) {
+
+  .admin-template-editor {
+    padding: 18px 10px 30px;
+  }
+
+  .admin-editor-section-header {
+    padding: 14px;
+  }
+
+  .admin-editor-section-body {
+    padding: 0 14px 16px;
+  }
+
+  .admin-editor-preview {
+    height: 450px;
+
+    min-height: 450px;
+
+    max-height: 450px;
+
+    padding: 6px;
+  }
+}

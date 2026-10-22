@@ -1,0 +1,516 @@
+
+/* ======================================
+   INVITATION DETAILS PAGE
+====================================== */
+
+.invitation-details-page {
+  min-height: 100vh;
+  padding: 28px;
+  background: #f7f8fc;
+  color: #20243a;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.invitation-details-page * {
+  box-sizing: border-box;
+}
+
+/* HEADER */
+
+.invitation-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.invitation-details-back,
+.invitation-details-refresh {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid #e5e7ef;
+  border-radius: 11px;
+  background: #fff;
+  color: #555d73;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.invitation-details-back:hover,
+.invitation-details-refresh:hover {
+  border-color: #8064e9;
+  color: #7055e8;
+  background: #f8f6ff;
+}
+
+.invitation-details-refresh:hover svg {
+  transform: rotate(45deg);
+}
+
+.invitation-details-refresh svg {
+  transition: transform 0.3s ease;
+}
+
+/* INVITATION INFORMATION */
+
+.invitation-details-info {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 26px;
+  padding: 27px;
+  border: 1px solid #e8eaf2;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 5px 22px rgba(35, 38, 65, 0.035);
+}
+
+.invitation-details-label {
+  margin: 0 0 10px;
+  color: #8064e9;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.invitation-details-info h1 {
+  margin: 0 0 14px;
+  color: #20243a;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 750;
+  letter-spacing: -0.8px;
+  overflow-wrap: anywhere;
+}
+
+.invitation-details-info .invitation-status {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.invitation-details-info .invitation-status.published {
+  background: #e7f8ee;
+  color: #198754;
+}
+
+.invitation-details-info .invitation-status.draft {
+  background: #fff3df;
+  color: #a86a13;
+}
+
+.invitation-details-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 190px;
+  padding-top: 5px;
+}
+
+.invitation-details-meta > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  color: #737b90;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.invitation-details-meta svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #92784f;
+}
+
+/* RSVP SUMMARY CARDS */
+
+.invitation-details-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.invitation-detail-stat {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  padding: 24px 20px;
+  border: 1px solid #e7e9f1;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(35, 38, 65, 0.035);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.invitation-detail-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(35, 38, 65, 0.07);
+}
+
+.invitation-detail-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: #f1edff;
+  color: #7055e8;
+}
+
+.invitation-detail-stat:nth-child(2)
+.invitation-detail-stat-icon {
+  background: #e7f8ee;
+  color: #198754;
+}
+
+.invitation-detail-stat:nth-child(3)
+.invitation-detail-stat-icon {
+  background: #fff3df;
+  color: #bd7d18;
+}
+
+.invitation-detail-stat:nth-child(4)
+.invitation-detail-stat-icon {
+  background: #ffeded;
+  color: #d65361;
+}
+
+.invitation-detail-stat p {
+  margin: 0 0 7px;
+  color: #81889b;
+  font-size: 12px;
+}
+
+.invitation-detail-stat h2 {
+  margin: 0;
+  color: #20243a;
+  font-size: 27px;
+  font-weight: 750;
+}
+
+/* PEOPLE COMING */
+
+.invitation-people-coming {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 120px;
+  margin-bottom: 26px;
+  padding: 24px 27px;
+  border: 1px solid #f0e3d2;
+  border-radius: 16px;
+  background: linear-gradient(115deg, #fffaf3, #f8f1e7);
+}
+
+.invitation-people-coming p {
+  margin: 0 0 8px;
+  color: #98734d;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.invitation-people-coming h2 {
+  margin: 0;
+  color: #704b2c;
+  font-size: 34px;
+  font-weight: 750;
+}
+
+.invitation-people-coming > span {
+  color: #8a7968;
+  font-size: 12px;
+  text-align: right;
+}
+
+/* GUEST RESPONSES CARD */
+
+.invitation-responses-card {
+  overflow: hidden;
+  border: 1px solid #e7e9f1;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 5px 22px rgba(35, 38, 65, 0.035);
+}
+
+.invitation-responses-header {
+  padding: 24px;
+  border-bottom: 1px solid #eff0f5;
+}
+
+.invitation-responses-header h2 {
+  margin: 0 0 7px;
+  color: #252940;
+  font-size: 19px;
+  font-weight: 750;
+}
+
+.invitation-responses-header p {
+  margin: 0;
+  color: #858ba0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* GUEST TABLE */
+
+.invitation-responses-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.invitation-responses-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.invitation-responses-table thead {
+  background: #fafbfe;
+}
+
+.invitation-responses-table th {
+  padding: 16px 20px;
+  border-bottom: 1px solid #eceef4;
+  color: #858ba0;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.invitation-responses-table td {
+  padding: 17px 20px;
+  border-bottom: 1px solid #f0f1f6;
+  color: #555d73;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+.invitation-responses-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.invitation-responses-table tbody tr:hover {
+  background: #faf9ff;
+}
+
+.invitation-responses-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* GUEST NAME AND AVATAR */
+
+.invitation-detail-guest {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 140px;
+}
+
+.invitation-detail-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f0edff;
+  color: #7055e8;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.invitation-detail-guest strong {
+  color: #30354b;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+/* RSVP BADGES */
+
+.invitation-details-page .guest-attendance {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 11px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.invitation-details-page .guest-attendance-yes {
+  background: #e7f8ee;
+  color: #16804a;
+}
+
+.invitation-details-page .guest-attendance-maybe {
+  background: #fff3dd;
+  color: #a96a0b;
+}
+
+.invitation-details-page .guest-attendance-no {
+  background: #ffeded;
+  color: #c34252;
+}
+
+/* EMPTY STATE */
+
+.invitation-no-responses {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  padding: 35px 20px;
+  color: #8d93a7;
+  text-align: center;
+}
+
+.invitation-no-responses > svg {
+  margin-bottom: 13px;
+  color: #a99af1;
+}
+
+.invitation-no-responses h3 {
+  margin: 0 0 8px;
+  color: #30354b;
+  font-size: 16px;
+}
+
+.invitation-no-responses p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* LOADING / ERROR */
+
+.simple-page {
+  min-height: 60vh;
+  padding: 45px 28px;
+  background: #f7f8fc;
+  color: #30354b;
+}
+
+.simple-page-label {
+  color: #8064e9;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+}
+
+.simple-page h1 {
+  font-size: 28px;
+}
+
+.simple-page button {
+  margin-top: 12px;
+  padding: 11px 17px;
+  border: none;
+  border-radius: 10px;
+  background: #7055e8;
+  color: #fff;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1050px) {
+  .invitation-details-page {
+    padding: 22px;
+  }
+
+  .invitation-details-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .invitation-details-page {
+    padding: 15px;
+  }
+
+  .invitation-details-header {
+    align-items: stretch;
+  }
+
+  .invitation-details-back,
+  .invitation-details-refresh {
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  .invitation-details-info {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .invitation-details-meta {
+    min-width: 0;
+  }
+
+  .invitation-details-stats {
+    gap: 11px;
+  }
+
+  .invitation-detail-stat {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .invitation-detail-stat-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .invitation-detail-stat h2 {
+    font-size: 24px;
+  }
+
+  .invitation-people-coming {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    padding: 21px;
+  }
+
+  .invitation-people-coming > span {
+    text-align: left;
+  }
+
+  .invitation-responses-header {
+    padding: 19px;
+  }
+
+  .invitation-responses-table {
+    min-width: 700px;
+  }
+
+  .invitation-responses-table th,
+  .invitation-responses-table td {
+    padding: 14px;
+  }
+}

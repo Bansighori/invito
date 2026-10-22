@@ -1,6 +1,10 @@
 import { MapPin } from "lucide-react";
 
-function BirthdayModern({ data, onRSVP }) {
+function BirthdayModern({
+  data,
+  design = {},
+  onRSVP
+})   {
 
   const locationText = [
     data.venue,

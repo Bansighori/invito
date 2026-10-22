@@ -1,7 +1,4 @@
-import {
-  useEffect,
-  useState
-} from "react";
+import { useEffect, useState } from "react";
 
 import {
   FileText,
@@ -9,527 +6,286 @@ import {
   CalendarDays,
   Pencil,
   Trash2,
-  Globe
+  Globe,
+  ArrowLeft
 } from "lucide-react";
 
-import {
-  useNavigate
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import TemplateRenderer from "../components/TemplateRenderer";
+import SupportChatButton from "../components/SupportChatButton";
 import api from "../api/axios";
 
-
 function Drafts() {
-
   const navigate = useNavigate();
 
+  const [drafts, setDrafts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // =========================================
-  // STATE
-  // =========================================
-
-  const [drafts, setDrafts] =
-    useState([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
-
-
-  // =========================================
   // FETCH DRAFTS
-  // =========================================
-
   useEffect(() => {
-
     const fetchDrafts = async () => {
-
       try {
-
         setLoading(true);
-
         setError("");
 
+        const response = await api.get("/invitations");
+        const invitations = response.data.invitations || [];
 
-        const response =
-          await api.get(
-            "/invitations"
-          );
-
-
-        console.log(
-          "ALL INVITATIONS:",
-          response.data
+        const draftInvitations = invitations.filter(
+          (invitation) => invitation.status === "draft"
         );
 
-
-        const invitations =
-          response.data.invitations || [];
-
-
-        console.log(
-          "INVITATION STATUSES:",
-          invitations.map(
-            (invitation) => ({
-              id: invitation._id,
-              title: invitation.title,
-              status: invitation.status,
-              templateId:
-                invitation.templateId,
-              category:
-                invitation.category
-            })
-          )
-        );
-
-
-        const draftInvitations =
-          invitations.filter(
-            (invitation) =>
-              invitation.status === "draft"
-          );
-
-
-        console.log(
-          "DRAFT INVITATIONS:",
-          draftInvitations
-        );
-
-
-        setDrafts(
-          draftInvitations
-        );
-
-
+        setDrafts(draftInvitations);
       } catch (error) {
-
-        console.error(
-          "Failed to fetch drafts:",
-          error
-        );
-
-
-        console.error(
-          "Server response:",
-          error.response?.data
-        );
-
+        console.error("Failed to fetch drafts:", error);
 
         setError(
           error.response?.data?.message ||
-          "Unable to load drafts."
+            "Unable to load drafts."
         );
-
-
       } finally {
-
         setLoading(false);
-
       }
-
     };
-
 
     fetchDrafts();
-
   }, []);
 
-
-  // =========================================
   // DELETE DRAFT
-  // =========================================
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this draft?"
+    );
 
-  const handleDelete =
-    async (id) => {
+    if (!confirmDelete) return;
 
-      const confirmDelete =
-        window.confirm(
-          "Are you sure you want to delete this draft?"
-        );
+    try {
+      await api.delete(`/invitations/${id}`);
 
+      setDrafts((previous) =>
+        previous.filter((draft) => draft._id !== id)
+      );
+    } catch (error) {
+      console.error("Delete draft error:", error);
 
-      if (!confirmDelete) {
-        return;
-      }
-
-
-      try {
-
-        await api.delete(
-          `/invitations/${id}`
-        );
-
-
-        setDrafts(
-          (previous) =>
-            previous.filter(
-              (draft) =>
-                draft._id !== id
-            )
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Delete draft error:",
-          error
-        );
-
-
-        console.error(
-          "Server response:",
-          error.response?.data
-        );
-
-
-        alert(
-          error.response?.data?.message ||
+      window.alert(
+        error.response?.data?.message ||
           "Failed to delete draft."
-        );
+      );
+    }
+  };
 
-      }
-
-    };
-
-
-  // =========================================
   // EDIT DRAFT
-  // =========================================
+  const handleEdit = (draft) => {
+    const templateId =
+      draft.templateId?._id || draft.templateId;
 
-  const handleEdit =
-    (draft) => {
+    if (!templateId) {
+      window.alert(
+        "Template information is missing for this draft."
+      );
+      return;
+    }
 
-      const templateId =
-        draft.templateId?._id ||
-        draft.templateId;
+    navigate(
+      `/invitations/create/${templateId}?draftId=${draft._id}`
+    );
+  };
 
+  // PUBLISH DRAFT
+  const handlePublish = async (id) => {
+    const confirmPublish = window.confirm(
+      "Are you sure you want to publish this invitation?"
+    );
 
-      if (!templateId) {
+    if (!confirmPublish) return;
 
-        alert(
-          "Template information is missing for this draft."
-        );
-
-        return;
-
-      }
-
-
-      navigate(
-        `/invitations/create/${templateId}?draftId=${draft._id}`
+    try {
+      const response = await api.post(
+        `/invitations/${id}/publish`
       );
 
-    };
+      const publicUrl = response.data.publicUrl;
 
+      window.alert(
+        publicUrl
+          ? `Invitation published successfully!\n\nPublic URL: ${publicUrl}`
+          : "Invitation published successfully!"
+      );
 
-  // =========================================
-  // PUBLISH DRAFT
-  // =========================================
+      setDrafts((previous) =>
+        previous.filter((draft) => draft._id !== id)
+      );
+    } catch (error) {
+      console.error("Publish invitation error:", error);
 
-  const handlePublish =
-    async (id) => {
-
-      const confirmPublish =
-        window.confirm(
-          "Are you sure you want to publish this invitation?"
-        );
-
-
-      if (!confirmPublish) {
-        return;
-      }
-
-
-      try {
-
-        const response =
-          await api.post(
-            `/invitations/${id}/publish`
-          );
-
-
-        console.log(
-          "Published invitation:",
-          response.data
-        );
-
-
-        const publicUrl =
-          response.data.publicUrl;
-
-
-        alert(
-          publicUrl
-            ? `Invitation published successfully!\n\nPublic URL: ${publicUrl}`
-            : "Invitation published successfully!"
-        );
-
-
-        // Remove published invitation
-        // from Drafts page
-
-        setDrafts(
-          (previous) =>
-            previous.filter(
-              (draft) =>
-                draft._id !== id
-            )
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Publish invitation error:",
-          error
-        );
-
-
-        console.error(
-          "Server response:",
-          error.response?.data
-        );
-
-
-        alert(
-          error.response?.data?.message ||
+      window.alert(
+        error.response?.data?.message ||
           "Failed to publish invitation."
-        );
+      );
+    }
+  };
 
-      }
-
-    };
-
-
-  // =========================================
-  // LOADING
-  // =========================================
-
-  if (loading) {
-
-    return (
-      <div className="simple-page">
-
-        <p className="simple-page-label">
-          WORKSPACE
-        </p>
-
-        <h1>
-          Drafts
-        </h1>
-
-        <p>
-          Loading your drafts...
-        </p>
-
-      </div>
-    );
-
-  }
-
-
-  // =========================================
-  // ERROR
-  // =========================================
-
-  if (error) {
-
-    return (
-      <div className="simple-page">
-
-        <p className="simple-page-label">
-          WORKSPACE
-        </p>
-
-        <h1>
-          Drafts
-        </h1>
-
-        <p>
-          {error}
-        </p>
-
-
-        <button
-          type="button"
-          onClick={() =>
-            window.location.reload()
-          }
-        >
-          Try Again
-        </button>
-
-      </div>
-    );
-
-  }
-
-
-  // =========================================
   // PAGE
-  // =========================================
-
   return (
+    <>
+      {/* BACK BUTTON CSS - SAME FILE */}
+      <style>{`
+        .drafts-back-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          padding: 8px 0;
+          margin-bottom: 14px;
+          border: none;
+          outline: none;
+          background: transparent;
+          color: #6554ff;
+          font-family: inherit;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: color 0.2s ease;
+        }
 
-    <div className="invitations-page">
+        .drafts-back-button:hover {
+          color: #4938df;
+        }
 
+        .drafts-back-button:focus-visible {
+          outline: 2px solid #6554ff;
+          outline-offset: 4px;
+          border-radius: 4px;
+        }
 
-      {/* =====================================
-          HEADER
-      ===================================== */}
+        .drafts-back-button svg {
+          width: 18px;
+          height: 18px;
+          flex-shrink: 0;
+        }
+      `}</style>
 
-      <div className="invitations-header">
+      <div className="invitations-page">
+        {/* HEADER */}
+        <div className="invitations-header">
+          <SupportChatButton />
 
-        <div>
+          <div>
+            <button
+              type="button"
+              className="drafts-back-button"
+              onClick={() => navigate("/templates")}
+            >
+              <ArrowLeft size={18} />
+              <span>Back</span>
+            </button>
 
-          <p className="invitations-eyebrow">
-            WORKSPACE
-          </p>
+            <p className="invitations-eyebrow">
+              WORKSPACE
+            </p>
 
-          <h1>
-            Drafts
-          </h1>
+            <h1>Drafts</h1>
 
-          <p className="invitations-subtitle">
-            Continue working on your unfinished
-            invitations.
-          </p>
-
-        </div>
-
-
-        <button
-          className="invitations-create-button"
-          type="button"
-          onClick={() =>
-            navigate("/templates")
-          }
-        >
-
-          <Plus size={18} />
-
-          Create Invitation
-
-        </button>
-
-      </div>
-
-
-      {/* =====================================
-          EMPTY STATE
-      ===================================== */}
-
-      {drafts.length === 0 ? (
-
-        <div className="invitations-empty">
-
-          <div className="invitations-empty-icon">
-
-            <FileText size={30} />
-
+            <p className="invitations-subtitle">
+              Continue working on your unfinished invitations.
+            </p>
           </div>
 
-
-          <h2>
-            No drafts yet
-          </h2>
-
-
-          <p>
-            Your unfinished invitations
-            will appear here.
-          </p>
-
-
           <button
+            className="invitations-create-button"
             type="button"
-            onClick={() =>
-              navigate("/templates")
-            }
+            onClick={() => navigate("/templates")}
           >
+            <Plus size={18} />
             Create Invitation
           </button>
-
         </div>
 
-      ) : (
+        {/* LOADING */}
+        {loading && (
+          <div className="invitations-empty">
+            <p>Loading your drafts...</p>
+          </div>
+        )}
 
-        /* ===================================
-           DRAFT GRID
-        =================================== */
+        {/* ERROR */}
+        {!loading && error && (
+          <div className="invitations-empty">
+            <h2>Unable to load drafts</h2>
+            <p>{error}</p>
 
-        <div className="invitations-grid">
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+            >
+              Try Again
+            </button>
+          </div>
+        )}
 
-          {drafts.map(
-            (draft) => (
+        {/* EMPTY STATE */}
+        {!loading && !error && drafts.length === 0 && (
+          <div className="invitations-empty">
+            <div className="invitations-empty-icon">
+              <FileText size={30} />
+            </div>
 
+            <h2>No drafts yet</h2>
+
+            <p>
+              Your unfinished invitations will appear here.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => navigate("/templates")}
+            >
+              Create Invitation
+            </button>
+          </div>
+        )}
+
+        {/* DRAFT GRID */}
+        {!loading && !error && drafts.length > 0 && (
+          <div className="invitations-grid">
+            {drafts.map((draft) => (
               <div
                 className="invitation-card"
                 key={draft._id}
               >
-
-
-                {/* =========================
-                    PREVIEW
-                ========================= */}
-
+                {/* PREVIEW */}
                 <div className="invitation-card-preview">
-
                   <div className="invitation-card-template">
-
                     <TemplateRenderer
-                      component={
-                        draft.templateId?.component
-                      }
-                      category={
-                        draft.category
-                      }
-                      data={
-                        draft.data || {}
-                      }
+                      component={draft.templateId?.component}
+                      category={draft.category}
+                      data={draft.data || {}}
                     />
-
                   </div>
-
                 </div>
 
-
-                {/* =========================
-                    CONTENT
-                ========================= */}
-
+                {/* CONTENT */}
                 <div className="invitation-card-content">
-
                   <div>
-
                     <p className="invitation-card-category">
                       {draft.category}
                     </p>
 
-
                     <h3>
                       {draft.title}
                     </h3>
-
                   </div>
-
 
                   <span className="invitation-status draft">
                     Draft
                   </span>
 
-
-                  {/* DATE */}
-
+                  {/* LAST EDITED */}
                   <div className="invitation-card-date">
-
-                    <CalendarDays
-                      size={15}
-                    />
+                    <CalendarDays size={15} />
 
                     Last edited{" "}
 
@@ -538,82 +294,46 @@ function Drafts() {
                           draft.updatedAt
                         ).toLocaleDateString()
                       : "Recently"}
-
                   </div>
 
-
-                  {/* =======================
-                      ACTIONS
-                  ======================= */}
-
+                  {/* ACTIONS */}
                   <div className="invitation-card-actions">
-
-
-                    {/* EDIT */}
-
                     <button
                       type="button"
                       title="Continue Editing"
-                      onClick={() =>
-                        handleEdit(draft)
-                      }
+                      onClick={() => handleEdit(draft)}
                     >
-
                       <Pencil size={17} />
-
                     </button>
-
-
-                    {/* PUBLISH */}
 
                     <button
                       type="button"
                       title="Publish Invitation"
                       onClick={() =>
-                        handlePublish(
-                          draft._id
-                        )
+                        handlePublish(draft._id)
                       }
                     >
-
                       <Globe size={17} />
-
                     </button>
-
-
-                    {/* DELETE */}
 
                     <button
                       type="button"
                       title="Delete"
                       onClick={() =>
-                        handleDelete(
-                          draft._id
-                        )
+                        handleDelete(draft._id)
                       }
                     >
-
                       <Trash2 size={17} />
-
                     </button>
-
-
                   </div>
-
                 </div>
-
               </div>
-
-            )
-          )}
-
-        </div>
-
-      )}
-
-    </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
-
 
 export default Drafts;

@@ -1,0 +1,203 @@
+/* ==========================================
+   UNIVERSAL TEMPLATE DESIGN SYSTEM
+========================================== */
+
+.template-design-wrapper {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+
+  background: var(--template-background);
+
+  color: var(--template-body-color);
+
+  font-family:
+    var(--template-body-font),
+    sans-serif;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+
+/* ==========================================
+   REAL TEMPLATE SURFACE
+========================================== */
+
+.template-design-surface {
+  width: min(
+    var(--template-width),
+    100%
+  );
+
+  min-height:
+    var(--template-height);
+
+  box-sizing: border-box;
+
+  padding:
+    var(--template-padding);
+
+  border:
+    var(--template-border);
+
+  border-radius:
+    var(--template-radius);
+
+  background:
+    var(--template-background);
+
+  color:
+    var(--template-body-color);
+
+  text-align:
+    var(--template-body-align);
+
+  position: relative;
+
+  overflow: hidden;
+
+  transition:
+    background 0.3s ease,
+    border 0.3s ease,
+    border-radius 0.3s ease;
+}
+
+
+/* ==========================================
+   FORCE ROOT TEMPLATE BACKGROUND
+========================================== */
+
+.template-design-surface > * {
+  box-sizing: border-box;
+
+  max-width: 100%;
+}
+
+
+/*
+  This makes the admin background work
+  even when an old template has its own
+  background declaration.
+*/
+
+.template-design-surface > * {
+  background:
+    var(--template-background);
+}
+
+
+/* ==========================================
+   TYPOGRAPHY
+========================================== */
+
+.template-design-surface h1,
+.template-design-surface h2,
+.template-design-surface h3,
+.template-design-surface h4,
+.template-design-surface h5,
+.template-design-surface h6 {
+  font-family:
+    var(--template-title-font),
+    serif !important;
+
+  font-size:
+    var(--template-title-size);
+
+  color:
+    var(--template-title-color);
+
+  text-align:
+    var(--template-title-align);
+
+  transition:
+    color 0.3s ease,
+    font-family 0.3s ease;
+}
+
+
+.template-design-surface p,
+.template-design-surface span,
+.template-design-surface label {
+  font-family:
+    var(--template-body-font),
+    sans-serif;
+
+  font-size:
+    var(--template-body-size);
+
+  color:
+    var(--template-body-color);
+
+  text-align:
+    var(--template-body-align);
+}
+
+
+/* ==========================================
+   BUTTON
+========================================== */
+
+.template-design-surface button {
+  border-radius:
+    var(--template-button-radius);
+
+  transition:
+    all 0.25s ease;
+}
+
+
+/* ==========================================
+   IMAGES
+========================================== */
+
+.template-design-surface img {
+  max-width: 100%;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 700px) {
+
+  .template-design-surface {
+
+    width: 100%;
+
+    min-height:
+      var(--template-height);
+
+    padding:
+      20px;
+
+    border-radius:
+      min(
+        var(--template-radius),
+        18px
+      );
+
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .template-design-surface {
+
+    min-height: auto;
+
+    padding: 16px;
+
+  }
+
+}

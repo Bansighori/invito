@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function EngagementRose({ data, onRSVP }) {
+function EngagementRose({ data, design = {}, onRSVP }) {
   const locationText = [
     data.venue,
     data.address

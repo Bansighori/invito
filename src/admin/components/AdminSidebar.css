@@ -1,3 +1,7 @@
+/* =========================================
+   ADMIN SIDEBAR
+========================================= */
+
 .admin-sidebar {
   position: fixed;
 
@@ -12,6 +16,8 @@
   display: flex;
   flex-direction: column;
 
+  box-sizing: border-box;
+
   background:
     linear-gradient(
       180deg,
@@ -25,15 +31,40 @@
     10px 0 35px
     rgba(55, 35, 70, 0.08);
 
+  /* CLOSED STATE */
   transform: translateX(-100%);
 
+  visibility: hidden;
+
+  opacity: 0;
+
+  pointer-events: none;
+
   transition:
-    transform 0.28s ease;
+    transform 0.28s ease,
+    opacity 0.2s ease,
+    visibility 0.28s ease;
 }
+
+
+/* =========================================
+   OPEN SIDEBAR
+========================================= */
 
 .admin-sidebar.open {
   transform: translateX(0);
+
+  visibility: visible;
+
+  opacity: 1;
+
+  pointer-events: auto;
 }
+
+
+/* =========================================
+   SIDEBAR HEADER
+========================================= */
 
 .admin-sidebar-header {
   padding: 25px 22px 20px;
@@ -43,6 +74,7 @@
 
 .admin-sidebar-brand {
   display: flex;
+
   align-items: center;
 
   gap: 11px;
@@ -53,6 +85,7 @@
   height: 40px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -94,6 +127,11 @@
   letter-spacing: 0.5px;
 }
 
+
+/* =========================================
+   SIDEBAR SECTION
+========================================= */
+
 .admin-sidebar-section {
   padding: 22px 22px 9px;
 
@@ -106,10 +144,17 @@
   letter-spacing: 1.5px;
 }
 
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
 .admin-sidebar-nav {
   flex: 1;
 
   overflow-y: auto;
+
+  overflow-x: hidden;
 
   padding: 5px 12px;
 
@@ -118,6 +163,7 @@
 
 .admin-sidebar-link {
   display: flex;
+
   align-items: center;
 
   gap: 12px;
@@ -165,16 +211,27 @@
     rgba(139, 92, 246, 0.20);
 }
 
+
+/* =========================================
+   SIDEBAR BOTTOM
+========================================= */
+
 .admin-sidebar-bottom {
   padding: 15px;
 
   border-top: 1px solid #f0ebf3;
 
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(
+    255,
+    255,
+    255,
+    0.75
+  );
 }
 
 .admin-sidebar-profile {
   display: flex;
+
   align-items: center;
 
   gap: 10px;
@@ -189,6 +246,7 @@
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -197,6 +255,7 @@
   color: white;
 
   font-size: 13px;
+
   font-weight: 700;
 
   background:
@@ -241,10 +300,16 @@
   white-space: nowrap;
 }
 
+
+/* =========================================
+   LOGOUT
+========================================= */
+
 .admin-logout-button {
   width: 100%;
 
   display: flex;
+
   align-items: center;
 
   gap: 9px;
@@ -262,6 +327,7 @@
   background: #fff7fa;
 
   font-size: 12px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -277,6 +343,11 @@
   border-color: #f4c5d5;
 }
 
+
+/* =========================================
+   MENU BUTTON
+========================================= */
+
 .admin-sidebar-menu-button {
   position: fixed;
 
@@ -289,6 +360,7 @@
   height: 42px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -315,6 +387,11 @@
   transform: translateY(-1px);
 }
 
+
+/* =========================================
+   OVERLAY
+========================================= */
+
 .admin-sidebar-overlay {
   position: fixed;
 
@@ -323,18 +400,40 @@
   z-index: 900;
 
   background:
-    rgba(35, 25, 45, 0.28);
+    rgba(
+      35,
+      25,
+      45,
+      0.28
+    );
 
   backdrop-filter: blur(2px);
 }
 
+
+/* =========================================
+   EXTRA SAFETY
+========================================= */
+
+/* Never allow hidden sidebar content to escape */
+.admin-sidebar:not(.open) {
+  overflow: hidden;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
 @media (max-width: 600px) {
+
   .admin-sidebar {
     width: 285px;
   }
 
   .admin-sidebar-menu-button {
     top: 13px;
+
     left: 13px;
   }
 }

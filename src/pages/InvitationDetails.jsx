@@ -20,6 +20,7 @@ import {
   useNavigate,
   useParams
 } from "react-router-dom";
+import "./InvitationDetails.css";
 
 
 function InvitationDetails() {
@@ -227,7 +228,7 @@ function InvitationDetails() {
         <button
           className="invitation-details-back"
           onClick={() =>
-            navigate("/invitations")
+            navigate("/Dashboard")
           }
         >
 

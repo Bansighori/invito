@@ -3,6 +3,7 @@ import { MapPin } from "lucide-react";
 
 function BirthdayElegant({
   data = {},
+  design = {},
   onRSVP,
   enableOpeningAnimation = false
 }) {

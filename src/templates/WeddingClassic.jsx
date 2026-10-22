@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function WeddingClassic({ data, onRSVP }) {
+function WeddingClassic({ data, design = {}, onRSVP }) {
 
   const locationUrl = data.venue
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(

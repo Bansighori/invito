@@ -3,62 +3,76 @@ import {
   useState
 } from "react";
 
+import { ArrowLeft } from "lucide-react";
+
 import api from "../api/axios";
+
+import { useNavigate } from "react-router-dom";
 
 import UpgradePremium from "../components/UpgradePremium";
 import UpgradePremiumPlus from "../components/UpgradePremiumPlus";
+import SupportChatButton from "../components/SupportChatButton";
 
 function Pricing() {
-
-  const [user, setUser] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(true);
-
+  const [user, setUser] = useState(null);
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // ========================================
-  // GET CURRENT USER
+  // GET USER + PLANS
   // ========================================
 
   useEffect(() => {
-
-    const fetchUser = async () => {
-
+    const fetchData = async () => {
       try {
+        const [userResponse, plansResponse] =
+          await Promise.all([
+            api.get("/auth/me"),
+            api.get("/plans")
+          ]);
+          console.log("User response:", userResponse.data);
+console.log("Plans response:", plansResponse.data);
 
-        const response =
-          await api.get("/auth/me");
-
-        if (
-          response.data.success
-        ) {
-
-          setUser(
-            response.data.user
-          );
-
+        if (userResponse.data.success) {
+          setUser(userResponse.data.user);
         }
 
+        if (plansResponse.data.success) {
+          setPlans(
+            plansResponse.data.plans.filter(
+              (plan) => plan.active
+            )
+          );
+        }
       } catch (error) {
-
         console.error(
-          "Failed to fetch current user:",
+          "Failed to load pricing:",
           error
         );
-
       } finally {
-
         setLoading(false);
-
       }
-
     };
 
-    fetchUser();
-
+    fetchData();
   }, []);
 
+  // ========================================
+  // FIND PLANS
+  // ========================================
+
+  const freePlan = plans.find(
+    (plan) => plan.key === "free"
+  );
+
+  const premiumPlan = plans.find(
+    (plan) => plan.key === "premium"
+  );
+
+  const premiumPlusPlan = plans.find(
+    (plan) => plan.key === "premium_plus"
+  );
 
   // ========================================
   // CHECK ACTIVE PLAN
@@ -67,43 +81,29 @@ function Pricing() {
   const isPlanActive =
     user?.plan !== "free" &&
     user?.planExpiresAt &&
-    new Date(
-      user.planExpiresAt
-    ) > new Date();
-
+    new Date(user.planExpiresAt) > new Date();
 
   const isPremium =
     isPlanActive &&
     user?.plan === "premium";
 
-
   const isPremiumPlus =
     isPlanActive &&
     user?.plan === "premium_plus";
 
-
-  // IMPORTANT:
-  // Used for the active plan banner
-
   const hasPaidPlan =
-    isPremium ||
-    isPremiumPlus;
-
+    isPremium || isPremiumPlus;
 
   // ========================================
   // LOADING
   // ========================================
 
   if (loading) {
-
     return (
-
       <div className="templates-page">
-
         <section className="pricing-section">
 
           <div className="pricing-heading">
-
             <p className="pricing-eyebrow">
               SIMPLE PRICING
             </p>
@@ -116,63 +116,105 @@ function Pricing() {
               Create beautiful invitations
               with the features you need.
             </p>
-
           </div>
 
           <div className="templates-loading">
-
             <div className="loading-spinner"></div>
 
             <p>
               Loading pricing...
             </p>
-
           </div>
 
         </section>
-
       </div>
-
     );
-
   }
-
 
   // ========================================
   // MAIN
   // ========================================
 
   return (
+    <>
+    <style>
+      {`
+      .pricing-heading {
+  position: relative;
+  text-align: center;
+  margin: 40px auto;
+  padding: 0 30px;
+}
 
+.pricing-back-button {
+  position: absolute;
+  left: 30px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  color: #6554ff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pricing-heading-content .pricing-label {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #666;
+}
+
+.pricing-heading-content h1 {
+  margin: 0 0 14px;
+}
+
+.pricing-heading-content > p:last-child {
+  margin: 0;
+  color: #777;
+}
+
+@media (max-width: 600px) {
+  .pricing-heading {
+    padding: 35px 16px 0;
+  }
+
+  .pricing-back-button {
+    left: 16px;
+    top: 0;
+  }
+}`}
+    </style>
     <div className="templates-page">
+      <SupportChatButton />
 
-      {/* =====================================
-          PRICING SECTION
-      ===================================== */}
+      
 
       <section className="pricing-section">
-
 
         {/* =====================================
             HEADING
         ===================================== */}
 
         <div className="pricing-heading">
+  <button
+    className="pricing-back-button"
+    onClick={() => navigate("/templates")}
+  >
+    <ArrowLeft size={18} />
+    Back
+  </button>
 
-          <p className="pricing-eyebrow">
-            SIMPLE PRICING
-          </p>
-
-          <h2>
-            Choose the perfect plan
-          </h2>
-
-          <p>
-            Create beautiful invitations with the
-            features you need.
-          </p>
-
-        </div>
+  <div className="pricing-heading-content">
+    <p className="pricing-label">SIMPLE PRICING</p>
+    <h1>Choose the perfect plan</h1>
+    <p>Create beautiful invitations with the features you need.</p>
+  </div>
+</div>
 
 
         {/* =====================================
@@ -183,48 +225,34 @@ function Pricing() {
 
           <div className="active-plan-banner">
 
-            {/* LEFT */}
-
             <div className="active-plan-left">
 
               <div className="active-plan-icon">
                 ✓
               </div>
 
-
               <div className="active-plan-content">
 
                 <h3>
-
                   Your{" "}
-
                   {user?.plan === "premium_plus"
                     ? "Premium Plus"
                     : "Premium"}
-
                   {" "}Plan is Active! 🎉
-
                 </h3>
 
-
                 <p>
-
                   You have full access to all{" "}
-
                   {user?.plan === "premium_plus"
                     ? "Premium Plus"
                     : "Premium"}
-
                   {" "}features.
-
                 </p>
 
               </div>
 
             </div>
 
-
-            {/* RIGHT */}
 
             <div className="active-plan-right">
 
@@ -233,7 +261,6 @@ function Pricing() {
                 <span>
                   Active until
                 </span>
-
 
                 <strong>
 
@@ -287,329 +314,260 @@ function Pricing() {
           id="pricing-plans"
         >
 
-
           {/* =====================================
               FREE PLAN
           ===================================== */}
 
-          <div className="pricing-card">
+          {freePlan && (
 
-            <div className="pricing-card-top">
+            <div className="pricing-card">
 
-              <span className="pricing-plan-name">
-                Free
-              </span>
+              <div className="pricing-card-top">
+
+                <span className="pricing-plan-name">
+                  {freePlan.name}
+                </span>
+
+                <span className="pricing-badge">
+                  STARTER
+                </span>
+
+              </div>
 
 
-              <span className="pricing-badge">
-                STARTER
-              </span>
+              <div className="pricing-price">
+
+                <span className="currency">
+                  ₹
+                </span>
+
+                <span className="amount">
+                  {freePlan.price}
+                </span>
+
+                <span className="period">
+                  {freePlan.duration === "Forever"
+                    ? ""
+                    : `/${freePlan.duration}`}
+                </span>
+
+              </div>
+
+
+              <p className="pricing-description">
+                {freePlan.description}
+              </p>
+
+
+              <div className="pricing-divider"></div>
+
+
+              <ul className="pricing-features">
+
+                {freePlan.features.map(
+                  (feature, index) => (
+                    <li key={index}>
+                      <span>✓</span>
+                      {feature}
+                    </li>
+                  )
+                )}
+
+              </ul>
+
+
+              <button
+                className="pricing-button current"
+                disabled
+              >
+                Current Plan
+              </button>
 
             </div>
 
-
-            <div className="pricing-price">
-
-              <span className="currency">
-                ₹
-              </span>
-
-              <span className="amount">
-                0
-              </span>
-
-              <span className="period">
-                /month
-              </span>
-
-            </div>
-
-
-            <p className="pricing-description">
-
-              Everything you need to create
-              beautiful invitations.
-
-            </p>
-
-
-            <div className="pricing-divider"></div>
-
-
-            <ul className="pricing-features">
-
-              <li>
-                <span>✓</span>
-                3 invitations
-              </li>
-
-              <li>
-                <span>✓</span>
-                Free templates
-              </li>
-
-              <li>
-                <span>✓</span>
-                RSVP management
-              </li>
-
-              <li>
-                <span>✓</span>
-                Public invitation URL
-              </li>
-
-              <li>
-                <span>✓</span>
-                Basic sharing
-              </li>
-
-            </ul>
-
-
-            <button
-              className="pricing-button current"
-              disabled
-            >
-              Current Plan
-            </button>
-
-          </div>
+          )}
 
 
           {/* =====================================
               PREMIUM PLAN
           ===================================== */}
 
-          <div
-            className={`pricing-card ${
-              isPremium
-                ? "active"
-                : ""
-            }`}
-          >
+          {premiumPlan && (
 
-            <div className="pricing-card-top">
+            <div
+              className={`pricing-card ${
+                isPremium
+                  ? "active"
+                  : ""
+              }`}
+            >
 
-              <span className="pricing-plan-name">
-                Premium
-              </span>
+              <div className="pricing-card-top">
+
+                <span className="pricing-plan-name">
+                  {premiumPlan.name}
+                </span>
+
+                <span className="pricing-badge premium">
+                  PRO
+                </span>
+
+              </div>
 
 
-              <span className="pricing-badge premium">
-                PRO
-              </span>
+              <div className="pricing-price">
+
+                <span className="currency">
+                  ₹
+                </span>
+
+                <span className="amount">
+                  {premiumPlan.price}
+                </span>
+
+                <span className="period">
+                  /{premiumPlan.duration}
+                </span>
+
+              </div>
+
+
+              <p className="pricing-description">
+                {premiumPlan.description}
+              </p>
+
+
+              <div className="pricing-divider"></div>
+
+
+              <ul className="pricing-features">
+
+                {premiumPlan.features.map(
+                  (feature, index) => (
+                    <li key={index}>
+                      <span>✓</span>
+                      {feature}
+                    </li>
+                  )
+                )}
+
+              </ul>
+
+
+              {isPremium ? (
+
+                <button
+                  className="pricing-button current"
+                  disabled
+                >
+                  ✓ Current Plan
+                </button>
+
+              ) : (
+
+                <UpgradePremium
+                  isPremium={false}
+                />
+
+              )}
 
             </div>
 
-
-            <div className="pricing-price">
-
-              <span className="currency">
-                ₹
-              </span>
-
-              <span className="amount">
-                199
-              </span>
-
-              <span className="period">
-                /30 days
-              </span>
-
-            </div>
-
-
-            <p className="pricing-description">
-
-              Unlimited invitations with powerful
-              premium features.
-
-            </p>
-
-
-            <div className="pricing-divider"></div>
-
-
-            <ul className="pricing-features">
-
-              <li>
-                <span>✓</span>
-                Unlimited invitations
-              </li>
-
-              <li>
-                <span>✓</span>
-                All premium templates
-              </li>
-
-              <li>
-                <span>✓</span>
-                Advanced RSVP
-              </li>
-
-              <li>
-                <span>✓</span>
-                Invitation analytics
-              </li>
-
-              <li>
-                <span>✓</span>
-                WhatsApp sharing
-              </li>
-
-              <li>
-                <span>✓</span>
-                Google Maps location
-              </li>
-
-              <li>
-                <span>✓</span>
-                Custom invitation URL
-              </li>
-
-            </ul>
-
-
-            {isPremium ? (
-
-              <button
-                className="pricing-button current"
-                disabled
-              >
-                ✓ Current Plan
-              </button>
-
-            ) : (
-
-              <UpgradePremium
-                isPremium={false}
-              />
-
-            )}
-
-          </div>
+          )}
 
 
           {/* =====================================
               PREMIUM PLUS PLAN
           ===================================== */}
 
-          <div
-            className={`pricing-card premium-plus-card ${
-              isPremiumPlus
-                ? "active"
-                : ""
-            }`}
-          >
+          {premiumPlusPlan && (
 
-            <div className="pricing-card-top">
+            <div
+              className={`pricing-card premium-plus-card ${
+                isPremiumPlus
+                  ? "active"
+                  : ""
+              }`}
+            >
 
-              <span className="pricing-plan-name">
-                Premium Plus
-              </span>
+              <div className="pricing-card-top">
+
+                <span className="pricing-plan-name">
+                  {premiumPlusPlan.name}
+                </span>
+
+                <span className="pricing-badge plus-badge">
+                  PLUS
+                </span>
+
+              </div>
 
 
-              <span className="pricing-badge plus-badge">
-                PLUS
-              </span>
+              <div className="pricing-price">
+
+                <span className="currency">
+                  ₹
+                </span>
+
+                <span className="amount">
+                  {premiumPlusPlan.price}
+                </span>
+
+                <span className="period">
+                  /{premiumPlusPlan.duration}
+                </span>
+
+              </div>
+
+
+              <p className="pricing-description">
+                {premiumPlusPlan.description}
+              </p>
+
+
+              <div className="pricing-divider"></div>
+
+
+              <ul className="pricing-features">
+
+                {premiumPlusPlan.features.map(
+                  (feature, index) => (
+                    <li key={index}>
+                      <span>✓</span>
+                      {feature}
+                    </li>
+                  )
+                )}
+
+              </ul>
+
+
+              {isPremiumPlus ? (
+
+                <button
+                  className="pricing-button current"
+                  disabled
+                >
+                  ✓ Current Plan
+                </button>
+
+              ) : (
+
+                <UpgradePremiumPlus />
+
+              )}
 
             </div>
 
-
-            <div className="pricing-price">
-
-              <span className="currency">
-                ₹
-              </span>
-
-              <span className="amount">
-                299
-              </span>
-
-              <span className="period">
-                /30 days
-              </span>
-
-            </div>
-
-
-            <p className="pricing-description">
-
-              The ultimate invitation experience
-              with advanced creative features.
-
-            </p>
-
-
-            <div className="pricing-divider"></div>
-
-
-            <ul className="pricing-features">
-
-              <li>
-                <span>✓</span>
-                Everything in Premium
-              </li>
-
-              <li>
-                <span>✓</span>
-                Photo gallery
-              </li>
-
-              <li>
-                <span>✓</span>
-                Birthday Animation 
-              </li>
-
-              <li>
-                <span>✓</span>
-                Guest List pdf
-              </li>
-
-              <li>
-                <span>✓</span>
-                Advanced RSVP
-              </li>
-
-              <li>
-                <span>✓</span>
-                Custom invitation URL
-              </li>
-
-              <li>
-                <span>✓</span>
-                WhatsApp sharing
-              </li>
-
-            </ul>
-
-
-            {isPremiumPlus ? (
-
-              <button
-                className="pricing-button current"
-                disabled
-              >
-                ✓ Current Plan
-              </button>
-
-            ) : (
-
-              <UpgradePremiumPlus />
-
-            )}
-
-          </div>
-
+          )}
 
         </div>
 
       </section>
 
     </div>
-
+    </>
   );
-
 }
 
 export default Pricing;

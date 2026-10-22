@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import api from "../api/axios";
+import SupportChatButton from "../components/SupportChatButton";
 
 
 function PaymentHistory() {
@@ -995,25 +996,17 @@ function PaymentHistory() {
       ================================== */}
 
       <div className="payment-history-header">
+        <SupportChatButton />
 
         <div>
 
           <button
-            className="payment-back-button"
-            onClick={() =>
-              navigate(-1)
-            }
-          >
-
-            <ArrowLeft
-              size={18}
-            />
-
-            Back
-
-          </button>
-
-
+  className="payment-back-button"
+  onClick={() => navigate("/home")}
+>
+  <ArrowLeft size={18} />
+  Back
+</button>
           <h1>
             Payment History
           </h1>

@@ -40,8 +40,6 @@ function CreateInvitation() {
   "PhotoWeddingRoyal"
 ];
 
-
-
   const [
     searchParams
   ] = useSearchParams();
@@ -53,7 +51,6 @@ function CreateInvitation() {
 
   const invitationId =
     searchParams.get("invitationId");
-
 
   const [template, setTemplate] =
     useState(null);
@@ -125,12 +122,12 @@ setFormData((previousData) => ({
     );
 
     if (
-      error.response?.data?.code ===
-      "PREMIUM_PLUS_REQUIRED"
-    ) {
-      navigate("/pricing");
-      return;
-    }
+  error.response?.data?.code === "PLAN_EXPIRED" ||
+  error.response?.data?.code === "FREE_LIMIT_REACHED"
+) {
+  navigate("/pricing");
+  return;
+}
 
     alert(
       error.response?.data?.message ||
@@ -330,7 +327,6 @@ status:
 
         };
 
-
         const createResponse =
           await api.post(
             "/invitations",
@@ -430,11 +426,13 @@ status:
 
     return (
       <TemplateRenderer
-        component={template.component}
-        category={template.category}
-        data={formData}
-        onRSVP={() => {}}
-      />
+  component={template.component}
+  category={template.category}
+  data={formData}
+  design={template.design || {}}
+  fields={template.fields || []}
+  onRSVP={() => {}}
+/>
     );
   };
 
@@ -477,17 +475,24 @@ status:
 setUser(
   userResponse.data.user
 );
-        const initialData = {};
+        const initialData = {
+  title: "You're Invited",
+  eventName: "Your Event",
 
+  parentName: "Emily & John",
+  
+  eventDate: "20 December 2026",
+  eventTime: "6:00 PM",
+  venue: "Beautiful Celebration Venue",
+  address: "Surat, Gujarat",
+  message: "Join us for a beautiful celebration..."
+};
 
-        selectedTemplate.fields.forEach(
-          (field) => {
-
-            initialData[field.name] =
-              "";
-
-          }
-        );
+selectedTemplate.fields.forEach((field) => {
+  if (initialData[field.name] === undefined) {
+    initialData[field.name] = "";
+  } 
+});
 
         initialData.venue = "";
 

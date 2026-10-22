@@ -1,0 +1,392 @@
+.admin-template-add-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 0 50px;
+}
+
+.admin-template-add-header {
+  margin-bottom: 24px;
+}
+
+.admin-template-back {
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b4eff;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 18px;
+}
+
+.admin-template-add-header h1 {
+  margin: 0;
+  font-size: 32px;
+  color: #241b35;
+}
+
+.admin-template-add-header p {
+  margin: 7px 0 0;
+  color: #777080;
+}
+
+.admin-template-error {
+  background: #fff0f0;
+  border: 1px solid #ffcaca;
+  color: #c62828;
+  padding: 13px 16px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.admin-template-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.template-form-card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid #ece5f3;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 12px 35px rgba(60, 35, 90, 0.07);
+}
+
+.form-section-title {
+  margin-bottom: 22px;
+}
+
+.form-section-title h2,
+.fields-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #281f38;
+}
+
+.form-section-title p,
+.fields-header p {
+  margin: 6px 0 0;
+  color: #837b8d;
+  font-size: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #443a50;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ded7e6;
+  border-radius: 11px;
+  padding: 12px 13px;
+  background: #fff;
+  color: #2b2433;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  transition: 0.2s;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #8b6cff;
+  box-shadow: 0 0 0 3px rgba(139, 108, 255, 0.1);
+}
+
+.form-group small {
+  color: #91889b;
+  font-size: 12px;
+}
+
+.plan-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.plan-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #e2dce9;
+  border-radius: 15px;
+  padding: 17px;
+  cursor: pointer;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.plan-option:hover {
+  border-color: #a68cff;
+}
+
+.plan-option.selected {
+  border-color: #7655ff;
+  background: #f7f4ff;
+}
+
+.plan-option input {
+  margin-top: 3px;
+}
+
+.plan-option strong {
+  display: block;
+  color: #30253e;
+  margin-bottom: 4px;
+}
+
+.plan-option span {
+  display: block;
+  font-size: 12px;
+  color: #8a8192;
+}
+
+.checkbox-group {
+  justify-content: flex-end;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+}
+
+.checkbox-group input {
+  width: 17px;
+  height: 17px;
+}
+
+.fields-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.add-field-button {
+  border: none;
+  background: #6c4cff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.template-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.template-field-row {
+  display: grid;
+  grid-template-columns: 38px 1fr 1fr 150px 90px 42px;
+  align-items: end;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #ebe5f0;
+  border-radius: 14px;
+  background: #faf9fc;
+}
+
+.field-number {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #eee9ff;
+  color: #6547dc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.required-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #62586b;
+  padding-bottom: 11px;
+}
+
+.required-field input {
+  width: 16px;
+  height: 16px;
+}
+
+.remove-field-button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 10px;
+  background: #fff0f0;
+  color: #d33d3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.template-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancel-button,
+.save-template-button {
+  border: none;
+  border-radius: 11px;
+  padding: 12px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background: #eeeaf2;
+  color: #4e4558;
+}
+
+.save-template-button {
+  background: #6547e8;
+  color: white;
+}
+
+.save-template-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .plan-options {
+    grid-template-columns: 1fr;
+  }
+
+  .template-field-row {
+    grid-template-columns: 38px 1fr 1fr;
+  }
+
+  .required-field {
+    padding-bottom: 0;
+  }
+
+  .remove-field-button {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 650px) {
+  .admin-template-add-page {
+    padding: 5px 0 35px;
+  }
+
+  .template-form-card {
+    padding: 17px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: auto;
+  }
+
+  .template-field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .field-number {
+    margin-bottom: 0;
+  }
+
+  .fields-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .template-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .cancel-button,
+  .save-template-button {
+    justify-content: center;
+    width: 100%;
+  }
+}.message-bubble {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: fit-content;
+  max-width: min(75%, 420px);
+  padding: 8px 10px;
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+}
+
+.message-text {
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.message-time {
+  flex-shrink: 0;
+  font-size: 9px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.message-row.user .message-time {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.message-row.admin .message-time {
+  color: #667781;
+}

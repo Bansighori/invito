@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function MinimalWedding({ data, onRSVP }) {
+function MinimalWedding({ data, design = {}, onRSVP }) {
     const locationText = [
     data.venue,
     data.address

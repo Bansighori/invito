@@ -2,6 +2,7 @@ import "./PhotoWeddingFloral.css";
 
 function PhotoWeddingFloral({
   data = {},
+  design = {},
   onRSVP
 }) {
   return (

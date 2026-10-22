@@ -1,6 +1,10 @@
 const Invitation = require("../models/Invitation");
 const Template = require("../models/Template");
 const User = require("../models/User");
+const createNotification =
+  require("../utils/createNotification");
+  const createAdminNotification =
+  require("../utils/createAdminNotification");
 
 // =========================================
 // CREATE INVITATION
@@ -43,25 +47,23 @@ const createInvitation = async (req, res) => {
       });
     }
 
-    // =========================================
-    // CHECK PLAN EXPIRY
-    // =========================================
+// CHECK PLAN EXPIRY
+let currentPlan = user.plan;
 
-    let currentPlan = user.plan;
+const planExpired =
+  currentPlan !== "free" &&
+  (
+    !user.planExpiresAt ||
+    new Date(user.planExpiresAt) <= new Date()
+  );
 
-    if (
-      user.plan !== "free" &&
-      user.planExpiresAt &&
-      new Date() > new Date(user.planExpiresAt)
-    ) {
-      user.plan = "free";
-      user.planExpiresAt = null;
-
-      await user.save();
-
-      currentPlan = "free";
-    }
-
+if (planExpired) {
+  return res.status(403).json({
+    success: false,
+    code: "PLAN_EXPIRED",
+    message: "Your plan has expired. Please purchase a plan again."
+  });
+}
     // =========================================
     // PLAN STATUS
     // =========================================
@@ -146,6 +148,12 @@ const createInvitation = async (req, res) => {
         status: status || "draft",
         userId: req.user.userId
       });
+      await createAdminNotification({
+  title: "New Invitation Created 📨",
+  message: `${req.user.name || "A user"} created a new ${invitation.category || "invitation"}.`,
+  type: "invitation",
+  link: "/admin/invitations"
+});
 
     // =========================================
     // INCREMENT FREE USAGE
@@ -218,6 +226,7 @@ const createInvitation = async (req, res) => {
     });
   }
 };
+
 
 
 // =========================================
@@ -352,10 +361,29 @@ const publishInvitation = async (req, res) => {
 
     invitation.slug = slug;
 
-    invitation.status =
-      "published";
+invitation.status =
+  "published";
 
-    await invitation.save();
+await invitation.save();
+
+
+// =========================================
+// CREATE PUBLISH NOTIFICATION
+// =========================================
+
+await createNotification({
+  userId: invitation.userId,
+
+  title: "Invitation Published",
+
+  message:
+    "Your invitation is now live and ready to share.",
+
+  type: "invitation",
+
+  link:
+    `/invitations/${invitation._id}`
+});
 
     return res.json({
       success: true,

@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function LittleStar({ data, onRSVP }) {
+function LittleStar({ data, design = {}, onRSVP }) {
   const locationText = [
     data.venue,
     data.address

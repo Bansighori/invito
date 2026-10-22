@@ -1,0 +1,634 @@
+/* ==========================================
+   ADMIN SETTINGS PAGE
+========================================== */
+
+.admin-settings {
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  box-sizing: border-box;
+
+  padding: 32px 40px 60px;
+
+  background: #f8f9fc;
+}
+
+
+/* ==========================================
+   CENTER SETTINGS CONTENT
+========================================== */
+
+.settings-header,
+.settings-card {
+  width: 100%;
+  max-width: 1250px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.settings-header {
+  margin-bottom: 28px;
+}
+
+.settings-header h1 {
+  margin: 0;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #171717;
+}
+
+.settings-header p {
+  margin: 7px 0 0;
+
+  color: #777;
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   CARD
+========================================== */
+
+.settings-card {
+  background: #ffffff;
+
+  border: 1px solid #eeeeee;
+  border-radius: 18px;
+
+  margin-bottom: 22px;
+  padding: 25px;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.02);
+}
+
+
+/* ==========================================
+   CARD HEADER
+========================================== */
+
+.settings-card-header {
+  margin-bottom: 22px;
+
+  padding-bottom: 18px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.settings-card-header h2 {
+  margin: 0;
+
+  font-size: 19px;
+  font-weight: 650;
+
+  color: #222;
+}
+
+.settings-card-header p {
+  margin: 6px 0 0;
+
+  color: #888;
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   PROFILE
+========================================== */
+
+.profile-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 20px 22px;
+}
+
+.setting-field {
+  width: 100%;
+}
+
+.setting-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #555;
+}
+
+.setting-field input {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 12px 13px;
+
+  border: 1px solid #dddddd;
+  border-radius: 9px;
+
+  outline: none;
+
+  font-size: 14px;
+
+  background: #ffffff;
+  color: #333;
+
+  transition: 0.2s;
+}
+
+.setting-field input:focus {
+  border-color: #8b5cf6;
+
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+}
+
+
+/* ==========================================
+   READONLY ROLE
+========================================== */
+
+.readonly-field {
+  min-height: 42px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 13px;
+
+  border: 1px solid #eeeeee;
+
+  background: #f8f8f8;
+
+  border-radius: 9px;
+
+  color: #777;
+
+  text-transform: capitalize;
+
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   ACCOUNT STATUS
+========================================== */
+
+.status-field {
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #444;
+
+  font-size: 14px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  flex-shrink: 0;
+}
+
+.status-dot.active {
+  background: #22c55e;
+}
+
+.status-dot.inactive {
+  background: #ef4444;
+}
+
+
+/* ==========================================
+   BUTTON AREA
+========================================== */
+
+.settings-actions {
+  margin-top: 22px;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+/* ==========================================
+   SAVE BUTTON
+========================================== */
+
+.save-btn {
+  border: none;
+
+  background: #8b5cf6;
+  color: #ffffff;
+
+  padding: 11px 20px;
+
+  border-radius: 9px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.save-btn:hover {
+  background: #7c3aed;
+}
+
+.save-btn:active {
+  transform: translateY(1px);
+}
+
+
+/* ==========================================
+   NOTIFICATIONS
+========================================== */
+
+.notification-list {
+  border-top: 1px solid #eeeeee;
+}
+
+.notification-item {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 0;
+
+  border-bottom: 1px solid #eeeeee;
+
+  gap: 20px;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item strong {
+  display: block;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #333;
+}
+
+.notification-item p {
+  margin: 5px 0 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+
+/* ==========================================
+   TOGGLE
+========================================== */
+
+.toggle {
+  width: 45px;
+  height: 24px;
+
+  border: none;
+
+  border-radius: 20px;
+
+  background: #d1d5db;
+
+  padding: 3px;
+
+  cursor: pointer;
+
+  position: relative;
+
+  flex-shrink: 0;
+}
+
+.toggle span {
+  width: 18px;
+  height: 18px;
+
+  background: #ffffff;
+
+  border-radius: 50%;
+
+  display: block;
+
+  transition: 0.2s;
+}
+
+.toggle.on {
+  background: #8b5cf6;
+}
+
+.toggle.on span {
+  transform: translateX(21px);
+}
+
+
+/* ==========================================
+   SECURITY
+========================================== */
+
+.security-list {
+  border-top: 1px solid #eeeeee;
+}
+
+.security-item {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 16px 0;
+
+  border-bottom: 1px solid #eeeeee;
+
+  font-size: 14px;
+
+  gap: 20px;
+}
+
+.security-item:last-child {
+  border-bottom: none;
+}
+
+.enabled {
+  color: #16a34a;
+
+  font-weight: 600;
+}
+
+.disabled {
+  color: #dc2626;
+
+  font-weight: 600;
+}
+
+
+/* ==========================================
+   SESSION
+========================================== */
+
+.session-box {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px;
+
+  background: #fafafa;
+
+  border: 1px solid #eeeeee;
+
+  border-radius: 12px;
+}
+
+.session-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+}
+
+.session-icon {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ede9fe;
+
+  color: #7c3aed;
+
+  font-size: 18px;
+}
+
+.session-info strong {
+  font-size: 14px;
+
+  color: #333;
+}
+
+.session-info p {
+  margin: 5px 0 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+
+/* ==========================================
+   LOGOUT BUTTON
+========================================== */
+
+.logout-btn {
+  border: none;
+
+  background: #fee2e2;
+
+  color: #dc2626;
+
+  padding: 10px 16px;
+
+  border-radius: 8px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  background: #fecaca;
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.settings-loading {
+  width: 100%;
+
+  min-height: calc(100vh - 70px);
+
+  box-sizing: border-box;
+
+  padding: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f8f9fc;
+
+  color: #777;
+
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   LARGE SCREEN
+========================================== */
+
+@media (min-width: 1400px) {
+  .admin-settings {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+
+  .settings-header,
+  .settings-card {
+    max-width: 1250px;
+  }
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 1000px) {
+  .admin-settings {
+    padding: 28px 25px 50px;
+  }
+
+  .settings-header,
+  .settings-card {
+    max-width: 100%;
+  }
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+  .admin-settings {
+    padding: 22px 16px 40px;
+  }
+
+  .settings-header {
+    margin-bottom: 22px;
+  }
+
+  .settings-header h1 {
+    font-size: 24px;
+  }
+
+  .settings-header p {
+    font-size: 13px;
+  }
+
+  .settings-card {
+    padding: 20px;
+
+    border-radius: 14px;
+  }
+
+  .settings-card-header {
+    margin-bottom: 18px;
+  }
+
+  .settings-card-header h2 {
+    font-size: 18px;
+  }
+
+  .settings-card-header p {
+    font-size: 13px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .notification-item {
+    gap: 15px;
+  }
+
+  .notification-item p {
+    max-width: 90%;
+  }
+
+  .session-box {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .logout-btn {
+    width: 100%;
+  }
+
+  .settings-actions {
+    justify-content: stretch;
+  }
+
+  .save-btn {
+    width: 100%;
+  }
+}
+
+
+/* ==========================================
+   SMALL MOBILE
+========================================== */
+
+@media (max-width: 450px) {
+  .admin-settings {
+    padding: 18px 12px 35px;
+  }
+
+  .settings-card {
+    padding: 17px;
+  }
+
+  .settings-header h1 {
+    font-size: 22px;
+  }
+
+  .settings-card-header h2 {
+    font-size: 17px;
+  }
+
+  .notification-item {
+    align-items: flex-start;
+  }
+}

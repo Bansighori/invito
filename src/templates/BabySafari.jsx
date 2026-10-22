@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function BabySafari({ data, onRSVP }) {
+function BabySafari({ data, design = {}, onRSVP }) {
   const locationText = [data.venue, data.address]
     .filter(Boolean)
     .join(", ");

@@ -7,6 +7,7 @@ import { MapPin } from "lucide-react";
 
 function BirthdayPop({
   data = {},
+  design = {},
   onRSVP,
   enableOpeningAnimation = false
 })  {

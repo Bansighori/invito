@@ -2,8 +2,12 @@ const jwt = require("jsonwebtoken");
 
 const authMiddleware = (req, res, next) => {
   try {
-    const authHeader =
-      req.headers.authorization;
+    console.log("========== AUTH DEBUG ==========");
+
+    const authHeader = req.headers.authorization;
+
+    console.log("Authorization:", authHeader ? "TOKEN RECEIVED" : "NO TOKEN");
+    console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
 
     if (!authHeader) {
       return res.status(401).json({
@@ -12,10 +16,14 @@ const authMiddleware = (req, res, next) => {
       });
     }
 
-    const token =
-      authHeader.startsWith("Bearer ")
-        ? authHeader.split(" ")[1]
-        : null;
+    if (!authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid authentication format"
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({
@@ -29,19 +37,37 @@ const authMiddleware = (req, res, next) => {
       process.env.JWT_SECRET
     );
 
-    // JWT contains "id"
-    // Provide both properties because
-    // different controllers currently use
-    // req.user.id and req.user.userId
+    console.log("Decoded JWT:", decoded);
+
+    const userId =
+      decoded.id ||
+      decoded._id ||
+      decoded.userId;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "User ID missing from token"
+      });
+    }
 
     req.user = {
-      id: decoded.id,
-      userId: decoded.id
+      _id: userId,
+      id: userId,
+      userId: userId
     };
+
+    console.log(
+      "Authenticated user:",
+      userId
+    );
+
+    console.log("================================");
 
     next();
 
   } catch (error) {
+
     console.error(
       "Authentication error:",
       error.message

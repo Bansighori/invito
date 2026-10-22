@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function RoyalWedding({ data, onRSVP }) {
+function RoyalWedding({ data, design = {}, onRSVP }) {
 
   const locationText = [
     data.venue,

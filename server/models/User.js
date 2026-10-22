@@ -16,18 +16,11 @@ const userSchema = new mongoose.Schema(
       trim: true
     },
 
-       role: {
-      type: String,
-      enum: [
-        "user",
-        "super_admin",
-        "user_admin",
-        "template_admin",
-        "payment_admin",
-        "support_admin"
-      ],
-      default: "user"
-    },
+      role: {
+  type: String,
+  enum: ["user"],
+  default: "user"
+},
 
 
     password: {
@@ -35,7 +28,13 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6
     },
+ 
 
+loginProvider: {
+  type: String,
+  enum: ["local", "google", "apple"],
+  default: "local"
+},
 
     // =========================
     // EMAIL VERIFICATION

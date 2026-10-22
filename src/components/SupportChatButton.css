@@ -1,0 +1,40 @@
+.support-chat-button {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+
+  width: 58px;
+  height: 58px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #6c63ff;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+
+  z-index: 9999;
+
+  transition: 0.25s ease;
+}
+
+.support-chat-button:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+
+@media (max-width: 600px) {
+  .support-chat-button {
+    width: 52px;
+    height: 52px;
+
+    right: 18px;
+    bottom: 18px;
+  }
+}

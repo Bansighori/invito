@@ -8,16 +8,20 @@ import {
   Mail,
   Save,
   Lock,
+  ArrowLeft,
   KeyRound
 } from "lucide-react";
 
 import {
   updateProfile,
-  
+  changePassword
 } from "../api/authApi";
+import { useNavigate } from "react-router-dom";
+import SupportChatButton from "../components/SupportChatButton";
 
 
 function Settings() {
+  const navigate = useNavigate();
 
   // ==========================================
   // USER STATE
@@ -43,8 +47,15 @@ function Settings() {
   const [profileLoading, setProfileLoading] =
     useState(false);
 
+  const [passwords, setPasswords] = useState({
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: ""
+});
 
-  
+const [passwordMessage, setPasswordMessage] = useState("");
+const [passwordError, setPasswordError] = useState("");
+const [passwordLoading, setPasswordLoading] = useState(false);
 
   // ==========================================
   // LOAD LOGGED-IN USER
@@ -189,19 +200,67 @@ function Settings() {
     }
 
   };
-
   
+const handlePasswordChange = async (event) => {
+  event.preventDefault();
 
-  
+  setPasswordMessage("");
+  setPasswordError("");
 
+  if (
+    !passwords.currentPassword ||
+    !passwords.newPassword ||
+    !passwords.confirmPassword
+  ) {
+    setPasswordError("Please fill in all fields.");
+    return;
+  }
 
-   
+  if (passwords.newPassword.length < 8) {
+    setPasswordError(
+      "New password must be at least 8 characters."
+    );
+    return;
+  }
 
+  if (passwords.newPassword !== passwords.confirmPassword) {
+    setPasswordError("New passwords do not match.");
+    return;
+  }
 
-    
+  if (passwords.currentPassword === passwords.newPassword) {
+    setPasswordError(
+      "New password must be different from the current password."
+    );
+    return;
+  }
 
-    
+  try {
+    setPasswordLoading(true);
 
+    const response = await changePassword({
+      currentPassword: passwords.currentPassword,
+      newPassword: passwords.newPassword
+    });
+
+    setPasswordMessage(
+      response.data.message || "Password changed successfully."
+    );
+
+    setPasswords({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: ""
+    });
+  } catch (error) {
+    setPasswordError(
+      error.response?.data?.message ||
+      "Failed to change password."
+    );
+  } finally {
+    setPasswordLoading(false);
+  }
+};
 
 
   // ==========================================
@@ -235,18 +294,26 @@ function Settings() {
       ====================================== */}
 
       <div className="settings-header">
+        <SupportChatButton />
 
         <div>
+
+          <button
+              type="button"
+              className="drafts-back-button"
+              onClick={() => navigate("/home")}
+            >
+              <ArrowLeft size={18} />
+              <span>Back</span>
+            </button>
 
           <p className="settings-label">
             ACCOUNT
           </p>
 
-
           <h1>
             Settings
           </h1>
-
 
           <p>
             Manage your account and security
@@ -430,10 +497,111 @@ function Settings() {
         </form>
 
       </div>
+      
+{/* CHANGE PASSWORD CARD */}
 
+<div className="settings-card">
 
-        </div>
+  <div className="settings-card-header">
+    <div>
+      <h2>Change Password</h2>
+      <p>Update your password to keep your account secure.</p>
+    </div>
+  </div>
 
+  <form
+    className="settings-form"
+    onSubmit={handlePasswordChange}
+  >
+    <div className="settings-field">
+      <label>Current Password</label>
+      <div className="settings-input-wrapper">
+        <Lock size={17} />
+        <input
+          type="password"
+          autoComplete="current-password"
+          value={passwords.currentPassword}
+          onChange={(e) =>
+            setPasswords({
+              ...passwords,
+              currentPassword: e.target.value
+            })
+          }
+          placeholder="Enter current password"
+          required
+        />
+      </div>
+    </div>
+
+    <div className="settings-field">
+      <label>New Password</label>
+      <div className="settings-input-wrapper">
+        <KeyRound size={17} />
+        <input
+          type="password"
+          autoComplete="new-password"
+          value={passwords.newPassword}
+          onChange={(e) =>
+            setPasswords({
+              ...passwords,
+              newPassword: e.target.value
+            })
+          }
+          placeholder="Enter new password (min. 8 characters)"
+          minLength={8}
+          required
+        />
+      </div>
+    </div>
+
+    <div className="settings-field">
+      <label>Confirm New Password</label>
+      <div className="settings-input-wrapper">
+        <KeyRound size={17} />
+        <input
+          type="password"
+          autoComplete="new-password"
+          value={passwords.confirmPassword}
+          onChange={(e) =>
+            setPasswords({
+              ...passwords,
+              confirmPassword: e.target.value
+            })
+          }
+          placeholder="Confirm new password"
+          minLength={8}
+          required
+        />
+      </div>
+    </div>
+
+    {passwordMessage && (
+      <div className="settings-success">
+        {passwordMessage}
+      </div>
+    )}
+
+    {passwordError && (
+      <div className="settings-error">
+        {passwordError}
+      </div>
+    )}
+
+    <button
+      type="submit"
+      className="settings-save-button"
+      disabled={passwordLoading}
+    >
+      <Lock size={17} />
+      <span>
+        {passwordLoading
+          ? "Updating..."
+          : "Change Password"}
+      </span>
+    </button>
+  </form>
+</div>
+</div>
   );
 
 }

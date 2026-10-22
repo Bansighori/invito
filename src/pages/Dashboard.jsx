@@ -6,10 +6,11 @@ import {
 import api from "../api/axios";
 
 import {
+  ArrowLeft,
   ArrowUpRight,
   CalendarDays,
   CheckCircle2,
-  Clock3,
+  Clock3, 
   LoaderCircle,
   Mail,
   Users
@@ -18,12 +19,11 @@ import {
 import {
   useNavigate
 } from "react-router-dom";
-
-
+import SupportChatButton from "../components/SupportChatButton";
+import "./Dashboard.css";
 function Dashboard() {
 
   const navigate = useNavigate();
-
 
   // ==========================================
   // STATE
@@ -557,8 +557,35 @@ function Dashboard() {
   // ==========================================
 
   return (
+    <>
+    <style>
+      {`
+      .dashboard-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border: none;
+  background: transparent;
+  color: #6554ff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
 
+.dashboard-back-button:hover {
+  color: #4938df;
+}
+
+.dashboard-back-button svg {
+  flex-shrink: 0;
+}`}
+    </style>
     <div className="dashboard-home">
+      <SupportChatButton />
+    
 
 
       {/* ========================================
@@ -568,6 +595,14 @@ function Dashboard() {
       <div className="dashboard-home-header">
 
         <div>
+          <button
+  type="button"
+  className="dashboard-back-button"
+  onClick={() => navigate("/home")}
+>
+  <ArrowLeft size={18} />
+  Back
+</button>
 
           <span className="dashboard-eyebrow">
             OVERVIEW
@@ -1254,32 +1289,30 @@ function Dashboard() {
 
                   {/* STATUS */}
 
-                  <span>
+                  
+                  
+<span
+  className={`published-status ${
+    invitation.status === "draft" ? "draft" : ""
+  }`}
+>
+  {invitation.status}
+</span>
 
-                    <span className="published-status">
-                      {invitation.status}
-                    </span>
-
-                  </span>
 
 
                   {/* ACTION */}
 
                   <button
-                    type="button"
-                    className="recent-row-action"
-                    onClick={() =>
-                      navigate(
-                        `/invitations/${invitation._id}`
-                      )
-                    }
-                  >
-
-                    <ArrowUpRight
-                      size={15}
-                    />
-
-                  </button>
+  type="button"
+  className="recent-row-action"
+  onClick={() =>
+    navigate(`/invitations/${invitation._id}`)
+  }
+  title="View guest details"
+>
+  <ArrowUpRight size={15} />
+</button>
 
 
                 </div>
@@ -1295,6 +1328,7 @@ function Dashboard() {
 
 
     </div>
+    </>
 
   );
 

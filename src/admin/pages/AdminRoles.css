@@ -1,0 +1,367 @@
+.admin-roles {
+  padding: 30px;
+}
+
+.roles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.roles-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.roles-header p {
+  color: #888;
+  margin-top: 6px;
+}
+
+.add-admin-btn {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.role-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.role-stat {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.role-stat span {
+  color: #888;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.role-stat strong {
+  font-size: 28px;
+}
+
+.admins-card {
+  background: white;
+  border-radius: 18px;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+.card-title {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-title h2 {
+  margin: 0;
+}
+
+.card-title span {
+  color: #888;
+}
+
+/* ==========================================
+   ADMIN TABLE
+========================================== */
+
+.admin-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns:
+    1.5fr
+    2fr
+    1.3fr
+    0.8fr
+    0.8fr;
+
+  align-items: center;
+  column-gap: 25px;
+  padding: 18px 24px;
+  box-sizing: border-box;
+}
+
+
+/* Header */
+
+.table-header {
+  background: #fafafa;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+
+  color: #888;
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* Rows */
+
+.table-row {
+  min-height: 82px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+
+/* Admin */
+
+.admin-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.admin-name strong {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* Avatar */
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-weight: 700;
+
+  background: linear-gradient(
+    135deg,
+    #ec4899,
+    #8b5cf6
+  );
+}
+
+
+/* Email */
+
+.table-row > span {
+  min-width: 0;
+}
+
+.table-row > span:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* Role */
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  background: #f3e8ff;
+  color: #7c3aed;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+
+/* Status */
+
+.status {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status.active {
+  color: #16a34a;
+}
+
+.status.inactive {
+  color: #dc2626;
+}
+
+
+/* Actions */
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.delete-admin-btn {
+  border: none;
+
+  background: #fee2e2;
+  color: #dc2626;
+
+  padding: 8px 14px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.delete-admin-btn:hover {
+  background: #fecaca;
+}
+
+.protected-admin {
+  color: #888;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status.active {
+  color: #16a34a;
+}
+
+.status.inactive {
+  color: #dc2626;
+}
+
+
+/* Modal */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+.admin-modal {
+  width: 450px;
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  right: 18px;
+  top: 15px;
+  border: none;
+  background: none;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.admin-modal h2 {
+  margin-top: 0;
+}
+
+.admin-modal label {
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.admin-modal input,
+.admin-modal select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.modal-actions button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+.modal-actions .create-btn {
+  background: #8b5cf6;
+  color: white;
+  border: none;
+}
+.admin-actions {
+  display: flex;
+  align-items: center;
+}
+
+.delete-admin-btn {
+  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.delete-admin-btn:hover {
+  background: #fecaca;
+}
+
+.protected-admin {
+  color: #888;
+  font-size: 12px;
+  font-weight: 600;
+}

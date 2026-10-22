@@ -327,3 +327,505 @@
     gap: 9px;
   }
 }
+/* ==========================================
+   ADMIN NOTIFICATION WRAPPER
+========================================== */
+
+.admin-notification-wrapper {
+  position: relative;
+}
+
+
+/* ==========================================
+   NOTIFICATION COUNT
+========================================== */
+
+.admin-notification-count {
+  position: absolute;
+
+  top: -5px;
+  right: -5px;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background: #ec4899;
+  color: white;
+
+  border: 2px solid white;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  box-sizing: border-box;
+}
+
+
+/* ==========================================
+   DROPDOWN
+========================================== */
+
+.admin-notification-dropdown {
+  position: absolute;
+
+  top: 52px;
+  right: 0;
+
+  width: 390px;
+  max-width: calc(100vw - 30px);
+
+  background: white;
+
+  border: 1px solid #ebe6ef;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 18px 45px
+    rgba(40, 30, 50, 0.14);
+
+  overflow: hidden;
+
+  z-index: 1200;
+
+  animation:
+    adminNotificationOpen
+    0.18s ease;
+}
+
+@keyframes adminNotificationOpen {
+
+  from {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.admin-notification-header {
+  min-height: 62px;
+
+  padding: 0 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #f0ebf3;
+}
+
+.admin-notification-header > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.admin-notification-header strong {
+  color: #2f2935;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.admin-notification-header span {
+  color: #9a919f;
+
+  font-size: 11px;
+}
+
+.admin-notification-close {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #99919d;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.admin-notification-close:hover {
+  background: #f6f3f8;
+  color: #5f5665;
+}
+
+
+/* ==========================================
+   ACTIONS
+========================================== */
+
+.admin-notification-actions {
+  padding: 9px 15px;
+
+  display: flex;
+  justify-content: flex-end;
+
+  border-bottom: 1px solid #f4f0f5;
+}
+
+.admin-notification-actions button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 9px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: #7c3aed;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.admin-notification-actions button:hover {
+  background: #f5f0ff;
+}
+
+
+/* ==========================================
+   LIST
+========================================== */
+
+.admin-notification-list {
+  max-height: 440px;
+
+  overflow-y: auto;
+}
+
+.admin-notification-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-notification-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-notification-list::-webkit-scrollbar-thumb {
+  background: #ddd5e3;
+  border-radius: 20px;
+}
+
+
+/* ==========================================
+   ITEM
+========================================== */
+
+.admin-notification-item {
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 11px;
+
+  padding: 14px 15px;
+
+  border-bottom: 1px solid #f3eff5;
+
+  transition: 0.18s ease;
+}
+
+.admin-notification-item:hover {
+  background: #faf9fc;
+}
+
+.admin-notification-item.unread {
+  background: #fcfaff;
+}
+
+
+/* ==========================================
+   NOTIFICATION ICON
+========================================== */
+
+.admin-notification-icon {
+  flex-shrink: 0;
+
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.admin-notification-icon.user {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.admin-notification-icon.payment {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.admin-notification-icon.invitation {
+  background: #fdf2f8;
+  color: #db2777;
+}
+
+.admin-notification-icon.security {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.admin-notification-icon.system {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+
+/* ==========================================
+   CONTENT
+========================================== */
+
+.admin-notification-content {
+  min-width: 0;
+
+  flex: 1;
+
+  cursor: pointer;
+}
+
+.admin-notification-title {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.admin-notification-title strong {
+  overflow: hidden;
+
+  color: #342d39;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-notification-content p {
+  margin: 5px 0;
+
+  color: #77707d;
+
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.admin-notification-content small {
+  color: #aaa1ad;
+
+  font-size: 9px;
+}
+
+
+/* ==========================================
+   UNREAD DOT
+========================================== */
+
+.admin-unread-dot {
+  flex-shrink: 0;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #ec4899;
+}
+
+
+/* ==========================================
+   ITEM ACTIONS
+========================================== */
+
+.admin-notification-item-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 2px;
+}
+
+.admin-notification-item-actions button {
+  width: 27px;
+  height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: #aaa1ad;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.admin-notification-item-actions button:hover {
+  background: #f1edf4;
+  color: #7c3aed;
+}
+
+
+/* ==========================================
+   EMPTY
+========================================== */
+
+.admin-notification-empty {
+  min-height: 190px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  color: #aaa2ae;
+}
+
+.admin-notification-empty svg {
+  color: #d4ccd9;
+  margin-bottom: 5px;
+}
+
+.admin-notification-empty strong {
+  color: #6f6675;
+
+  font-size: 13px;
+}
+
+.admin-notification-empty span {
+  font-size: 10px;
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.admin-notification-loading {
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  color: #99919f;
+
+  font-size: 11px;
+}
+
+.admin-notification-spinner {
+  width: 27px;
+  height: 27px;
+
+  border: 3px solid #eee8f2;
+  border-top-color: #7c3aed;
+
+  border-radius: 50%;
+
+  animation:
+    adminNotificationSpin
+    0.8s linear infinite;
+}
+
+@keyframes adminNotificationSpin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.admin-notification-footer {
+  padding: 10px;
+
+  text-align: center;
+
+  border-top: 1px solid #f0ebf3;
+
+  color: #aaa1ad;
+
+  font-size: 9px;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+  .admin-notification-dropdown {
+    position: fixed;
+
+    top: 68px;
+    left: 10px;
+    right: 10px;
+
+    width: auto;
+    max-width: none;
+  }
+
+  .admin-notification-list {
+    max-height: calc(100vh - 160px);
+  }
+
+}

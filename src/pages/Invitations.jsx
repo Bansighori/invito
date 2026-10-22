@@ -25,6 +25,7 @@ import {
 } from "react-router-dom";
 
 import TemplateRenderer from "../components/TemplateRenderer";
+import SupportChatButton from "../components/SupportChatButton";
 
 
 function Invitations() {
@@ -391,9 +392,33 @@ function Invitations() {
   // =========================================
 
   return (
+    <>
+    <style>
+      {`
+      .back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  margin-bottom: 20px;
+  background: #ffffff;
+  color: #333;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: #f3f4f6;
+  transform: translateX(-3px);
+}`}
+    </style>
 
     <div className="invitations-page">
-
+      <SupportChatButton />
 
       {/* =====================================
           HEADER
@@ -402,6 +427,13 @@ function Invitations() {
       <div className="invitations-header">
 
         <div>
+          <button
+  type="button"
+  className="back-button"
+  onClick={() => navigate("/templates")}
+>
+  ← Back
+</button>
 
           <p className="invitations-eyebrow">
             INVITATIONS
@@ -780,6 +812,7 @@ function Invitations() {
       )}
 
     </div>
+    </>
   );
 }
 

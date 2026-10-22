@@ -5,6 +5,8 @@ const { OAuth2Client } = require("google-auth-library");
 
 const User = require("../models/User");
 const Otp = require("../models/Otp");
+const createAdminNotification =
+  require("../utils/createAdminNotification");
 
 // =====================================================
 // GMAIL TRANSPORTER
@@ -42,9 +44,9 @@ const sendRegisterOtp = async (req, res) => {
       });
     }
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       return res.status(400).json({
-        message: "Password must be at least 6 characters"
+        message: "Password must be at least 8 characters"
       });
     }
 
@@ -219,6 +221,13 @@ const verifyRegisterOtp = async (req, res) => {
       isEmailVerified: true,
       plan: "free"
     });
+
+    await createAdminNotification({
+  title: "New User Registered 👤",
+  message: `${user.name} has joined Invito.`,
+  type: "user",
+  link: "/admin/users"
+});
 
     // Mark OTP as verified
     otpRecord.verified = true;
@@ -636,6 +645,12 @@ const googleLogin = async (req, res) => {
         isEmailVerified: true,
         plan: "free"
       });
+      await createAdminNotification({
+  title: "New User Registered 👤",
+  message: `${user.name} has joined Invito using Google.`,
+  type: "user",
+  link: "/admin/users"
+});
     }
 
     // Create Invito JWT

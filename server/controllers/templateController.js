@@ -7,10 +7,11 @@ const Template = require("../models/Template");
 const getTemplates = async (req, res) => {
   try {
     const templates = await Template.find({
-      isActive: true
-    }).sort({
-      createdAt: -1
-    });
+  isActive: true
+}).sort({
+  displayOrder: 1,
+  createdAt: -1
+});
 
     res.status(200).json({
       success: true,
@@ -63,11 +64,13 @@ const getTemplateById = async (req, res) => {
 const getTemplatesByCategory = async (req, res) => {
   try {
     const templates = await Template.find({
-      category: req.params.category,
-      isActive: true
-    }).sort({
-      createdAt: -1
-    });
+  category: req.params.category,
+  isActive: true,
+  status: "published"
+}).sort({
+  displayOrder: 1,
+  createdAt: -1
+});
 
     res.status(200).json({
       success: true,

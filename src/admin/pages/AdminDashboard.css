@@ -26,7 +26,7 @@
     ),
     radial-gradient(
       circle at 78% 90%,
-      rgba(59, 130, 246, 0.10),
+      rgba(59, 130, 246, 0.1),
       transparent 27%
     ),
     linear-gradient(
@@ -39,7 +39,7 @@
 
 
 /* =========================================
-   SOFT GRID BACKGROUND
+   BACKGROUND GRID
 ========================================= */
 
 .admin-dashboard::before {
@@ -76,7 +76,7 @@
 
 
 /* =========================================
-   LARGE FLOATING GLOW
+   FLOATING GLOW
 ========================================= */
 
 .admin-dashboard::after {
@@ -108,7 +108,7 @@
 
 
 /* =========================================
-   KEEP CONTENT ABOVE BACKGROUND
+   CONTENT ABOVE BACKGROUND
 ========================================= */
 
 .admin-dashboard > * {
@@ -134,6 +134,7 @@
   color: #8b5cf6;
 
   font-size: 10px;
+
   font-weight: 800;
 
   letter-spacing: 1.8px;
@@ -145,6 +146,7 @@
   color: #211b27;
 
   font-size: 36px;
+
   font-weight: 750;
 
   line-height: 1.15;
@@ -207,13 +209,13 @@
   border-radius: 50%;
 
   background:
-    rgba(236, 72, 153, 0.20);
+    rgba(236, 72, 153, 0.2);
 
   box-shadow:
     30px 22px 0
     rgba(59, 130, 246, 0.12),
     -28px 45px 0
-    rgba(168, 85, 247, 0.10);
+    rgba(168, 85, 247, 0.1);
 
   pointer-events: none;
 
@@ -252,6 +254,7 @@
   min-height: 125px;
 
   display: flex;
+
   align-items: center;
 
   gap: 17px;
@@ -337,6 +340,7 @@
 
 .admin-stat-icon {
   position: relative;
+
   z-index: 2;
 
   width: 53px;
@@ -345,6 +349,7 @@
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -416,7 +421,7 @@
    STAT TEXT
 ========================================= */
 
-.admin-stat-card > div:last-child {
+.admin-stat-card > div:nth-child(2) {
   position: relative;
 
   z-index: 2;
@@ -428,6 +433,7 @@
   color: #766e7d;
 
   font-size: 12px;
+
   font-weight: 600;
 }
 
@@ -437,6 +443,7 @@
   color: #211c26;
 
   font-size: 30px;
+
   font-weight: 750;
 
   letter-spacing: -0.5px;
@@ -444,28 +451,236 @@
 
 
 /* =========================================
-   INFORMATION CARDS
+   STAT ARROW
 ========================================= */
 
-.admin-dashboard-info {
-  position: relative;
+.stat-arrow {
+  position: absolute;
 
+  top: 18px;
+  right: 18px;
+
+  z-index: 3;
+
+  color: #aaa;
+
+  opacity: 0;
+
+  transition: 0.25s;
+}
+
+.admin-stat-card:hover .stat-arrow {
+  opacity: 1;
+
+  transform:
+    translate(2px, -2px);
+}
+
+
+/* =========================================
+   CHART GRID
+========================================= */
+
+.admin-charts-grid {
   display: grid;
 
   grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+    minmax(0, 1.5fr)
+    minmax(0, 1fr);
 
   gap: 18px;
 
-  margin-top: 4px;
+  margin-bottom: 24px;
 }
+
+
+/* =========================================
+   CHART CARD
+========================================= */
+
+.admin-chart-card {
+  position: relative;
+
+  background:
+    rgba(255, 255, 255, 0.9);
+
+  border:
+    1px solid
+    rgba(231, 227, 235, 0.9);
+
+  border-radius: 17px;
+
+  padding: 23px;
+
+  box-shadow:
+    0 10px 30px
+    rgba(40, 30, 50, 0.04);
+
+  backdrop-filter: blur(14px);
+
+  -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* =========================================
+   MONTHLY USAGE FULL WIDTH
+========================================= */
+
+.monthly-usage-card {
+  grid-column: 1 / -1;
+}
+
+
+/* =========================================
+   CHART HEADER
+========================================= */
+
+.admin-chart-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.admin-chart-header h3 {
+  margin: 0;
+
+  color: #29232e;
+
+  font-size: 16px;
+
+  font-weight: 700;
+}
+
+.admin-chart-header p {
+  margin: 5px 0 0;
+
+  color: #88808d;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   CHART ICON
+========================================= */
+
+.chart-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #ede9fe;
+
+  color: #7c3aed;
+}
+
+.chart-icon.pink {
+  background: #fce7f3;
+
+  color: #db2777;
+}
+
+
+/* =========================================
+   CHART CONTAINER
+========================================= */
+
+.chart-container {
+  width: 100%;
+
+  height: 300px;
+
+  margin-top: 5px;
+}
+
+.monthly-chart {
+  height: 330px;
+}
+
+.plan-chart {
+  margin-top: 0;
+}
+
+
+/* =========================================
+   EMPTY MONTHLY DATA
+========================================= */
+
+.monthly-empty {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #aaa;
+}
+
+.monthly-empty svg {
+  margin-bottom: 10px;
+
+  color: #c4b5fd;
+}
+
+.monthly-empty p {
+  margin: 0 0 5px;
+
+  color: #666;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.monthly-empty span {
+  color: #999;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   LOWER GRID
+========================================= */
+
+.admin-lower-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.3fr)
+    minmax(0, 1fr);
+
+  gap: 18px;
+
+  margin-bottom: 24px;
+}
+
+
+/* =========================================
+   INFO CARD
+========================================= */
 
 .admin-info-card {
   position: relative;
 
   overflow: hidden;
 
-  min-height: 145px;
+  min-height: 190px;
 
   padding: 24px;
 
@@ -476,7 +691,7 @@
   border-radius: 17px;
 
   background:
-    rgba(255, 255, 255, 0.88);
+    rgba(255, 255, 255, 0.9);
 
   backdrop-filter: blur(14px);
 
@@ -487,50 +702,297 @@
     rgba(40, 30, 50, 0.04);
 }
 
-.admin-info-card::after {
-  content: "";
 
-  position: absolute;
+/* =========================================
+   INFO TITLE
+========================================= */
 
-  width: 150px;
-  height: 150px;
+.info-card-title {
+  display: flex;
 
-  right: -75px;
-  bottom: -85px;
+  align-items: center;
 
-  border-radius: 50%;
+  gap: 12px;
 
-  background:
-    rgba(139, 92, 246, 0.07);
+  position: relative;
 
-  pointer-events: none;
+  z-index: 2;
 }
 
-.admin-info-card h3 {
-  position: relative;
-  z-index: 2;
-
-  margin: 0 0 10px;
+.info-card-title h3 {
+  margin: 0;
 
   color: #29232e;
 
   font-size: 16px;
+
   font-weight: 700;
 }
 
-.admin-info-card p {
+.info-card-title p {
+  margin: 4px 0 0;
+
+  color: #88808d;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   INFO ICON
+========================================= */
+
+.info-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+}
+
+.info-icon.purple {
+  background: #ede9fe;
+
+  color: #7c3aed;
+}
+
+.info-icon.blue {
+  background: #e0f2fe;
+
+  color: #0284c7;
+}
+
+
+/* =========================================
+   INFO DESCRIPTION
+========================================= */
+
+.info-description {
   position: relative;
+
   z-index: 2;
 
-  max-width: 600px;
-
-  margin: 0;
+  margin: 18px 0;
 
   color: #77707d;
 
   font-size: 13px;
 
   line-height: 1.7;
+}
+
+
+/* =========================================
+   OVERVIEW ITEMS
+========================================= */
+
+.overview-items {
+  position: relative;
+
+  z-index: 2;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 10px;
+}
+
+.overview-items div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 9px 11px;
+
+  border-radius: 9px;
+
+  background: #faf9fc;
+
+  color: #625b69;
+
+  font-size: 12px;
+
+  border: 1px solid #f0edf3;
+}
+
+.overview-items svg {
+  color: #8b5cf6;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================
+   ACCESS STATUS
+========================================= */
+
+.access-status {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-top: 13px;
+
+  color: #55505b;
+
+  font-size: 13px;
+}
+
+.access-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(34, 197, 94, 0.1);
+}
+
+
+/* =========================================
+   QUICK ACTIONS
+========================================= */
+
+.quick-actions-card {
+  position: relative;
+
+  padding: 23px;
+
+  margin-bottom: 10px;
+
+  border:
+    1px solid
+    rgba(231, 227, 235, 0.9);
+
+  border-radius: 17px;
+
+  background:
+    rgba(255, 255, 255, 0.9);
+
+  box-shadow:
+    0 10px 30px
+    rgba(40, 30, 50, 0.04);
+
+  backdrop-filter: blur(14px);
+
+  -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* =========================================
+   QUICK ACTION HEADER
+========================================= */
+
+.quick-actions-header {
+  margin-bottom: 18px;
+}
+
+.quick-actions-header h3 {
+  margin: 0;
+
+  color: #29232e;
+
+  font-size: 16px;
+
+  font-weight: 700;
+}
+
+.quick-actions-header p {
+  margin: 5px 0 0;
+
+  color: #88808d;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   QUICK ACTION GRID
+========================================= */
+
+.quick-actions-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+
+/* =========================================
+   QUICK ACTION BUTTON
+========================================= */
+
+.quick-action {
+  min-height: 76px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  border: 1px solid #eeeaf2;
+
+  border-radius: 11px;
+
+  background: #faf9fc;
+
+  color: #5f5867;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.quick-action svg {
+  color: #8b5cf6;
+
+  transition: 0.2s;
+}
+
+.quick-action:hover {
+  transform: translateY(-3px);
+
+  background: #f5f1ff;
+
+  border-color: #ddd0ff;
+
+  color: #6d28d9;
+}
+
+.quick-action:hover svg {
+  transform: scale(1.08);
 }
 
 
@@ -570,7 +1032,9 @@
   min-height: 100vh;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   color: #77717d;
@@ -592,6 +1056,7 @@
 ========================================= */
 
 @keyframes dashboardGlow {
+
   0%,
   100% {
     transform:
@@ -604,9 +1069,11 @@
       translate(-22px, 18px)
       scale(1.08);
   }
+
 }
 
 @keyframes dashboardFloat {
+
   0%,
   100% {
     transform:
@@ -617,9 +1084,11 @@
     transform:
       translateY(-12px);
   }
+
 }
 
 @keyframes dashboardFloatSmall {
+
   0%,
   100% {
     transform:
@@ -630,25 +1099,48 @@
     transform:
       translate(7px, -9px);
   }
+
 }
 
 
 /* =========================================
-   RESPONSIVE
+   TABLET
 ========================================= */
 
 @media (max-width: 1000px) {
+
+  .admin-dashboard {
+    padding: 30px 25px 40px;
+  }
 
   .admin-stats-grid {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
   }
 
-  .admin-dashboard-info {
+  .admin-charts-grid {
     grid-template-columns: 1fr;
   }
 
+  .monthly-usage-card {
+    grid-column: auto;
+  }
+
+  .admin-lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions-grid {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
 }
+
+
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 700px) {
 
@@ -684,6 +1176,58 @@
 
   .admin-stat-card h2 {
     font-size: 27px;
+  }
+
+  .admin-chart-card {
+    padding: 18px;
+  }
+
+  .chart-container {
+    height: 280px;
+  }
+
+  .monthly-chart {
+    height: 310px;
+  }
+
+  .admin-info-card {
+    padding: 19px;
+  }
+
+  .overview-items {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions-card {
+    padding: 18px;
+  }
+
+  .quick-actions-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 450px) {
+
+  .quick-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-action {
+    min-height: 58px;
+
+    flex-direction: row;
+
+    justify-content: flex-start;
+
+    padding: 0 18px;
   }
 
 }

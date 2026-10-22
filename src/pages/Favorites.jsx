@@ -6,9 +6,10 @@ import {
 import api from "../api/axios";
 
 import TemplateCard from "../components/TemplateCard";
-
+import SupportChatButton from "../components/SupportChatButton";
 import {
-  Heart
+  Heart,
+  ArrowLeft
 } from "lucide-react";
 
 import {
@@ -195,32 +196,56 @@ function Favorites() {
 
 
   return (
-    <div className="favorites-page">
+    <>
+    <style>
+      {`
+      .favorites-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border: none;
+  background: transparent;
+  color: #6554ff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.favorites-back-button:hover {
+  color: #4938df;
+}
+
+.favorites-back-button svg {
+  flex-shrink: 0;
+}`}
+    </style>
+       <div className="favorites-page">
 
       {/* Header */}
 
-      <div className="favorites-header">
+<div className="favorites-header">
+  <SupportChatButton />
 
-        <div>
+  <div>
+    <button
+      type="button"
+      className="favorites-back-button"
+      onClick={() => navigate("/templates")}
+    >
+      <ArrowLeft size={18} />
+      Back
+    </button>
 
-          <p className="simple-page-label">
-            SAVED
-          </p>
+    <p className="simple-page-label">
+      SAVED
+    </p>
 
-          <h1>
-            Favorites
-          </h1>
-
-          
-
-        </div>
-
-
-        {/* Count */}
-
-        
-
-      </div>
+    <h1>Favorites</h1>
+  </div>
+</div>
 
 
       {/* Empty State */}
@@ -282,6 +307,7 @@ function Favorites() {
       )}
 
     </div>
+    </>
   );
 
 }

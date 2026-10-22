@@ -1,23 +1,17 @@
-import Sidebar from "../components/Sidebar";
-import Topbar from "../components/Topbar";
+
 import { Outlet } from "react-router-dom";
+import Topbar from "../components/Topbar";
+import Sidebar from "../components/Sidebar";
 
 function DashboardLayout() {
   return (
-    <div className="app-layout">
-
+    <div className="dashboard-layout">
       <Sidebar />
 
-      <div className="main-area">
-
+      <div className="dashboard-main">
         <Topbar />
-
-        <main className="page-content">
-          <Outlet />
-        </main>
-
+        <Outlet />
       </div>
-
     </div>
   );
 }

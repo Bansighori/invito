@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function GraduationDay({ data, onRSVP }) {
+function GraduationDay({ data, design = {}, onRSVP }) {
   const locationText = [data.venue, data.address]
     .filter(Boolean)
     .join(", ");

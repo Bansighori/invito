@@ -6,6 +6,11 @@ dotenv.config({
 });
 
 const express = require("express");
+const http = require("http");
+
+const app = express();
+
+const server = http.createServer(app);
 const cors = require("cors");
 
 const connectDB = require("./config/db");
@@ -29,6 +34,32 @@ const paymentRoutes =
 
 const adminRoutes = require("./routes/adminRoutes");
 const adminAuthRoutes = require("./routes/adminAuthRoutes");
+const adminTemplateRoutes =
+  require("./routes/adminTemplateRoutes");
+
+const adminPaymentRoutes = require("./routes/adminPaymentRoutes");
+const adminPlanRoutes =
+  require("./routes/adminPlanRoutes");
+  const notificationRoutes =
+  require("./routes/notificationRoutes");
+  const cron = require("node-cron");
+const checkPlanExpiry =
+  require("./utils/checkPlanExpiry");
+
+const adminNotificationRoutes = require("./routes/adminNotificationRoutes");
+const chatRoutes = require("./routes/chatRoutes");
+const adminRoleRoutes =
+  require("./routes/adminRoleRoutes");
+  const adminSettingsRoutes = require("./routes/adminSettingsRoutes");
+
+const { Server } = require("socket.io");
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5000",
+    methods: ["GET", "POST"]
+  }
+});
 
 dotenv.config({
   path: path.join(__dirname, ".env")
@@ -44,7 +75,7 @@ console.log(
     ? process.env.EMAIL_PASSWORD.length
     : 0
 );
-const app = express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -82,6 +113,20 @@ app.use(async (req, res, next) => {
       message
     });
   }
+});
+// ========================================
+// PLAN EXPIRY CHECK
+// Runs every day at 9:00 AM
+// ========================================
+
+cron.schedule("0 9 * * *", async () => {
+
+  console.log(
+    "Running daily plan expiry check..."
+  );
+
+  await checkPlanExpiry();
+
 });
 
 app.get("/", (req, res) => {
@@ -122,10 +167,48 @@ app.use(
   "/api/payment",
   paymentRoutes
 );
-app.use("/api/admin", adminRoutes);
+
 app.use(
   "/api/admin/auth",
   adminAuthRoutes
 );
+
+app.use(
+  "/api/admin/payments",
+  adminPaymentRoutes
+);
+app.use(
+  "/api/admin/templates",
+  adminTemplateRoutes
+);
+app.use(
+  "/api/admin/plans",
+  adminPlanRoutes
+);
+
+app.use(
+  "/api/notifications",
+  notificationRoutes
+);
+
+app.use(
+  "/api/admin/notifications",
+  adminNotificationRoutes
+);
+
+app.use(
+  "/api/admin/roles",
+  adminRoleRoutes
+);
+app.use(
+  "/api/admin",
+  adminRoutes
+);
+app.use(
+  "/api/chat",
+  chatRoutes
+);
+app.use("/api/admin/settings", adminSettingsRoutes);
+
 
 module.exports = app;

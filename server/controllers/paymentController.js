@@ -3,6 +3,10 @@ const crypto = require("crypto");
 
 const User = require("../models/User");
 const Payment = require("../models/Payment");
+const createNotification =
+  require("../utils/createNotification");
+const createAdminNotification =
+  require("../utils/createAdminNotification");
 
 
 // =====================================================
@@ -575,6 +579,24 @@ const verifyPremiumPayment =
 
 
       await user.save();
+      await createNotification({
+  userId: user._id,
+
+  title: "Payment Successful",
+
+  message:
+    "Your Premium plan is active for 30 days.",
+
+  type: "payment",
+
+  link: "/pricing"
+});
+await createAdminNotification({
+  title: "Payment Received 💳",
+  message: `${user.name} purchased the Premium plan for ₹199.`,
+  type: "payment",
+  link: "/admin/payments"
+});
 
 
       // -----------------------------------------------
@@ -831,6 +853,24 @@ const verifyPremiumPlusPayment =
 
 
       await user.save();
+      await createNotification({
+  userId: user._id,
+
+  title: "Payment Successful",
+
+  message:
+    "Your Premium Plus plan is active for 30 days.",
+
+  type: "payment",
+
+  link: "/pricing"
+});
+await createAdminNotification({
+  title: "Payment Received 💳",
+  message: `${user.name} purchased the Premium Plus plan for ₹299.`,
+  type: "payment",
+  link: "/admin/payments"
+});
 
 
       // -----------------------------------------------
@@ -994,6 +1034,34 @@ const markPaymentFailed =
 
 
       await payment.save();
+      // ========================================
+// CREATE PAYMENT FAILED NOTIFICATION
+// ========================================
+
+const planName =
+  payment.plan === "premium_plus"
+    ? "Premium Plus"
+    : "Premium";
+
+await createNotification({
+  userId: payment.user,
+
+  title: "Payment Failed",
+
+  message:
+    `Your ${planName} payment could not be completed. Please try again.`,
+
+  type: "payment",
+
+  link: "/payment-history"
+});
+await createAdminNotification({
+  title: "Payment Failed ⚠️",
+  message:
+    `A ${planName} payment failed. Please check the payment details.`,
+  type: "payment",
+  link: "/admin/payments"
+});
 
 
       // -----------------------------------------------

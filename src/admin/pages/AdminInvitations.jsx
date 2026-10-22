@@ -43,6 +43,8 @@ function AdminInvitations() {
     useState("all");
   const [categoryFilter, setCategoryFilter] =
     useState("all");
+  const [ownerFilter, setOwnerFilter] =
+  useState("all");
 
   const [selectedInvitation, setSelectedInvitation] =
     useState(null);
@@ -111,6 +113,23 @@ function AdminInvitations() {
   "Party",
   "Other"
 ];
+const owners = useMemo(() => {
+  const ownerMap = new Map();
+
+  invitations.forEach((invitation) => {
+    const user = invitation.userId;
+
+    if (user?._id) {
+      ownerMap.set(user._id, {
+        id: user._id,
+        name: user.name || "Unknown User",
+        email: user.email || ""
+      });
+    }
+  });
+
+  return Array.from(ownerMap.values());
+}, [invitations]);
 
   const filteredInvitations =
     useMemo(() => {
@@ -145,18 +164,25 @@ function AdminInvitations() {
             invitation.category ===
               categoryFilter;
 
+          const matchesOwner =
+  ownerFilter === "all" ||
+  invitation.userId?._id ===
+    ownerFilter;
+
           return (
-            matchesSearch &&
-            matchesStatus &&
-            matchesCategory
-          );
+  matchesSearch &&
+  matchesStatus &&
+  matchesCategory &&
+  matchesOwner
+);
         }
       );
     }, [
       invitations,
       search,
       statusFilter,
-      categoryFilter
+      categoryFilter,
+      ownerFilter
     ]);
 
   const totalPages =
@@ -177,12 +203,13 @@ function AdminInvitations() {
     );
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [
-    search,
-    statusFilter,
-    categoryFilter
-  ]);
+  setCurrentPage(1);
+}, [
+  search,
+  statusFilter,
+  categoryFilter,
+  ownerFilter
+]);
 
   const formatDate = (date) => {
     if (!date) return "-";
@@ -606,6 +633,18 @@ function AdminInvitations() {
   ))}
 </select>
 
+<select
+  value={ownerFilter}
+  onChange={(e) => setOwnerFilter(e.target.value)}
+>
+  <option value="all">All Owners</option>
+
+  {owners.map((owner) => (
+    <option key={owner.id} value={owner.id}>
+      {owner.name} — {owner.email}
+    </option>
+  ))}
+</select>
               <select
                 value={statusFilter}
                 onChange={(e) =>

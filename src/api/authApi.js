@@ -11,7 +11,6 @@ export const login = (credentials) =>
     credentials
   );
 
-
 // ==========================================
 // REGISTER - SEND OTP
 // ==========================================
@@ -32,7 +31,6 @@ export const verifyRegisterOtp = (userData) =>
     "/auth/verify-register-otp",
     userData
   );
-
 
 // ==========================================
 // OLD REGISTER
@@ -69,6 +67,7 @@ export const changePassword = (passwordData) =>
     passwordData
   );
 
+  
 
 // ==========================================
 // FORGOT PASSWORD - SEND OTP

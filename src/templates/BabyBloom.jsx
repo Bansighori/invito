@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function BabyBloom({ data, onRSVP }) {
+function BabyBloom({ data, design = {}, onRSVP }) {
   const locationText = [
     data.venue,
     data.address

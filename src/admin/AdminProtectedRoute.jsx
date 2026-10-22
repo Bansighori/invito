@@ -1,17 +1,15 @@
 import { Navigate } from "react-router-dom";
 
 function AdminProtectedRoute({ children }) {
-  const token = localStorage.getItem(
-    "invitoAdminToken"
-  );
+  const token = localStorage.getItem("invitoAdminToken");
+
+  console.log("AdminProtectedRoute:", {
+    hasToken: !!token,
+    currentPath: window.location.pathname,
+  });
 
   if (!token) {
-    return (
-      <Navigate
-        to="/admin/login"
-        replace
-      />
-    );
+    return <Navigate to="/login" replace />;
   }
 
   return children;

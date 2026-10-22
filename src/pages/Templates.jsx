@@ -7,7 +7,8 @@ import {
 import {
   Search,
   SlidersHorizontal,
-  Plus
+  Plus,
+  ArrowLeft,
 } from "lucide-react";
 
 import api from "../api/axios";
@@ -17,12 +18,11 @@ import {
 } from "react-router-dom";
 
 import TemplateCard from "../components/TemplateCard";
-
+import SupportChatButton from "../components/SupportChatButton";
 
 function Templates() {
 
   const navigate = useNavigate();
-
 
   /* =========================
      STATE
@@ -33,6 +33,8 @@ function Templates() {
 
   const [user, setUser] =
     useState(null);
+
+  const [checkingPlan, setCheckingPlan] = useState(true);
 
   const [category, setCategory] =
     useState("All");
@@ -46,7 +48,6 @@ function Templates() {
   const [error, setError] =
     useState("");
 
-
   /* =========================
      PHOTO TEMPLATES
      PREMIUM PLUS ONLY
@@ -55,9 +56,9 @@ function Templates() {
   const photoTemplates = [
     "PhotoWeddingFloral",
     "PhotoWeddingRomantic",
-    "PhotoWeddingRoyal"
+    "PhotoWeddingRoyal",
+    "BirthdayPhotoPremiumPlus"
   ];
-
 
   /* =========================
      FETCH TEMPLATES + USER
@@ -76,12 +77,77 @@ function Templates() {
         // GET TEMPLATES
         // ========================================
 
-        const templatesResponse =
-          await api.get("/templates");
+        const templatesResponse = await api.get("/templates");
 
-        setTemplates(
-          templatesResponse.data.templates || []
-        );
+console.log(
+  "TEMPLATES FROM API:",
+  templatesResponse.data.templates
+);
+
+const loadUser = async () => {
+    try {
+      const response = await api.get("/auth/me");
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Unable to load user:", error);
+    } finally {
+      setCheckingPlan(false);
+    }
+  };
+
+  loadUser();
+
+const handleCreateInvitation = async (template) => {
+  try {
+    const response = await api.get("/auth/me");
+    const user = response.data.user;
+
+    const isPaidPlan =
+      user.plan === "premium" ||
+      user.plan === "premium_plus";
+
+    const isExpired =
+      !user.planExpiresAt ||
+      new Date(user.planExpiresAt) <= new Date();
+
+    if (isPaidPlan && isExpired) {
+      navigate("/pricing");
+      return;
+    }
+
+    if (
+      user.plan === "free" &&
+      user.freeInvitationsUsed >= 3
+    ) {
+      navigate("/pricing");
+      return;
+    }
+
+    navigate(`/invitations/create/${template._id}`);
+  } catch (error) {
+    console.error("Unable to check plan:", error);
+    alert("Unable to verify your plan. Please try again.");
+  }
+};
+
+const fetchedTemplates =
+  templatesResponse.data.templates || [];
+
+fetchedTemplates.sort(
+  (a, b) =>
+    Number(a.displayOrder ?? 9999) -
+    Number(b.displayOrder ?? 9999)
+);
+
+console.log(
+  "TEMPLATES AFTER SORT:",
+  fetchedTemplates.map((t) => ({
+    title: t.title,
+    displayOrder: t.displayOrder
+  }))
+);
+
+setTemplates(fetchedTemplates);
 
 
         // ========================================
@@ -217,79 +283,68 @@ function Templates() {
      USE TEMPLATE
   ========================= */
 
-  const handleUseTemplate =
-    (template) => {
-
-      // Check whether this is
-      // one of the 3 photo templates
-      const isPhotoTemplate =
-        photoTemplates.includes(
-          template.component
-        );
 
 
-      // ========================================
-      // PHOTO TEMPLATE
-      // PREMIUM PLUS ONLY
-      // ========================================
+const handleUseTemplate = (template) => {
+  if (!user) {
+    navigate("/login");
+    return;
+  }
 
-      if (
-        isPhotoTemplate &&
-        !isPremiumPlus
-      ) {
+  const isPaid =
+    user.plan === "premium" ||
+    user.plan === "premium_plus";
 
-        navigate("/pricing");
+  const isExpired =
+    !user.planExpiresAt ||
+    new Date(user.planExpiresAt) <= new Date();
 
-        return;
+  // Block expired subscriptions.
+  if (isPaid && isExpired) {
+    navigate("/pricing");
+    return;
+  }
 
-      }
+  // Free users can create only 3 invitations.
+  if (
+    user.plan === "free" &&
+    user.freeInvitationsUsed >= 3
+  ) {
+    navigate("/pricing");
+    return;
+  }
 
+  // Premium Plus templates are exclusive.
+  if (
+    template.isPremiumPlus &&
+    user.plan !== "premium_plus"
+  ) {
+    navigate("/pricing");
+    return;
+  }
 
-      // ========================================
-      // NORMAL PREMIUM TEMPLATE
-      // ========================================
+  // Photo templates are also Premium Plus only.
+  const isPhoto =
+    photoTemplates.includes(template.component) ||
+    template.isPhotoTemplate;
 
-      if (
-        template.isPremium &&
-        !hasPaidPlan
-      ) {
+  if (isPhoto && user.plan !== "premium_plus") {
+    navigate("/pricing");
+    return;
+  }
 
-        navigate("/pricing");
+  // Regular Premium templates.
+  if (
+    template.isPremium &&
+    user.plan !== "premium" &&
+    user.plan !== "premium_plus"
+  ) {
+    navigate("/pricing");
+    return;
+  }
 
-        return;
-
-      }
-
-
-      // ========================================
-      // FREE INVITATION LIMIT
-      // ========================================
-
-      if (
-        !hasPaidPlan &&
-        user?.freeInvitationsUsed >= 3
-      ) {
-
-        alert(
-          "You have used all 3 free invitations. Please upgrade to Premium to continue."
-        );
-
-        navigate("/pricing");
-
-        return;
-
-      }
-
-
-      // ========================================
-      // OPEN TEMPLATE
-      // ========================================
-
-      navigate(
-        `/invitations/create/${template._id}`
-      );
-
-    };
+  navigate(`/invitations/create/${template._id}`);
+};
 
 
   /* =========================
@@ -301,6 +356,7 @@ function Templates() {
     return (
 
       <div className="templates-page">
+        
 
         <div className="templates-header">
 
@@ -405,8 +461,105 @@ function Templates() {
   ========================= */
 
   return (
+    <>
+    <style>
+      {`
+
+      /* Main template page */
+.templates-page {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 22px 26px;
+  box-sizing: border-box;
+}
+
+/* Page heading */
+.templates-header {
+  margin-bottom: 24px;
+}
+
+/* Search and category section */
+.template-toolbar {
+  margin-bottom: 20px;
+}
+
+/* Category buttons */
+.template-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Template cards grid */
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px;
+  width: 100%;
+  margin-top: 0;
+  align-items: start;
+}
+
+/* Individual card */
+.template-card {
+  min-width: 0;
+  width: 100%;
+}
+
+/* Responsive layout */
+@media (max-width: 1200px) {
+  .templates-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .templates-page {
+    padding: 16px;
+  }
+
+  .templates-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .templates-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+      .templates-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #6554ff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.templates-back-button:hover {
+  color: #4b3de0;
+}
+
+.templates-back-button svg {
+  width: 18px;
+  height: 18px;
+}`}
+    </style>
 
     <div className="templates-page">
+      <SupportChatButton />
 
 
       {/* =========================
@@ -416,6 +569,13 @@ function Templates() {
       <div className="templates-header">
 
         <div>
+          <button
+  className="templates-back-button"
+  onClick={() => navigate("/home")}
+>
+  <ArrowLeft size={18} />
+  Back
+</button>
 
           <p className="templates-eyebrow">
             DESIGN LIBRARY
@@ -433,20 +593,7 @@ function Templates() {
         </div>
 
 
-        <button
-          className="template-create-button"
-          onClick={() =>
-            navigate(
-              "/invitations/create"
-            )
-          }
-        >
-
-          <Plus size={18} />
-
-          Create from scratch
-
-        </button>
+        
 
       </div>
 
@@ -536,24 +683,7 @@ function Templates() {
         </div>
 
 
-        <select
-          className="sort-select"
-        >
-
-          <option>
-            Recommended
-          </option>
-
-          <option>
-            Newest
-          </option>
-
-          <option>
-            Popular
-          </option>
-
-        </select>
-
+          
       </div>
 
 
@@ -573,7 +703,6 @@ function Templates() {
                   template.component
                 );
 
-
               const isLocked =
                 (
                   template.isPremium &&
@@ -584,23 +713,16 @@ function Templates() {
                   !isPremiumPlus
                 );
 
-
               return (
-
-                <TemplateCard
-                  key={template._id}
-                  template={template}
-                  onUse={handleUseTemplate}
-                  isLocked={isLocked}
-                  isPhotoTemplate={
-                    isPhotoTemplate
-                  }
-                  isPremiumPlus={
-                    isPremiumPlus
-                  }
-                />
-
-              );
+  <TemplateCard
+    key={template._id}
+    template={template}
+    onUse={handleUseTemplate}
+    isLocked={isLocked}
+    isPhotoTemplate={isPhotoTemplate}
+    isPremiumPlus={isPremiumPlus}
+  />
+);
 
             }
           )}
@@ -625,6 +747,7 @@ function Templates() {
       )}
 
     </div>
+    </>
 
   );
 

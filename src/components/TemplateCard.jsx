@@ -171,6 +171,9 @@ function TemplateCard({
           <TemplateRenderer
             component={template.component}
             data={getTemplateSampleData(template)}
+            design={template.design || {}}
+fields={template.fields || []}
+onRSVP={() => {}}
           />
 
         </div>
@@ -294,55 +297,37 @@ function TemplateCard({
 
         )}
 
+{/* =========================
+    USE BUTTON
+========================= */}
 
-        {/* =========================
-            USE BUTTON
-        ========================= */}
+<button
+  type="button"
+  className={`template-use-overlay ${
+    isLocked ? "template-use-locked" : ""
+  }`}
+  onClick={(event) => {
+    event.preventDefault();
+    event.stopPropagation();
 
-        <button
-          type="button"
-          className={`template-use-overlay ${
-            isLocked
-              ? "template-use-locked"
-              : ""
-          }`}
-          onClick={(event) => {
+    onUse(template);
+  }}
+>
+  {isLocked ? (
+    <>
+      <Lock size={15} />
+      {isPhotoTemplate
+        ? "Upgrade to Premium Plus"
+        : "Upgrade to Premium"}
+    </>
+  ) : (
+    <>
+      Use Template
+      <ArrowUpRight size={16} />
+    </>
+  )}
+</button>
 
-            event.preventDefault();
-            event.stopPropagation();
-
-            onUse(template);
-
-          }}
-        >
-
-          {isLocked ? (
-
-            <>
-
-              <Lock size={15} />
-
-              {isPhotoTemplate
-                ? "Upgrade to Premium Plus"
-                : "Unlock Template"}
-
-            </>
-
-          ) : (
-
-            <>
-
-              Use Template
-
-              <ArrowUpRight
-                size={16}
-              />
-
-            </>
-
-          )}
-
-        </button>
 
       </div>
 

@@ -1,5 +1,6 @@
 const Guest = require("../models/Guest");
 const Invitation = require("../models/Invitation");
+const createNotification = require("../utils/createNotification");
 
 
 const createGuest = async (req, res) => {
@@ -27,6 +28,7 @@ const createGuest = async (req, res) => {
       });
     }
 
+
     if (
       invitation.status !== "published"
     ) {
@@ -45,6 +47,7 @@ const createGuest = async (req, res) => {
         message: "Guest name is required"
       });
     }
+
 
     if (
       ![
@@ -74,6 +77,29 @@ const createGuest = async (req, res) => {
       });
 
 
+    // ========================================
+    // CREATE NOTIFICATION
+    // ========================================
+
+    if (invitation.userId) {
+
+      await createNotification({
+        userId: invitation.userId,
+
+        title: "New RSVP Received",
+
+        message:
+          `${name.trim()} submitted an RSVP for your invitation.`,
+
+        type: "rsvp",
+
+        link:
+          `/invitations/${invitationId}/guests`
+      });
+
+    }
+
+
     res.status(201).json({
       success: true,
       message:
@@ -96,7 +122,6 @@ const createGuest = async (req, res) => {
 
   }
 };
-
 
 
 const getGuestsByInvitation =

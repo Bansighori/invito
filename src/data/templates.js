@@ -72,6 +72,18 @@ const templates = [
   },
 
   {
+  id: "birthday-photo-premium-plus",
+  name: "Birthday Photo Premium Plus",
+  category: "Birthday",
+  component: "BirthdayPhotoPremiumPlus",
+  description:
+    "An elegant birthday invitation with photo upload, personalized details, and RSVP.",
+  premium: true,
+  isPremiumPlus: true,
+  isPhotoTemplate: true
+},
+
+  {
     id: "baby-bloom",
     name: "Baby Bloom",
     category: "Baby Shower",

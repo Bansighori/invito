@@ -3138,7 +3138,7 @@ span:not(.recent-table-date) {
   display: grid;
 
   grid-template-columns:
-    repeat(4, minmax(0, 1fr));
+    repeat(3, minmax(0, 1fr));
 
   gap: 20px;
 }
@@ -3201,23 +3201,107 @@ span:not(.recent-table-date) {
   align-items: flex-start;
 }
 
+
+
+/* CARD */
+
+.template-card {
+  width: 100%;
+  height: 350px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  transition: 0.2s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-3px);
+}
+
+/* PREVIEW */
+
+.template-preview {
+  width: 100%;
+  height: 315px;
+  overflow: hidden;
+  position: relative;
+  background: #f8f8f8;
+}
+
+/* TEMPLATE IMAGE */
+
+.template-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* CARD DETAILS */
+
+.template-info {
+  height: 95px;
+  padding: 14px 16px;
+  background: white;
+}
+
+.template-category {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 7px;
+  background: #f1edff;
+  color: #6355d9;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.template-name {
+  margin: 8px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #171717;
+}
+
+/* PREMIUM BADGE */
+
+.template-premium {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #202020;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* FAVORITE */
+
 .template-favorite {
-  width: 34px;
-  height: 34px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+
+  width: 30px;
+  height: 30px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: white;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border: 0;
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.92);
-  color: #444;
-
   cursor: pointer;
 }
-
 .premium-badge {
   display: flex;
   align-items: center;
@@ -3380,6 +3464,35 @@ span:not(.recent-table-date) {
     font-size: 26px;
   }
 }
+
+@media (max-width: 1400px) {
+  .template-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .template-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 750px) {
+  .template-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .template-card {
+    height: 420px;
+  }
+}
+
 /* =========================
    TEMPLATE LOADING
 ========================= */
@@ -13129,4 +13242,812 @@ span:not(.recent-table-date) {
     grid-template-columns: 1fr;
   }
 
+}
+/* ========================================
+   NOTIFICATION
+======================================== */
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-button {
+  position: relative;
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ef4444;
+  color: white;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  border: 2px solid white;
+}
+
+
+/* ========================================
+   DROPDOWN
+======================================== */
+
+.notification-dropdown {
+  position: absolute;
+
+  top: calc(100% + 14px);
+  right: 0;
+
+  width: 380px;
+  max-height: 520px;
+
+  background: white;
+
+  border: 1px solid #eee;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.15);
+
+  overflow: hidden;
+
+  z-index: 1000;
+}
+
+
+/* ========================================
+   HEADER
+======================================== */
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 17px 18px;
+
+  border-bottom: 1px solid #eee;
+}
+
+.notification-header h3 {
+  margin: 0;
+
+  font-size: 16px;
+  color: #241b2f;
+}
+
+.notification-header span {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 12px;
+  color: #8b8194;
+}
+
+.mark-all-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  border: none;
+  background: transparent;
+
+  color: #7c3aed;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.mark-all-button:hover {
+  text-decoration: underline;
+}
+
+
+/* ========================================
+   LIST
+======================================== */
+
+.notification-list {
+  max-height: 390px;
+  overflow-y: auto;
+}
+
+
+/* ========================================
+   ITEM
+======================================== */
+
+.notification-item {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  padding: 14px 16px;
+
+  border: none;
+  border-bottom: 1px solid #f1edf3;
+
+  background: white;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+  background: #faf7ff;
+}
+
+.notification-item.unread {
+  background: #f8f5ff;
+}
+
+
+/* ========================================
+   ICON
+======================================== */
+
+.notification-item-icon {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f0eaff;
+
+  border-radius: 12px;
+
+  font-size: 18px;
+}
+
+
+/* ========================================
+   CONTENT
+======================================== */
+
+.notification-item-content {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.notification-item-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.notification-item-title strong {
+  color: #30263a;
+
+  font-size: 13px;
+}
+
+.notification-item-content p {
+  margin: 4px 0;
+
+  color: #6f6678;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+.notification-item-content small {
+  color: #a198a8;
+
+  font-size: 10px;
+}
+
+
+/* ========================================
+   UNREAD DOT
+======================================== */
+
+.unread-dot {
+  width: 7px;
+  height: 7px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #7c3aed !important;
+}
+
+
+/* ========================================
+   READ ICON
+======================================== */
+
+.notification-read-icon {
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ede9fe;
+
+  color: #7c3aed;
+}
+
+
+/* ========================================
+   EMPTY
+======================================== */
+
+.notification-empty {
+  min-height: 220px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: #aaa0b0;
+
+  text-align: center;
+}
+
+.notification-empty h4 {
+  margin: 10px 0 3px;
+
+  color: #4b4052;
+
+  font-size: 14px;
+}
+
+.notification-empty p {
+  margin: 0;
+
+  font-size: 12px;
+}
+
+
+/* ========================================
+   SPINNER
+======================================== */
+
+.notification-spinner {
+  width: 24px;
+  height: 24px;
+
+  border: 3px solid #eee;
+  border-top-color: #7c3aed;
+
+  border-radius: 50%;
+
+  animation: notification-spin 0.8s linear infinite;
+}
+
+@keyframes notification-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ========================================
+   FOOTER
+======================================== */
+
+.notification-footer {
+  padding: 11px;
+
+  border-top: 1px solid #eee;
+
+  text-align: center;
+}
+
+.notification-footer button {
+  border: none;
+  background: transparent;
+
+  color: #7c3aed;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 600px) {
+
+  .notification-dropdown {
+    position: fixed;
+
+    top: 70px;
+    left: 12px;
+    right: 12px;
+
+    width: auto;
+
+    max-height: calc(100vh - 90px);
+  }
+
+}
+/* =========================================
+   FINAL TEMPLATE GALLERY SIZE FIX
+========================================= */
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px;
+  width: 100%;
+}
+
+/* CARD */
+
+.templates-grid .template-card {
+  width: 100%;
+  height: 320px !important;
+  min-height: 320px !important;
+
+  overflow: hidden;
+  position: relative;
+
+  border: 1px solid #e5e1e5;
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+}
+
+/* PREVIEW */
+
+.templates-grid .template-preview {
+  width: 100%;
+  height: 230px !important;
+  min-height: 230px !important;
+  max-height: 230px !important;
+
+  overflow: hidden;
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  border-radius: 16px 16px 0 0;
+}
+
+/* LIVE TEMPLATE PREVIEW */
+
+.templates-grid .template-preview-live {
+  width: 100%;
+  height: 230px !important;
+  min-height: 230px !important;
+  max-height: 230px !important;
+
+  overflow: hidden;
+  position: relative;
+}
+
+/* SCALE THE BIG INVITATION */
+
+.templates-grid .template-preview-scaler {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 650px;
+  height: 650px;
+  transform:    translateX(-50%)    scale(0.42) !important;
+  transform-origin: top center;
+  pointer-events: none;
+  -webkit-transform:    translateX(-50%)    scale(0.42) !important;
+  -moz-transform:    translateX(-50%)    scale(0.42) !important;
+  -ms-transform:    translateX(-50%)    scale(0.42) !important;
+  -o-transform:    translateX(-50%)    scale(0.42) !important;
+}
+
+/* ACTUAL TEMPLATE */
+
+.templates-grid .template-preview-scaler > div {
+  width: 650px !important;
+  max-width: 650px !important;
+  min-height: 650px !important;
+
+  margin: 0 !important;
+}
+
+/* CARD INFORMATION */
+
+.templates-grid .template-card-info {
+  height: 88px !important;
+  min-height: 88px !important;
+
+  padding: 10px 14px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  background: #ffffff;
+}
+
+/* CATEGORY */
+
+.templates-grid .template-category {
+  margin: 0 0 5px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+
+  color: #8b5cf6;
+}
+
+/* NAME */
+
+.templates-grid .template-card-info h3 {
+  margin: 0;
+
+  font-size: 14px;
+  line-height: 1.3;
+
+  font-weight: 650;
+
+  color: #222;
+}
+
+/* TYPE */
+
+.templates-grid .template-type {
+  padding: 5px 8px;
+
+  border-radius: 6px;
+
+  background: #f6f6f6;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  color: #777;
+}
+
+/* FAVORITE */
+
+.templates-grid .template-favorite {
+  position: absolute;
+
+  top: 10px;
+  left: 10px;
+
+  width: 30px;
+  height: 30px;
+
+  z-index: 50;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.95);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PREMIUM */
+
+.templates-grid .premium-badge {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  z-index: 50;
+}
+
+/* HOVER BUTTON */
+
+.templates-grid .template-use-overlay {
+  position: absolute;
+
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+
+  z-index: 60;
+
+  height: 38px;
+
+  opacity: 0;
+  transform: translateY(8px);
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.templates-grid .template-card:hover
+.template-use-overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* HOVER */
+
+.templates-grid .template-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.templates-grid .template-card:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 12px 28px rgba(80, 50, 90, 0.12);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+
+
+/* =========================================
+   FINAL COMPACT TEMPLATE CARD OVERRIDES
+   Keeps cards short on desktop and mobile
+========================================= */
+
+.templates-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.templates-grid .template-card {
+  height: 320px !important;
+  min-height: 320px !important;
+}
+
+.templates-grid .template-preview,
+.templates-grid .template-preview-live {
+  height: 230px !important;
+  min-height: 230px !important;
+  max-height: 230px !important;
+}
+
+.templates-grid .template-card-info {
+  height: 88px !important;
+  min-height: 88px !important;
+}
+
+@media (max-width: 1400px) {
+  .templates-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1100px) {
+  .templates-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .templates-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 550px) {
+  .templates-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .templates-grid .template-card {
+    height: 320px !important;
+    min-height: 320px !important;
+  }
+
+  .templates-grid .template-preview,
+  .templates-grid .template-preview-live {
+    height: 230px !important;
+    min-height: 230px !important;
+    max-height: 230px !important;
+  }
+}
+
+
+/* =========================================
+   COMPACT INVITATION PAGE CARDS
+   Matches the shorter template gallery cards
+========================================= */
+
+.invitations-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+
+.invitations-grid .invitation-card {
+  height: 320px !important;
+  min-height: 320px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.invitations-grid .invitation-card-preview {
+  height: 230px !important;
+  min-height: 230px !important;
+  max-height: 230px !important;
+  flex: 0 0 230px;
+  overflow: hidden;
+}
+
+.invitations-grid .invitation-card-template {
+  transform: translateX(-50%) scale(0.35);
+}
+
+.invitations-grid .invitation-card-content {
+  min-height: 0;
+  flex: 1;
+  padding: 10px 14px;
+  overflow: hidden;
+}
+
+.invitations-grid .invitation-card-category {
+  margin-bottom: 4px;
+  font-size: 9px;
+}
+
+.invitations-grid .invitation-card-content h3 {
+  font-size: 14px;
+  line-height: 1.25;
+  padding-right: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.invitations-grid .invitation-status {
+  top: 10px;
+  right: 10px;
+  padding: 4px 7px;
+  font-size: 9px;
+}
+
+.invitations-grid .invitation-card-date {
+  margin-top: 8px;
+  padding-top: 7px;
+  font-size: 10px;
+}
+
+.invitations-grid .invitation-card-actions {
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.invitations-grid .invitation-card-actions button {
+  width: 29px;
+  height: 29px;
+  border-radius: 8px;
+}
+
+@media (max-width: 1400px) {
+  .invitations-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1100px) {
+  .invitations-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .invitations-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 550px) {
+  .invitations-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .invitations-grid .invitation-card {
+    height: 320px !important;
+    min-height: 320px !important;
+  }
+
+  .invitations-grid .invitation-card-preview {
+    height: 230px !important;
+    min-height: 230px !important;
+    max-height: 230px !important;
+    flex-basis: 230px;
+  }
+}
+
+
+/* FIX: Keep invitation card action buttons fully visible */
+.invitations-grid .invitation-card {
+  height: 360px !important;
+  min-height: 360px !important;
+  overflow: hidden;
+}
+
+.invitations-grid .invitation-card-preview {
+  height: 220px !important;
+  min-height: 220px !important;
+  max-height: 220px !important;
+  flex: 0 0 220px !important;
+}
+
+.invitations-grid .invitation-card-content {
+  height: auto !important;
+  min-height: 0 !important;
+  flex: 1 0 auto !important;
+  overflow: visible !important;
+  padding: 10px 14px 12px !important;
+}
+
+.invitations-grid .invitation-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 8px !important;
+  padding-bottom: 2px;
+}
+
+@media (max-width: 550px) {
+  .invitations-grid .invitation-card {
+    height: 360px !important;
+    min-height: 360px !important;
+  }
+  .invitations-grid .invitation-card-preview {
+    height: 220px !important;
+    min-height: 220px !important;
+    max-height: 220px !important;
+    flex-basis: 220px !important;
+  }
 }

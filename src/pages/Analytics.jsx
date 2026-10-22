@@ -7,8 +7,10 @@ import {
   CheckCircle,
   Clock,
   XCircle,
-  TrendingUp
+  TrendingUp,
+  ArrowLeft
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import {
   ResponsiveContainer,
@@ -23,12 +25,14 @@ import {
   YAxis,
   CartesianGrid
 } from "recharts";
+import SupportChatButton from "../components/SupportChatButton";
 
 import "./Analytics.css";
 function Analytics() {
 
   const [invitations, setInvitations] =
     useState([]);
+    const navigate = useNavigate();
   
   const [analytics, setAnalytics] =
     useState({
@@ -342,6 +346,32 @@ function Analytics() {
   // ==========================================
 
   return (
+    <>
+    <style>
+      {`
+      .analytics-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border: none;
+  background: transparent;
+  color: #6554ff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.analytics-back-button:hover {
+  color: #4938df;
+}
+
+.analytics-back-button svg {
+  flex-shrink: 0;
+}`}
+    </style>
 
     <div className="analytics-page">
 
@@ -351,25 +381,29 @@ function Analytics() {
           ===================================== */}
 
       <div className="analytics-header">
+  <SupportChatButton />
 
-        <div>
+  <div className="analytics-header-content">
+    <button
+      type="button"
+      className="analytics-back-button"
+      onClick={() => navigate("/home")}
+    >
+      <ArrowLeft size={18} />
+      Back
+    </button>
 
-          <p className="analytics-eyebrow">
-            INSIGHTS
-          </p>
+    <p className="analytics-eyebrow">
+      INSIGHTS
+    </p>
 
-          <h1>
-            Analytics
-          </h1>
+    <h1>Analytics</h1>
 
-          <p className="analytics-description">
-            View invitation performance and RSVP
-            statistics.
-          </p>
-
-        </div>
-
-      </div>
+    <p className="analytics-description">
+      View invitation performance and RSVP statistics.
+    </p>
+  </div>
+</div>
 
 
       {/* =====================================
@@ -852,6 +886,7 @@ function Analytics() {
       </div>
 
     </div>
+    </>
 
   );
 

@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function PartyNight({ data, onRSVP }) {
+function PartyNight({ data, design = {}, onRSVP }) {
   const locationText = [
     data.venue,
     data.address

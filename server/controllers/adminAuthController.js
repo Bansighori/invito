@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const Admin = require("../models/Admin");
+const createAdminNotification =
+  require("../utils/createAdminNotification");
 
 
 // ==========================================
@@ -22,8 +24,15 @@ const adminLogin = async (req, res) => {
 
     // Find admin
     const admin = await Admin.findOne({
-      email: email.toLowerCase()
+      email: email.trim().toLowerCase()
     });
+    console.log("Login email:", email.trim().toLowerCase());
+console.log("Admin found:", !!admin);
+
+if (admin) {
+  console.log("Admin role:", admin.role);
+  console.log("Admin active:", admin.isActive);
+}
 
     if (!admin) {
       return res.status(401).json({
@@ -45,6 +54,7 @@ const adminLogin = async (req, res) => {
       password,
       admin.password
     );
+    console.log("Password matches:", passwordMatch);
 
     if (!passwordMatch) {
       return res.status(401).json({
@@ -52,6 +62,20 @@ const adminLogin = async (req, res) => {
         message: "Invalid admin credentials"
       });
     }
+    console.log("Login email:", email.trim().toLowerCase());
+console.log("Admin found:", !!admin);
+
+if (admin) {
+  console.log("Admin role:", admin.role);
+  console.log("Admin active:", admin.isActive);
+
+  const passwordMatch = await bcrypt.compare(
+    password,
+    admin.password
+  );
+
+  console.log("Password matches:", passwordMatch);
+}
 
     // Create admin JWT
     const token = jwt.sign(
@@ -66,6 +90,12 @@ const adminLogin = async (req, res) => {
         expiresIn: "1d"
       }
     );
+    await createAdminNotification({
+  title: "Admin Login 🔐",
+  message: `${admin.email} logged in to the Invito admin panel.`,
+  type: "security",
+  link: "/admin/dashboard"
+});
 
     return res.json({
       success: true,

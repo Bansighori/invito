@@ -1,6 +1,6 @@
 import { MapPin } from "lucide-react";
 
-function VintageWedding({ data, onRSVP }) {
+function VintageWedding({ data, design = {}, onRSVP }) {
   const locationText = [data.venue, data.address]
     .filter(Boolean)
     .join(", ");

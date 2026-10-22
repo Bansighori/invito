@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
-
 const Admin = require("../models/Admin");
 
 const adminAuthMiddleware = async (req, res, next) => {
   try {
+
     // ==========================================
     // GET AUTHORIZATION HEADER
     // ==========================================
@@ -20,7 +20,7 @@ const adminAuthMiddleware = async (req, res, next) => {
 
 
     // ==========================================
-    // GET TOKEN
+    // CHECK BEARER TOKEN
     // ==========================================
 
     if (!authHeader.startsWith("Bearer ")) {
@@ -30,9 +30,13 @@ const adminAuthMiddleware = async (req, res, next) => {
       });
     }
 
-    const token =
-      authHeader.split(" ")[1];
 
+    // ==========================================
+    // GET TOKEN
+    // ==========================================
+
+    const token =
+      authHeader.substring(7).trim();
 
     if (!token) {
       return res.status(401).json({
@@ -53,7 +57,7 @@ const adminAuthMiddleware = async (req, res, next) => {
 
 
     // ==========================================
-    // MAKE SURE TOKEN IS ADMIN TOKEN
+    // MAKE SURE IT IS ADMIN TOKEN
     // ==========================================
 
     if (decoded.type !== "admin") {
@@ -65,15 +69,27 @@ const adminAuthMiddleware = async (req, res, next) => {
 
 
     // ==========================================
+    // GET ADMIN ID
+    // ==========================================
+
+    const adminId =
+      decoded.adminId || decoded.id;
+
+    if (!adminId) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid admin token"
+      });
+    }
+
+
+    // ==========================================
     // FIND ADMIN
     // ==========================================
 
-    const admin = await Admin.findById(
-      decoded.adminId || decoded.id
-    ).select(
-      "-password"
-    );
-
+    const admin =
+      await Admin.findById(adminId)
+        .select("-password");
 
     if (!admin) {
       return res.status(401).json({
@@ -112,10 +128,10 @@ const adminAuthMiddleware = async (req, res, next) => {
 
     return res.status(401).json({
       success: false,
-      message: "Invalid or expired admin token"
+      message:
+        "Invalid or expired admin token"
     });
   }
 };
-
 
 module.exports = adminAuthMiddleware;

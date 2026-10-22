@@ -3,24 +3,20 @@ import {
   Users,
   FileText,
   Palette,
-  UserCheck,
   CreditCard,
   Crown,
-  BarChart3,
-  Bell,
   ShieldCheck,
-  Activity,
   Settings,
   LogOut,
   Menu,
   X,
-  Sparkles
+  Sparkles,
+  MessageCircle
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
 import "./AdminSidebar.css";
-
 
 function AdminSidebar({
   isOpen,
@@ -28,75 +24,135 @@ function AdminSidebar({
 }) {
   const navigate = useNavigate();
 
-  const admin =
-    JSON.parse(
-      localStorage.getItem("invitoAdmin") || "null"
-    );
+  const admin = JSON.parse(
+    localStorage.getItem("invitoAdmin") || "null"
+  );
+
+  const adminRole =
+    admin?.role || "super_admin";
+
+
+  // ==========================================
+  // MENU ITEMS
+  // ==========================================
 
   const menuItems = [
+
     {
       label: "Dashboard",
       path: "/admin/dashboard",
-      icon: LayoutDashboard
+      icon: LayoutDashboard,
+      roles: [
+        "super_admin",
+        "user_admin",
+        "template_admin",
+        "payment_admin",
+        "support_admin"
+      ]
     },
+
     {
       label: "Users",
       path: "/admin/users",
-      icon: Users
+      icon: Users,
+      roles: [
+        "super_admin",
+        "user_admin",
+        "support_admin"
+      ]
     },
+
     {
       label: "Invitations",
       path: "/admin/invitations",
-      icon: FileText
+      icon: FileText,
+      roles: [
+        "super_admin",
+        "support_admin"
+      ]
     },
+
     {
       label: "Templates",
       path: "/admin/templates",
-      icon: Palette
+      icon: Palette,
+      roles: [
+        "super_admin",
+        "template_admin"
+      ]
     },
-    {
-      label: "Guests / RSVPs",
-      path: "/admin/guests",
-      icon: UserCheck
-    },
+
     {
       label: "Payments",
       path: "/admin/payments",
-      icon: CreditCard
+      icon: CreditCard,
+      roles: [
+        "super_admin",
+        "payment_admin"
+      ]
     },
+
     {
       label: "Plans",
       path: "/admin/plans",
-      icon: Crown
+      icon: Crown,
+      roles: [
+        "super_admin",
+        "payment_admin"
+      ]
     },
+
+    // ==========================================
+    // SUPPORT
+    // ==========================================
+
     {
-      label: "Analytics",
-      path: "/admin/analytics",
-      icon: BarChart3
+      label: "Support",
+      path: "/admin/support",
+      icon: MessageCircle,
+      roles: [
+        "super_admin",
+        "support_admin"
+      ]
     },
-    {
-      label: "Notifications",
-      path: "/admin/notifications",
-      icon: Bell
-    },
+
     {
       label: "Admin Roles",
       path: "/admin/roles",
-      icon: ShieldCheck
+      icon: ShieldCheck,
+      roles: [
+        "super_admin"
+      ]
     },
-    {
-      label: "Activity Logs",
-      path: "/admin/activity-logs",
-      icon: Activity
-    },
+
     {
       label: "Settings",
       path: "/admin/settings",
-      icon: Settings
+      icon: Settings,
+      roles: [
+        "super_admin"
+      ]
     }
+
   ];
 
+
+  // ==========================================
+  // FILTER MENU BY ADMIN ROLE
+  // ==========================================
+
+  const visibleMenuItems =
+    menuItems.filter((item) =>
+      item.roles.includes(adminRole)
+    );
+
+
+  // ==========================================
+  // LOGOUT
+  // ==========================================
+
   const handleLogout = () => {
+
     localStorage.removeItem(
       "invitoAdminToken"
     );
@@ -107,24 +163,38 @@ function AdminSidebar({
 
     navigate(
       "/admin/login",
-      { replace: true }
+      {
+        replace: true
+      }
     );
   };
 
+
   return (
     <>
+      {/* =====================================
+          MOBILE MENU BUTTON
+      ===================================== */}
+
       <button
         className="admin-sidebar-menu-button"
         onClick={() =>
           setIsOpen(!isOpen)
         }
       >
+
         {isOpen ? (
           <X size={20} />
         ) : (
           <Menu size={20} />
         )}
+
       </button>
+
+
+      {/* =====================================
+          MOBILE OVERLAY
+      ===================================== */}
 
       {isOpen && (
         <div
@@ -135,12 +205,23 @@ function AdminSidebar({
         />
       )}
 
+
+      {/* =====================================
+          SIDEBAR
+      ===================================== */}
+
       <aside
         className={`admin-sidebar ${
           isOpen ? "open" : ""
         }`}
       >
+
+        {/* =====================================
+            HEADER
+        ===================================== */}
+
         <div className="admin-sidebar-header">
+
           <div className="admin-sidebar-brand">
 
             <div className="admin-sidebar-logo">
@@ -148,6 +229,7 @@ function AdminSidebar({
             </div>
 
             <div>
+
               <strong>
                 Invito
               </strong>
@@ -155,21 +237,31 @@ function AdminSidebar({
               <span>
                 Admin Panel
               </span>
+
             </div>
 
           </div>
+
         </div>
+
+
+        {/* =====================================
+            MAIN MENU
+        ===================================== */}
 
         <div className="admin-sidebar-section">
           MAIN
         </div>
 
+
         <nav className="admin-sidebar-nav">
 
-          {menuItems.map((item) => {
+          {visibleMenuItems.map((item) => {
+
             const Icon = item.icon;
 
             return (
+
               <NavLink
                 key={item.path}
                 to={item.path}
@@ -184,26 +276,38 @@ function AdminSidebar({
                   setIsOpen(false)
                 }
               >
+
                 <Icon size={18} />
 
                 <span>
                   {item.label}
                 </span>
+
               </NavLink>
+
             );
+
           })}
 
         </nav>
+
+
+        {/* =====================================
+            ADMIN PROFILE
+        ===================================== */}
 
         <div className="admin-sidebar-bottom">
 
           <div className="admin-sidebar-profile">
 
             <div className="admin-avatar">
+
               {admin?.name
                 ?.charAt(0)
                 ?.toUpperCase() || "A"}
+
             </div>
+
 
             <div className="admin-profile-info">
 
@@ -221,15 +325,22 @@ function AdminSidebar({
 
           </div>
 
+
+          {/* =====================================
+              LOGOUT
+          ===================================== */}
+
           <button
             className="admin-logout-button"
             onClick={handleLogout}
           >
+
             <LogOut size={17} />
 
             <span>
               Logout
             </span>
+
           </button>
 
         </div>
