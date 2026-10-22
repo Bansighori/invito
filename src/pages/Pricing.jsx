@@ -25,38 +25,35 @@ function Pricing() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const [userResponse, plansResponse] =
-          await Promise.all([
-            api.get("/auth/me"),
-            api.get("/plans")
-          ]);
-          console.log("User response:", userResponse.data);
-console.log("Plans response:", plansResponse.data);
+    try {
+      const plansResponse = await api.get("/plans");
 
-        if (userResponse.data.success) {
-          setUser(userResponse.data.user);
-        }
-
-        if (plansResponse.data.success) {
-          setPlans(
-            plansResponse.data.plans.filter(
-              (plan) => plan.active
-            )
-          );
-        }
-      } catch (error) {
-        console.error(
-          "Failed to load pricing:",
-          error
+      if (plansResponse.data.success) {
+        setPlans(
+          (plansResponse.data.plans || []).filter(
+            (plan) => plan.active
+          )
         );
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Failed to load pricing plans:", error);
+    }
 
-    fetchData();
-  }, []);
+    try {
+      const userResponse = await api.get("/auth/me");
+
+      if (userResponse.data.success) {
+        setUser(userResponse.data.user);
+      }
+    } catch (error) {
+      console.error("Failed to load user:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
 
   // ========================================
   // FIND PLANS

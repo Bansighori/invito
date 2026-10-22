@@ -1,214 +1,142 @@
+
 const dotenv = require("dotenv");
 const path = require("path");
 
 dotenv.config({
-  path: path.join(__dirname, ".env")
+  path: path.join(__dirname, ".env"),
 });
 
 const express = require("express");
-const http = require("http");
+const cors = require("cors");
+const cron = require("node-cron");
 
 const app = express();
 
-const server = http.createServer(app);
-const cors = require("cors");
-
+// Database and template setup
 const connectDB = require("./config/db");
-const seedTemplatesIfEmpty =
-  require("./config/seedTemplatesIfEmpty");
+const seedTemplatesIfEmpty = require("./config/seedTemplatesIfEmpty");
 
-const templateRoutes =
-  require("./routes/templateRoutes");
-
-const invitationRoutes =
-  require("./routes/invitationRoutes");
-
-const guestRoutes =
-  require("./routes/guestRoutes");
-
-const authRoutes =
-  require("./routes/authRoutes");
-
-const paymentRoutes =
-  require("./routes/paymentRoutes");
+// Routes
+const templateRoutes = require("./routes/templateRoutes");
+const invitationRoutes = require("./routes/invitationRoutes");
+const guestRoutes = require("./routes/guestRoutes");
+const authRoutes = require("./routes/authRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const planRoutes = require("./routes/planRoutes");
 
 const adminRoutes = require("./routes/adminRoutes");
 const adminAuthRoutes = require("./routes/adminAuthRoutes");
-const adminTemplateRoutes =
-  require("./routes/adminTemplateRoutes");
-
+const adminTemplateRoutes = require("./routes/adminTemplateRoutes");
 const adminPaymentRoutes = require("./routes/adminPaymentRoutes");
-const adminPlanRoutes =
-  require("./routes/adminPlanRoutes");
-  const notificationRoutes =
-  require("./routes/notificationRoutes");
-  const cron = require("node-cron");
-const checkPlanExpiry =
-  require("./utils/checkPlanExpiry");
-
+const adminPlanRoutes = require("./routes/adminPlanRoutes");
 const adminNotificationRoutes = require("./routes/adminNotificationRoutes");
+const adminRoleRoutes = require("./routes/adminRoleRoutes");
+const adminSettingsRoutes = require("./routes/adminSettingsRoutes");
+
+const notificationRoutes = require("./routes/notificationRoutes");
 const chatRoutes = require("./routes/chatRoutes");
-const adminRoleRoutes =
-  require("./routes/adminRoleRoutes");
-  const adminSettingsRoutes = require("./routes/adminSettingsRoutes");
 
-const { Server } = require("socket.io");
+const checkPlanExpiry = require("./utils/checkPlanExpiry");
 
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5000",
-    methods: ["GET", "POST"]
-  }
-});
+// CORS CONFIGURATION
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://invito-zeta.vercel.app",
+];
 
-dotenv.config({
-  path: path.join(__dirname, ".env")
-});
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log(
-  "EMAIL_PASSWORD exists:",
-  !!process.env.EMAIL_PASSWORD
-);
-console.log(
-  "EMAIL_PASSWORD length:",
-  process.env.EMAIL_PASSWORD
-    ? process.env.EMAIL_PASSWORD.length
-    : 0
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests without an Origin header, such as server-to-server.
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Origin not allowed by CORS"));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
 );
 
-
-app.use(cors());
 app.use(express.json());
 
+// DATABASE MIDDLEWARE
 app.use(async (req, res, next) => {
   try {
     await connectDB();
     await seedTemplatesIfEmpty();
     next();
   } catch (error) {
-    console.error(
-      "Database connection failed:",
-      error.message
-    );
+    console.error("Database connection failed:", error.message);
 
     let message = "Database connection failed";
 
     if (error.message === "MONGO_URI is not defined") {
-      message =
-        "MONGO_URI is not set in environment variables";
+      message = "MONGO_URI is not set in environment variables";
     } else if (
       error.message.includes("127.0.0.1") ||
       error.message.includes("localhost")
     ) {
       message =
         "MONGO_URI points to localhost. Use a MongoDB Atlas connection string on Vercel";
-    } else if (
-      process.env.NODE_ENV !== "production"
-    ) {
+    } else if (process.env.NODE_ENV !== "production") {
       message = error.message;
     }
 
     res.status(500).json({
       success: false,
-      message
+      message,
     });
   }
 });
-// ========================================
+
 // PLAN EXPIRY CHECK
-// Runs every day at 9:00 AM
-// ========================================
-
+// Runs every day at 9:00 AM according to the server's timezone.
 cron.schedule("0 9 * * *", async () => {
+  console.log("Running daily plan expiry check...");
 
-  console.log(
-    "Running daily plan expiry check..."
-  );
-
-  await checkPlanExpiry();
-
+  try {
+    await checkPlanExpiry();
+  } catch (error) {
+    console.error("Plan expiry check failed:", error.message);
+  }
 });
 
+// HEALTH CHECK ROUTES
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Invito API is running"
+    message: "Invito API is running",
   });
 });
 
 app.get("/api", (req, res) => {
   res.json({
     success: true,
-    message: "Invito API is running"
+    message: "Invito API is running",
   });
 });
 
-app.use(
-  "/api/templates",
-  templateRoutes
-);
+// USER ROUTES
+app.use("/api/templates", templateRoutes);
+app.use("/api/invitations", invitationRoutes);
+app.use("/api/guests", guestRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/payment", paymentRoutes);
+app.use("/api/plans", planRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/chat", chatRoutes);
 
-app.use(
-  "/api/invitations",
-  invitationRoutes
-);
-
-app.use(
-  "/api/guests",
-  guestRoutes
-);
-
-app.use(
-  "/api/auth",
-  authRoutes
-);
-
-app.use(
-  "/api/payment",
-  paymentRoutes
-);
-
-app.use(
-  "/api/admin/auth",
-  adminAuthRoutes
-);
-
-app.use(
-  "/api/admin/payments",
-  adminPaymentRoutes
-);
-app.use(
-  "/api/admin/templates",
-  adminTemplateRoutes
-);
-app.use(
-  "/api/admin/plans",
-  adminPlanRoutes
-);
-
-app.use(
-  "/api/notifications",
-  notificationRoutes
-);
-
-app.use(
-  "/api/admin/notifications",
-  adminNotificationRoutes
-);
-
-app.use(
-  "/api/admin/roles",
-  adminRoleRoutes
-);
-app.use(
-  "/api/admin",
-  adminRoutes
-);
-app.use(
-  "/api/chat",
-  chatRoutes
-);
+// ADMIN ROUTES
+app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/admin/payments", adminPaymentRoutes);
+app.use("/api/admin/templates", adminTemplateRoutes);
+app.use("/api/admin/plans", adminPlanRoutes);
+app.use("/api/admin/notifications", adminNotificationRoutes);
+app.use("/api/admin/roles", adminRoleRoutes);
 app.use("/api/admin/settings", adminSettingsRoutes);
-
+app.use("/api/admin", adminRoutes);
 
 module.exports = app;
