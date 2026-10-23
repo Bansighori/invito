@@ -147,10 +147,10 @@
   justify-content: center;
   gap: 12px;
   padding: 14px 20px;
-  border: 1px solid var(--home-ink);
+ 
   border-radius: 3px;
-  background: var(--home-ink);
-  color: #fefdfe;
+  background: var(--home-pink);
+  color: #080808;
   font-size: 12px;
   font-weight: 700;
   transition: background .2s, transform .2s;
