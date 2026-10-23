@@ -1895,10 +1895,41 @@
 
 @media (max-width: 560px) {
   .home-navbar {
-    min-height: 70px;
-    padding: 0 19px;
-    gap: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
   }
+
+  .home-nav-cta {
+    display: inline-flex;
+    padding: 10px 12px;
+    font-size: 11px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+  }
+
+  
+
+  .home-nav-links.menu-open {
+    display: flex;
+  }
+
+  .mobile-create-button {
+    display: inline-flex;
+  }
+ 
 
   .home-logo {
     font-size: 26px;
@@ -1909,19 +1940,9 @@
     height: 34px;
   }
 
-  .home-nav-cta {
-    display: none;
-  }
+  
 
-  .mobile-menu-toggle {
-    width: 40px;
-    height: 40px;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--home-border);
-    background: #fffdfa;
-    color: var(--home-ink);
-  }
+  
 
   .home-nav-links {
     position: absolute;
@@ -1938,9 +1959,7 @@
     box-shadow: 0 18px 25px rgba(30, 24, 20, .07);
   }
 
-  .home-nav-links.menu-open {
-    display: flex;
-  }
+  
 
   .home-nav-links > button {
     padding: 15px 5px;
@@ -2332,46 +2351,6 @@
     flex-direction: column;
     gap: 12px;
     line-height: 1.7;
-  }
-}
-
-@media (max-width: 768px) {
-  .home-navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .home-nav-cta {
-    display: inline-flex;
-    padding: 10px 12px;
-    font-size: 11px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 2;
-  }
-
-  .mobile-menu-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 3;
-  }
-
-  .home-nav-links {
-    display: none;
-  }
-
-  .home-nav-links.menu-open {
-    display: flex;
-  }
-
-  .mobile-create-button {
-    display: inline-flex;
   }
 }
 
