@@ -61,13 +61,6 @@ const celebrations = [
     className: "party",
     count: "05",
   },
-  {
-    name: "Anniversaries",
-    icon: "🥂",
-    description: "Celebrate every chapter of your love.",
-    className: "anniversary",
-    count: "06",
-  },
 ];
 
 const previewCards = [
