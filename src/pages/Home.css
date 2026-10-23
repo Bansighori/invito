@@ -2335,6 +2335,46 @@
   }
 }
 
+@media (max-width: 768px) {
+  .home-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .home-nav-cta {
+    display: inline-flex;
+    padding: 10px 12px;
+    font-size: 11px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+  }
+
+  .home-nav-links {
+    display: none;
+  }
+
+  .home-nav-links.menu-open {
+    display: flex;
+  }
+
+  .mobile-create-button {
+    display: inline-flex;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-page *,
   .home-page *::before,
