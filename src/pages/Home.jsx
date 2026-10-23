@@ -22,7 +22,7 @@ import {
   ShieldCheck,
   Gift,
 } from "lucide-react";
-import SupportChatButton from "../components/SupportChatButton";
+
 import "./Home.css";
 
 const celebrations = [
@@ -157,7 +157,7 @@ function Home() {
 
   return (
     <main className="home-page">
-      <SupportChatButton />
+      
 
       {/* Navigation */}
       <header className="home-header">

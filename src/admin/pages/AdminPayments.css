@@ -389,17 +389,6 @@
   word-break: break-word;
 }
 
-.payment-modal-status.success {
-  color: #078453;
-}
-
-.payment-modal-status.failed {
-  color: #d12d50;
-}
-
-.payment-modal-status.created {
-  color: #b76b00;
-}
 
 .payment-failure-box {
   margin-top: 20px;
@@ -409,9 +398,7 @@
   border: 1px solid #ffdfe4;
 }
 
-.payment-failure-box strong {
-  color: #be123c;
-}
+
 
 .payment-failure-box p {
   margin: 7px 0;
