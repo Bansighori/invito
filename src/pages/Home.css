@@ -150,7 +150,7 @@
   border: 1px solid var(--home-ink);
   border-radius: 3px;
   background: var(--home-ink);
-  color: white;
+  color: #e76f91;
   font-size: 12px;
   font-weight: 700;
   transition: background .2s, transform .2s;
