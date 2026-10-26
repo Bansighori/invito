@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Send, MessageCircle, Check, CheckCheck } from "lucide-react";
-import axios from "axios";
+import api from "../../api/axios";
 
 import AdminSidebar from "../components/AdminSidebar";
 import AdminNavbar from "../components/AdminNavbar";
@@ -11,11 +11,12 @@ function AdminSupportChat() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chats, setChats] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [chatNotice, setChatNotice] = useState("");
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
 
   const admin = JSON.parse(localStorage.getItem("invitoAdmin") || "null");
-  const adminToken = localStorage.getItem("invitoAdminToken");
+ 
   const adminId = admin?.id || admin?._id;
 
   const formatTime = (date) => {
@@ -31,57 +32,41 @@ function AdminSupportChat() {
   };
 
   const loadChats = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/chat/admin",
-        {
-          headers: { Authorization: `Bearer ${adminToken}` },
-        }
-      );
-      setChats(response.data.chats || []);
-    } catch (error) {
-      console.error("Failed to load chats:", error.response?.data || error);
-    }
-  }, [adminToken]);
+  try {
+    const response = await api.get("/chat/admin");
+    setChats(response.data.chats || []);
+  } catch (error) {
+    console.error(
+      "Failed to load chats:",
+      error.response?.data || error.message
+    );
+  }
+}, []);
 
   const loadMessages = useCallback(async (userId) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/chat/admin/${userId}`,
-        {
-          headers: { Authorization: `Bearer ${adminToken}` },
-        }
-      );
+  try {
+    const response = await api.get(`/chat/admin/${userId}`);
 
-      const loadedMessages = response.data.messages || [];
-      setMessages(loadedMessages);
+    setMessages(response.data.messages || []);
 
-      // Opening this conversation means the admin has read these messages.
-      loadedMessages.forEach((msg) => {
-  if (msg.sender === "user" && msg._id) {
-    socket.emit("message_read", {
-      messageId: msg._id,
-    });
+    await api.put(`/chat/admin/${userId}/read`, {});
+
+    await loadChats();
+  } catch (error) {
+    console.error(
+      "Failed to load messages:",
+      error.response?.data || error.message
+    );
   }
-});
-
-      await axios.put(
-        `http://localhost:5000/api/chat/admin/${userId}/read`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${adminToken}` },
-        }
-      );
-
-      loadChats();
-    } catch (error) {
-      console.error("Failed to load messages:", error.response?.data || error);
-    }
-  }, [adminToken, loadChats]);
+}, [loadChats]);
 
   useEffect(() => {
-    loadChats();
-  }, [loadChats]);
+  loadChats();
+
+  const interval = setInterval(loadChats, 10000);
+
+  return () => clearInterval(interval);
+}, [loadChats]);
 
   useEffect(() => {
   if (!adminId) {
@@ -128,33 +113,36 @@ function AdminSupportChat() {
     loadMessages(chat.userId);
   };
 
-  const sendMessage = () => {
-    const text = message.trim();
+  
+const sendMessage = async () => {
+  const text = message.trim();
 
-    if (!text || !selectedUser || !socket.connected || !adminId) return;
+  if (!text || !selectedUser) return;
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        _id: `temp-${Date.now()}`,
-        userId: selectedUser.userId,
-        adminId,
-        message: text,
-        sender: "admin",
-        createdAt: new Date().toISOString(),
-        delivered: false,
-        read: false,
-      },
-    ]);
-
-    socket.emit("admin_send_message", {
-      userId: selectedUser.userId,
-      adminId,
-      message: text,
-    });
-
+  try {
     setMessage("");
-  };
+
+    await api.post(
+      `/chat/admin/${selectedUser.userId}/message`,
+      { message: text }
+    );
+
+    await loadMessages(selectedUser.userId);
+    await loadChats();
+  } catch (error) {
+    console.error(
+      "Send message error:",
+      error.response?.data || error.message
+    );
+
+    setMessage(text);
+
+    alert(
+      error.response?.data?.message ||
+      "Failed to send message. Please try again."
+    );
+  }
+};
 
   const renderTicks = (msg) => {
     // Show ticks beside the admin's own messages.
@@ -285,11 +273,11 @@ function AdminSupportChat() {
                   }}
                 />
                 <button
-                  onClick={sendMessage}
-                  disabled={!message.trim()}
-                >
-                  <Send size={18} />
-                </button>
+  onClick={sendMessage}
+  disabled={!message.trim() || !selectedUser}
+>
+  <Send size={18} />
+</button>
               </div>
             </>
           )}
