@@ -349,3 +349,64 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+/* Mobile Admin Roles layout */
+@media (max-width: 600px) {
+  .admin-roles {
+    width: 100%;
+    min-width: 0;
+    padding: 20px 12px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .admins-card {
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .admin-table {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-header,
+  .table-row {
+    min-width: 650px;
+    display: grid;
+    grid-template-columns: 150px 170px 130px 100px 90px;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+  }
+
+  .table-header {
+    padding: 14px;
+  }
+
+  .table-row {
+    padding: 14px;
+  }
+
+  .admin-name {
+    min-width: 0;
+  }
+
+  .admin-name strong,
+  .table-row > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .role-badge {
+    white-space: nowrap;
+  }
+
+  .admin-actions {
+    white-space: nowrap;
+  }
+}
