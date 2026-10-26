@@ -35,20 +35,20 @@ api.interceptors.request.use(
       return config;
     }
 
-    if (url.includes("/admin/")) {
-      const token = localStorage.getItem("invitoAdminToken");
+    // Support chat and admin API routes
+    const isAdminRoute =
+      url.includes("/admin/") ||
+      url.endsWith("/admin") ||
+      url.includes("/chat/admin");
 
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-
-      return config;
-    }
-
-    const token = localStorage.getItem("invitoToken");
+    const token = localStorage.getItem(
+      isAdminRoute ? "invitoAdminToken" : "invitoToken"
+    );
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      delete config.headers.Authorization;
     }
 
     return config;
