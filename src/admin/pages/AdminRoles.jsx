@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import "./AdminRoles.css";
-
 import AdminSidebar from "../components/AdminSidebar";
 import AdminNavbar from "../components/AdminNavbar";
 
@@ -24,172 +23,69 @@ function AdminRoles() {
   // ==========================================
 
   const loadData = async () => {
-    try {
-      const token =
-        localStorage.getItem("invitoAdminToken");
+  try {
+    const [adminsRes, rolesRes] = await Promise.all([
+      api.get("/admin/roles/admins"),
+      api.get("/admin/roles"),
+    ]);
 
-      console.log("ADMIN TOKEN:", token);
+    setAdmins(adminsRes.data.admins || []);
+    setRoles(rolesRes.data.roles || []);
+  } catch (error) {
+    console.error(
+      "ADMIN ROLES ERROR:",
+      error.response?.data || error.message
+    );
+  }
+};
 
-      if (!token) {
-        console.error("NO ADMIN TOKEN FOUND");
-        return;
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      };
-
-      console.log("Loading admins...");
-
-      const adminsRes = await axios.get(
-        "http://localhost:5000/api/admin/roles/admins",
-        config
-      );
-
-      console.log(
-        "ADMINS RESPONSE:",
-        adminsRes.data
-      );
-
-      setAdmins(
-        adminsRes.data.admins || []
-      );
-
-      console.log("Loading roles...");
-
-      const rolesRes = await axios.get(
-        "http://localhost:5000/api/admin/roles",
-        config
-      );
-
-      console.log(
-        "ROLES RESPONSE:",
-        rolesRes.data
-      );
-
-      setRoles(
-        rolesRes.data.roles || []
-      );
-
-    } catch (error) {
-
-      console.error(
-        "ADMIN ROLES ERROR:",
-        error
-      );
-
-      console.error(
-        "STATUS:",
-        error.response?.status
-      );
-
-      console.error(
-        "SERVER RESPONSE:",
-        error.response?.data
-      );
-    }
-  };
-
-
-  // ==========================================
-  // LOAD WHEN PAGE OPENS
-  // ==========================================
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
+useEffect(() => {
+  loadData();
+}, []);
 
   // ==========================================
   // CREATE ADMIN
   // ==========================================
 
   const createAdmin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const token =
-        localStorage.getItem(
-          "invitoAdminToken"
-        );
+  try {
+    await api.post("/admin/roles/admins", form);
 
-      if (!token) {
-        alert("Admin token not found");
-        return;
-      }
+    alert("Admin created successfully");
+    setShowModal(false);
 
-      await axios.post(
-        "http://localhost:5000/api/admin/roles/admins",
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        }
-      );
+    setForm({
+      name: "",
+      email: "",
+      password: "",
+      role: "",
+    });
 
-      alert("Admin created successfully");
-
-      setShowModal(false);
-
-      setForm({
-        name: "",
-        email: "",
-        password: "",
-        role: ""
-      });
-
-      loadData();
-
-    } catch (error) {
-
-      console.error(
-        "CREATE ADMIN ERROR:",
-        error.response?.data || error
-      );
-
-      alert(
-        error.response?.data?.message ||
-        "Failed to create admin"
-      );
-    }
-  };
+    loadData();
+  } catch (error) {
+    alert(
+      error.response?.data?.message ||
+      "Failed to create admin"
+    );
+  }
+};
   const deleteAdmin = async (admin) => {
-  const confirmed = window.confirm(
-    `Are you sure you want to delete ${admin.name}?`
-  );
-
-  if (!confirmed) {
+  if (
+    !window.confirm(
+      `Are you sure you want to delete ${admin.name}?`
+    )
+  ) {
     return;
   }
 
   try {
-    const token =
-      localStorage.getItem("invitoAdminToken");
-
-    await axios.delete(
-      `http://localhost:5000/api/admin/roles/admins/${admin._id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
+    await api.delete(`/admin/roles/admins/${admin._id}`);
 
     alert("Admin deleted successfully");
-
     loadData();
-
   } catch (error) {
-    console.error(
-      "Delete admin error:",
-      error.response?.data || error
-    );
-
     alert(
       error.response?.data?.message ||
       "Failed to delete admin"
