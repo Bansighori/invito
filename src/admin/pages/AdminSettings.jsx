@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import "./AdminSettings.css";
 
 import AdminSidebar from "../components/AdminSidebar";
@@ -16,33 +16,22 @@ function AdminSettings() {
     systemNotifications: true
   });
 
-  const token =
-    localStorage.getItem("invitoAdminToken");
 
   // ==========================================
-  // LOAD ADMIN PROFILE
+ // LOAD ADMIN PROFILE
   // ==========================================
 
   const loadProfile = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/admin/settings/profile",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
-      setAdmin(response.data.admin);
-
-    } catch (error) {
-      console.error(
-        "Load profile error:",
-        error.response?.data || error
-      );
-    }
-  };
+  try {
+    const response = await api.get("/admin/settings/profile");
+    setAdmin(response.data.admin);
+  } catch (error) {
+    console.error(
+      "Load profile error:",
+      error.response?.data || error.message
+    );
+  }
+};
 
   useEffect(() => {
     loadProfile();
@@ -60,31 +49,21 @@ function AdminSettings() {
   };
 
   const saveProfile = async () => {
-    try {
-      await axios.put(
-        "http://localhost:5000/api/admin/settings/profile",
-        {
-          name: admin.name,
-          email: admin.email
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
+  try {
+    await api.put("/admin/settings/profile", {
+      name: admin.name,
+      email: admin.email,
+    });
 
-      alert("Profile updated successfully");
-
-      loadProfile();
-
-    } catch (error) {
-      alert(
-        error.response?.data?.message ||
-        "Failed to update profile"
-      );
-    }
-  };
+    alert("Profile updated successfully");
+    loadProfile();
+  } catch (error) {
+    alert(
+      error.response?.data?.message ||
+      "Failed to update profile"
+    );
+  }
+};
 
   // ==========================================
   // LOGOUT

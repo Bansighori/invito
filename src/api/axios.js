@@ -8,60 +8,52 @@ const PUBLIC_AUTH_PATHS = [
   "/auth/send-forgot-password-otp",
   "/auth/verify-forgot-password-otp",
   "/auth/reset-password",
-  "/admin/auth/login"
+  "/admin/auth/login",
 ];
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api",
 });
 
 api.interceptors.request.use(
   (config) => {
-    const url = config.url || "";
+    const url = new URL(
+      config.url || "",
+      config.baseURL || window.location.origin
+    ).pathname;
 
-    // Public authentication routes
-    const isPublicAuthRoute =
-      PUBLIC_AUTH_PATHS.some((path) =>
-        url.includes(path)
-      );
+    const isPublicAuthRoute = PUBLIC_AUTH_PATHS.some(
+      (path) => url.endsWith(path)
+    );
+
+    config.headers = config.headers || {};
 
     if (isPublicAuthRoute) {
       delete config.headers.Authorization;
       return config;
     }
 
-    // Admin APIs
-    if (url.startsWith("/admin/")) {
-      const adminToken =
-        localStorage.getItem(
-          "invitoAdminToken"
-        );
+    if (url.includes("/admin/")) {
+      const token = localStorage.getItem("invitoAdminToken");
 
-      if (adminToken) {
-        config.headers.Authorization =
-          `Bearer ${adminToken}`;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
       }
 
       return config;
     }
 
-    // Customer APIs
-    const token =
-      localStorage.getItem(
-        "invitoToken"
-      );
+    const token = localStorage.getItem("invitoToken");
 
     if (token) {
-      config.headers.Authorization =
-        `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
   },
-
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export default api;
