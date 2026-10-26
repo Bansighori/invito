@@ -1,8 +1,14 @@
 
 import { useEffect, useState, useCallback } from "react";
-import { Send, MessageCircle, Check, CheckCheck } from "lucide-react";
-import api from "../../api/axios";
+import {
+  Send,
+  MessageCircle,
+  Check,
+  CheckCheck,
+  ArrowLeft,
+} from "lucide-react";
 
+import api from "../../api/axios";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminNavbar from "../components/AdminNavbar";
 import "./AdminSupportChat.css";
@@ -14,8 +20,14 @@ function AdminSupportChat() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [loadingChats, setLoadingChats] = useState(true);
+  const [loadingMessages, setLoadingMessages] = useState(false);
   const [chatError, setChatError] = useState("");
   const [sending, setSending] = useState(false);
+
+  const getUserId = (chat) => {
+    const id = chat?.userId;
+    return String(id?._id || id?.id || id || "");
+  };
 
   const formatTime = (date) => {
     if (!date) return "";
@@ -34,9 +46,6 @@ function AdminSupportChat() {
   const loadChats = useCallback(async () => {
     try {
       const response = await api.get("/chat/admin");
-
-      console.log("Support chats:", response.data);
-
       setChats(response.data.chats || []);
       setChatError("");
     } catch (error) {
@@ -56,76 +65,123 @@ function AdminSupportChat() {
   }, []);
 
   // Load messages for a selected user
-  const loadMessages = useCallback(
-    async (userId) => {
+  const loadMessages = useCallback(async (userId, silent = false) => {
+    if (!userId) return;
+
+    if (!silent) setLoadingMessages(true);
+
+    try {
+      const response = await api.get(
+        `/chat/admin/${encodeURIComponent(userId)}`
+      );
+
+      setMessages(response.data.messages || []);
+
+      // Mark user messages as read
+      await api.put(
+        `/chat/admin/${encodeURIComponent(userId)}/read`,
+        {}
+      );
+
+      // Refresh unread counts without interrupting the conversation
       try {
-        const response = await api.get(`/chat/admin/${userId}`);
-
-        setMessages(response.data.messages || []);
-
-        await api.put(`/chat/admin/${userId}/read`, {});
-        await loadChats();
+        const chatsResponse = await api.get("/chat/admin");
+        setChats(chatsResponse.data.chats || []);
       } catch (error) {
-        console.error(
-          "Load messages error:",
-          error.response?.data || error.message
-        );
+        console.error("Refresh chat list error:", error);
+      }
+    } catch (error) {
+      console.error(
+        "Load messages error:",
+        error.response?.status,
+        error.response?.data || error.message
+      );
 
+      if (!silent) {
         setMessages([]);
         alert(
           error.response?.data?.message ||
             "Unable to load this conversation."
         );
       }
-    },
-    [loadChats]
-  );
+    } finally {
+      if (!silent) setLoadingMessages(false);
+    }
+  }, []);
 
-  // Initial load and automatic refresh
+  // Initial load and refresh chat list
   useEffect(() => {
     loadChats();
 
-    const interval = setInterval(() => {
-      loadChats();
-    }, 10000);
+    const interval = setInterval(loadChats, 10000);
 
     return () => clearInterval(interval);
   }, [loadChats]);
 
-  // Refresh selected conversation periodically
+  // Refresh messages while a conversation is open
   useEffect(() => {
-    if (!selectedUser?.userId) return;
+    const userId = getUserId(selectedUser);
+
+    if (!userId) return;
 
     const interval = setInterval(() => {
-      loadMessages(selectedUser.userId);
+      loadMessages(userId, true);
     }, 10000);
 
     return () => clearInterval(interval);
   }, [selectedUser, loadMessages]);
 
+  // Open selected conversation
   const selectChat = (chat) => {
+    const userId = getUserId(chat);
+
+    if (!userId) {
+      console.error("Missing user ID in chat:", chat);
+      alert("Unable to open this conversation: user ID is missing.");
+      return;
+    }
+
     setSelectedUser(chat);
     setMessages([]);
-    loadMessages(chat.userId);
+    setMessage("");
+
+    loadMessages(userId);
   };
 
-  // Send admin reply using the REST API
+  // Back to the conversation list on mobile
+  const backToChats = () => {
+    setSelectedUser(null);
+    setMessages([]);
+    setMessage("");
+  };
+
+  // Send admin reply
   const sendMessage = async () => {
     const text = message.trim();
+    const userId = getUserId(selectedUser);
 
-    if (!text || !selectedUser || sending) return;
+    if (!text || !userId || sending) return;
 
     setSending(true);
 
     try {
-      await api.post(
-        `/chat/admin/${selectedUser.userId}/message`,
+      const response = await api.post(
+        `/chat/admin/${encodeURIComponent(userId)}/message`,
         { message: text }
       );
 
       setMessage("");
 
-      await loadMessages(selectedUser.userId);
+      // Show sent message immediately when returned by the API
+      if (response.data.chatMessage) {
+        setMessages((previous) => [
+          ...previous,
+          response.data.chatMessage,
+        ]);
+      } else {
+        await loadMessages(userId, true);
+      }
+
       await loadChats();
     } catch (error) {
       console.error(
@@ -184,7 +240,12 @@ function AdminSupportChat() {
 
       <AdminNavbar />
 
-      <div className="admin-support-page">
+      <div
+        className={`admin-support-page ${
+          selectedUser ? "conversation-selected" : ""
+        }`}
+      >
+        {/* Conversation list */}
         <div className="support-chat-list">
           <div className="support-list-header">
             <MessageCircle size={22} />
@@ -203,64 +264,93 @@ function AdminSupportChat() {
               No support messages yet.
             </div>
           ) : (
-            chats.map((chat) => (
-              <div
-                key={chat.userId}
-                className={`support-user ${
-                  String(selectedUser?.userId) ===
-                  String(chat.userId)
-                    ? "active"
-                    : ""
-                }`}
-                onClick={() => selectChat(chat)}
-              >
-                <div className="user-avatar">
-                  {chat.user?.name?.charAt(0)?.toUpperCase() || "U"}
-                </div>
+            chats.map((chat) => {
+              const userId = getUserId(chat);
+              const isActive =
+                getUserId(selectedUser) === userId;
 
-                <div className="user-info">
-                  <strong>
-                    {chat.user?.name || chat.user?.email || "User"}
-                  </strong>
+              return (
+                <button
+                  type="button"
+                  key={userId}
+                  className={`support-user ${
+                    isActive ? "active" : ""
+                  }`}
+                  onClick={() => selectChat(chat)}
+                >
+                  <div className="user-avatar">
+                    {chat.user?.name?.charAt(0)?.toUpperCase() ||
+                      "U"}
+                  </div>
 
-                  <span>
-                    {chat.lastMessage || "No messages"}
-                  </span>
-                </div>
+                  <div className="user-info">
+                    <strong>
+                      {chat.user?.name ||
+                        chat.user?.email ||
+                        "User"}
+                    </strong>
 
-                {chat.unreadCount > 0 && (
-                  <span className="unread-count">
-                    {chat.unreadCount}
-                  </span>
-                )}
-              </div>
-            ))
+                    <span>
+                      {chat.lastMessage || "No messages"}
+                    </span>
+                  </div>
+
+                  {chat.unreadCount > 0 && (
+                    <span className="unread-count">
+                      {chat.unreadCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })
           )}
         </div>
 
+        {/* Conversation window */}
         <div className="admin-chat-window">
           {!selectedUser ? (
             <div className="empty-chat">
               <MessageCircle size={50} />
               <h2>Select a conversation</h2>
-              <p>Select a user to view their support messages.</p>
+              <p>
+                Select a user to view their support messages.
+              </p>
             </div>
           ) : (
             <>
               <div className="admin-chat-header">
+                <button
+                  type="button"
+                  className="mobile-chat-back"
+                  onClick={backToChats}
+                  aria-label="Back to support chats"
+                >
+                  <ArrowLeft size={22} />
+                </button>
+
                 <div className="user-avatar">
-                  {selectedUser.user?.name?.charAt(0)?.toUpperCase() || "U"}
+                  {selectedUser.user?.name
+                    ?.charAt(0)
+                    ?.toUpperCase() || "U"}
                 </div>
 
-                <div>
-                  <h3>{selectedUser.user?.name || "User"}</h3>
-                  <span>{selectedUser.user?.email || ""}</span>
+                <div className="selected-user-info">
+                  <h3>
+                    {selectedUser.user?.name || "User"}
+                  </h3>
+                  <span>
+                    {selectedUser.user?.email || ""}
+                  </span>
                 </div>
               </div>
 
               <div className="admin-messages">
-                {messages.length === 0 ? (
-                  <p className="no-chats">No messages in this conversation.</p>
+                {loadingMessages && messages.length === 0 ? (
+                  <p className="no-chats">Loading messages...</p>
+                ) : messages.length === 0 ? (
+                  <p className="no-chats">
+                    No messages in this conversation.
+                  </p>
                 ) : (
                   messages.map((msg, index) => (
                     <div
@@ -289,7 +379,10 @@ function AdminSupportChat() {
                   placeholder="Type your reply..."
                   disabled={sending}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
+                    if (
+                      e.key === "Enter" &&
+                      !e.shiftKey
+                    ) {
                       e.preventDefault();
                       sendMessage();
                     }
@@ -297,8 +390,10 @@ function AdminSupportChat() {
                 />
 
                 <button
+                  type="button"
                   onClick={sendMessage}
                   disabled={!message.trim() || sending}
+                  aria-label="Send message"
                 >
                   <Send size={18} />
                 </button>

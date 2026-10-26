@@ -347,3 +347,150 @@
 }
 
 
+/* Mobile support chat navigation */
+.mobile-chat-back {
+  display: none;
+}
+
+.support-user {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  .admin-support-page {
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100dvh - 125px);
+    min-height: 400px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .admin-support-page .support-chat-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  .admin-support-page .admin-chat-window {
+    display: none;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .admin-support-page.conversation-selected .support-chat-list {
+    display: none;
+  }
+
+  .admin-support-page.conversation-selected .admin-chat-window {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin-support-page .support-user {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 12px;
+    min-height: 70px;
+    box-sizing: border-box;
+  }
+
+  .admin-support-page .user-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .admin-support-page .user-info strong,
+  .admin-support-page .user-info span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .admin-support-page .admin-chat-header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .mobile-chat-back {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .selected-user-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .selected-user-info h3,
+  .selected-user-info span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .admin-support-page .admin-messages {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-support-page .admin-message-input {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .admin-support-page .admin-message-input input {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .admin-support-page .admin-message-input button {
+    flex-shrink: 0;
+    touch-action: manipulation;
+  }
+}
+
