@@ -214,15 +214,20 @@ if (canvas.width === 0 || canvas.height === 0) {
 
 
     // Create PDF
+  
+    // Convert canvas to image
     const imageData = canvas.toDataURL("image/png");
 
+    // Create PDF using the invitation's original dimensions
     const pdf = new jsPDF({
-      orientation: "portrait",
+      orientation:
+        canvas.width > canvas.height ? "landscape" : "portrait",
       unit: "px",
       format: [canvas.width, canvas.height],
       compress: true,
     });
 
+    // Add the complete invitation without cropping
     pdf.addImage(
       imageData,
       "PNG",
@@ -232,8 +237,9 @@ if (canvas.width === 0 || canvas.height === 0) {
       canvas.height
     );
 
-    // Add clickable links using the original element positions
+    // Calculate clickable link positions
     const originalRect = element.getBoundingClientRect();
+
     const scaleX = canvas.width / originalRect.width;
     const scaleY = canvas.height / originalRect.height;
 
@@ -249,10 +255,24 @@ if (canvas.width === 0 || canvas.height === 0) {
       const width = linkRect.width * scaleX;
       const height = linkRect.height * scaleY;
 
-      pdf.link(x, y, width, height, { url });
+      // Keep link coordinates inside the PDF page
+      const safeX = Math.max(0, Math.min(x, canvas.width));
+      const safeY = Math.max(0, Math.min(y, canvas.height));
+      const safeWidth = Math.min(width, canvas.width - safeX);
+      const safeHeight = Math.min(height, canvas.height - safeY);
+
+      if (safeWidth > 0 && safeHeight > 0) {
+        pdf.link(
+          safeX,
+          safeY,
+          safeWidth,
+          safeHeight,
+          { url }
+        );
+      }
     };
 
-    // Support different RSVP button class names
+    // Clickable RSVP button
     const rsvpButton = element.querySelector(
       [
         ".invitation-rsvp-button",
@@ -269,7 +289,7 @@ if (canvas.width === 0 || canvas.height === 0) {
       addPdfLink(rsvpButton, rsvpUrl);
     }
 
-    // Add Google Maps link if present
+    // Clickable Google Maps link
     const locationLink = element.querySelector(
       'a[href*="google.com/maps"]'
     );
@@ -285,17 +305,21 @@ if (canvas.width === 0 || canvas.height === 0) {
     pdf.save(`${filename}.pdf`);
 
   } catch (error) {
-  console.error("PDF error:", error);
-  console.error("PDF stack trace:", error.stack);
-  console.error("PDF element:", invitationRef.current);
+    console.error("PDF error:", error);
+    console.error("PDF stack trace:", error.stack);
+    console.error("PDF element:", invitationRef.current);
 
-  alert(`PDF failed: ${error.message}`);
+    alert(`PDF failed: ${error.message}`);
 
   } finally {
-    element.classList.remove("pdf-generating");
+    if (invitationRef.current) {
+      invitationRef.current.classList.remove("pdf-generating");
+    }
+
     setIsDownloadingPDF(false);
   }
 };
+
 
 
 
