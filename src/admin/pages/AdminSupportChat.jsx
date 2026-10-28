@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   Send,
   MessageCircle,
@@ -24,6 +24,11 @@ function AdminSupportChat() {
   const [chatError, setChatError] = useState("");
   const [sending, setSending] = useState(false);
 
+  // WhatsApp-style scrolling refs
+  const messagesContainerRef = useRef(null);
+  const shouldAutoScrollRef = useRef(true);
+  const firstLoadRef = useRef(false);
+
   const getUserId = (chat) => {
     const id = chat?.userId;
     return String(id?._id || id?.id || id || "");
@@ -42,10 +47,48 @@ function AdminSupportChat() {
     });
   };
 
+  // Scroll to the latest message
+  const scrollToBottom = useCallback((behavior = "auto") => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior,
+    });
+  }, []);
+
+  // Detect whether the admin is near the bottom
+  const handleMessagesScroll = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const distanceFromBottom =
+      container.scrollHeight -
+      container.scrollTop -
+      container.clientHeight;
+
+    shouldAutoScrollRef.current = distanceFromBottom < 120;
+  };
+
+  // Scroll after history loads or new messages arrive
+  useEffect(() => {
+    if (loadingMessages) return;
+
+    if (firstLoadRef.current || shouldAutoScrollRef.current) {
+      requestAnimationFrame(() => {
+        scrollToBottom("auto");
+      });
+
+      firstLoadRef.current = false;
+    }
+  }, [messages, loadingMessages, scrollToBottom]);
+
   // Load all support conversations
   const loadChats = useCallback(async () => {
     try {
       const response = await api.get("/chat/admin");
+
       setChats(response.data.chats || []);
       setChatError("");
     } catch (error) {
@@ -57,14 +100,16 @@ function AdminSupportChat() {
 
       setChatError(
         error.response?.data?.message ||
-          `Unable to load chats (${error.response?.status || "network error"})`
+          `Unable to load chats (${
+            error.response?.status || "network error"
+          })`
       );
     } finally {
       setLoadingChats(false);
     }
   }, []);
 
-  // Load messages for a selected user
+  // Load messages for the selected user
   const loadMessages = useCallback(async (userId, silent = false) => {
     if (!userId) return;
 
@@ -83,7 +128,7 @@ function AdminSupportChat() {
         {}
       );
 
-      // Refresh unread counts without interrupting the conversation
+      // Refresh unread counts
       try {
         const chatsResponse = await api.get("/chat/admin");
         setChats(chatsResponse.data.chats || []);
@@ -109,7 +154,7 @@ function AdminSupportChat() {
     }
   }, []);
 
-  // Initial load and refresh chat list
+  // Initial load and refresh conversation list
   useEffect(() => {
     loadChats();
 
@@ -118,7 +163,7 @@ function AdminSupportChat() {
     return () => clearInterval(interval);
   }, [loadChats]);
 
-  // Refresh messages while a conversation is open
+  // Refresh messages periodically without forcing scroll
   useEffect(() => {
     const userId = getUserId(selectedUser);
 
@@ -131,7 +176,7 @@ function AdminSupportChat() {
     return () => clearInterval(interval);
   }, [selectedUser, loadMessages]);
 
-  // Open selected conversation
+  // Open a conversation at the latest message
   const selectChat = (chat) => {
     const userId = getUserId(chat);
 
@@ -141,6 +186,9 @@ function AdminSupportChat() {
       return;
     }
 
+    shouldAutoScrollRef.current = true;
+    firstLoadRef.current = true;
+
     setSelectedUser(chat);
     setMessages([]);
     setMessage("");
@@ -148,11 +196,13 @@ function AdminSupportChat() {
     loadMessages(userId);
   };
 
-  // Back to the conversation list on mobile
+  // Return to the conversation list on mobile
   const backToChats = () => {
     setSelectedUser(null);
     setMessages([]);
     setMessage("");
+    shouldAutoScrollRef.current = true;
+    firstLoadRef.current = false;
   };
 
   // Send admin reply
@@ -162,6 +212,7 @@ function AdminSupportChat() {
 
     if (!text || !userId || sending) return;
 
+    shouldAutoScrollRef.current = true;
     setSending(true);
 
     try {
@@ -172,12 +223,22 @@ function AdminSupportChat() {
 
       setMessage("");
 
-      // Show sent message immediately when returned by the API
+      // Display the saved message immediately
       if (response.data.chatMessage) {
-        setMessages((previous) => [
-          ...previous,
-          response.data.chatMessage,
-        ]);
+        const savedMessage = response.data.chatMessage;
+
+        setMessages((previous) => {
+          if (
+            previous.some(
+              (msg) =>
+                String(msg._id) === String(savedMessage._id)
+            )
+          ) {
+            return previous;
+          }
+
+          return [...previous, savedMessage];
+        });
       } else {
         await loadMessages(userId, true);
       }
@@ -199,6 +260,7 @@ function AdminSupportChat() {
     }
   };
 
+  // Message delivery/read ticks
   const renderTicks = (msg) => {
     if (msg.sender !== "admin") return null;
 
@@ -265,9 +327,7 @@ function AdminSupportChat() {
             </div>
           ) : (
             chats.map((chat) => {
-              cons
-              
-               userId = getUserId(chat);
+              const userId = getUserId(chat);
               const isActive =
                 getUserId(selectedUser) === userId;
 
@@ -320,6 +380,7 @@ function AdminSupportChat() {
             </div>
           ) : (
             <>
+              {/* Selected user header */}
               <div className="admin-chat-header">
                 <button
                   type="button"
@@ -337,16 +398,19 @@ function AdminSupportChat() {
                 </div>
 
                 <div className="selected-user-info">
-                  <h3>
-                    {selectedUser.user?.name || "User"}
-                  </h3>
+                  <h3>{selectedUser.user?.name || "User"}</h3>
                   <span>
                     {selectedUser.user?.email || ""}
                   </span>
                 </div>
               </div>
 
-              <div className="admin-messages">
+              {/* Messages: scrollable history */}
+              <div
+                className="admin-messages"
+                ref={messagesContainerRef}
+                onScroll={handleMessagesScroll}
+              >
                 {loadingMessages && messages.length === 0 ? (
                   <p className="no-chats">Loading messages...</p>
                 ) : messages.length === 0 ? (
@@ -374,6 +438,7 @@ function AdminSupportChat() {
                 )}
               </div>
 
+              {/* Reply input */}
               <div className="admin-message-input">
                 <input
                   value={message}
@@ -381,10 +446,7 @@ function AdminSupportChat() {
                   placeholder="Type your reply..."
                   disabled={sending}
                   onKeyDown={(e) => {
-                    if (
-                      e.key === "Enter" &&
-                      !e.shiftKey
-                    ) {
+                    if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
                       sendMessage();
                     }

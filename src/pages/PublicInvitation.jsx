@@ -142,27 +142,24 @@ const handleDownloadPDF = async () => {
     }
 
     // Wait for images
-    const images = Array.from(element.querySelectorAll("img"));
+    const images = [...element.querySelectorAll("img")];
 
-    await Promise.all(
-      images.map(async (img) => {
-        if (!img.complete) {
-          await new Promise((resolve) => {
-            img.addEventListener("load", resolve, { once: true });
-            img.addEventListener("error", resolve, { once: true });
-          });
-        }
+await Promise.all(
+  images.map(async (img) => {
+    if (!img.complete) {
+      await new Promise((resolve) => {
+        img.addEventListener("load", resolve, { once: true });
+        img.addEventListener("error", resolve, { once: true });
+      });
+    }
 
-        if (img.naturalWidth > 0 && img.decode) {
-          try {
-            await img.decode();
-          } catch {
-            // Continue if image decoding fails
-          }
-        }
-      })
-    );
-
+    // Hide only images that failed to load.
+    if (img.naturalWidth === 0) {
+      console.warn("Skipping broken image:", img.src);
+      img.style.visibility = "hidden";
+    }
+  })
+);
     // Allow styles and layout to settle
     await new Promise((resolve) => setTimeout(resolve, 200));
 
@@ -174,7 +171,6 @@ const handleDownloadPDF = async () => {
       );
     }
 
-    // Render the invitation
 
     // Render the invitation
 console.log("PDF element:", element);
@@ -190,12 +186,33 @@ const canvas = await toCanvas(element, {
   cacheBust: true,
   backgroundColor: "#ffffff",
   skipAutoScale: false,
-  filter: (node) => {
-    return !(
-      node instanceof Element &&
-      node.classList.contains("engagement-gold-shine")
-    );
+  // Capture the complete invitation with its button
+  width: element.scrollWidth,
+  height: element.scrollHeight,
+
+  style: {
+    overflow: "visible",
   },
+  filter: (node) => {
+    if (!(node instanceof Element)) return true;
+
+    // Exclude decorative animation
+    if (node.classList.contains("engagement-gold-shine")) {
+      return false;
+    }
+
+    // Exclude images that failed to load
+    if (
+      node.tagName === "IMG" &&
+      (!node.complete || node.naturalWidth === 0)
+    ) {
+      return false;
+    }
+
+    return true;
+  },
+  
+
 });
 
 if (!canvas.width || !canvas.height) {
@@ -273,21 +290,26 @@ if (canvas.width === 0 || canvas.height === 0) {
     };
 
     // Clickable RSVP button
-    const rsvpButton = element.querySelector(
-      [
-        ".invitation-rsvp-button",
-        ".engagement-gold-rsvp",
-        ".dynamic-rsvp-button",
-        ".photo-floral-rsvp",
-      ].join(", ")
-    );
+    
+const rsvpButton = element.querySelector(
+  [
+    ".invitation-rsvp-button",
+    ".engagement-gold-rsvp",
+    ".dynamic-rsvp-button",
+    ".photo-floral-rsvp",
+    ".royal-rsvp-button",
+    ".birthday-rsvp-button",
+  ].join(", ")
+);
 
-    if (rsvpButton && slug) {
-      const rsvpUrl =
-        `${window.location.origin}/invite/${slug}?rsvp=true`;
+if (rsvpButton && slug) {
+  const baseUrl = "https://invito-zeta.vercel.app";
 
-      addPdfLink(rsvpButton, rsvpUrl);
-    }
+  const rsvpUrl =
+    `${baseUrl}/invite/${slug}?rsvp=true`;
+
+  addPdfLink(rsvpButton, rsvpUrl);
+}
 
     // Clickable Google Maps link
     const locationLink = element.querySelector(
@@ -305,24 +327,22 @@ if (canvas.width === 0 || canvas.height === 0) {
     pdf.save(`${filename}.pdf`);
 
   } catch (error) {
-    console.error("PDF error:", error);
-    console.error("PDF stack trace:", error.stack);
-    console.error("PDF element:", invitationRef.current);
+  console.error("PDF error object:", error);
+  console.error("Error type:", error?.type);
+  console.error("Error target:", error?.target);
+  console.error("Target tag:", error?.target?.tagName);
+  console.error("Target source:", error?.target?.src);
+  console.error("Current invitation URL:", window.location.href);
 
-    alert(`PDF failed: ${error.message}`);
-
-  } finally {
-    if (invitationRef.current) {
-      invitationRef.current.classList.remove("pdf-generating");
-    }
-
-    setIsDownloadingPDF(false);
-  }
+  alert(
+    `PDF failed. Check Console for the exact failing resource.`
+  );
+} finally {
+  element?.classList.remove("pdf-generating");
+  setIsDownloadingPDF(false);
+}
+   
 };
-
-
-
-
   // ==========================================
   // TEMPLATE COMPONENT
   // ==========================================

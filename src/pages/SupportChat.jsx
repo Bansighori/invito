@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -20,11 +20,16 @@ function SupportChat() {
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [chatNotice, setChatNotice] = useState("");
 
-  const user = JSON.parse(localStorage.getItem("invitoUser") || "null");
+  const messagesContainerRef = useRef(null);
+  const shouldAutoScrollRef = useRef(true);
+  const previousMessageCountRef = useRef(0);
+
+  const user = JSON.parse(
+    localStorage.getItem("invitoUser") || "null"
+  );
   const userId = user?.id || user?._id;
   const token = localStorage.getItem("invitoToken");
 
-  // Format timestamp.
   const formatTime = (date) => {
     if (!date) return "";
 
@@ -38,7 +43,66 @@ function SupportChat() {
     });
   };
 
-  // Update a message when the server sends a live status update.
+  // Scroll to the latest message when appropriate.
+  const scrollToBottom = useCallback((behavior = "auto") => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior,
+    });
+  }, []);
+
+  // Track whether the user is already near the bottom.
+  const handleMessagesScroll = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    const distanceFromBottom =
+      container.scrollHeight -
+      container.scrollTop -
+      container.clientHeight;
+
+    shouldAutoScrollRef.current = distanceFromBottom < 120;
+  };
+
+  
+  // Open the conversation at the latest message.
+  useEffect(() => {
+    if (loadingHistory) return;
+
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    requestAnimationFrame(() => {
+      container.scrollTop = container.scrollHeight;
+      shouldAutoScrollRef.current = true;
+      previousMessageCountRef.current = messages.length;
+    });
+  }, [loadingHistory, scrollToBottom]);
+
+  // Scroll down when new messages arrive, unless the user
+  // is reading older messages.
+  useEffect(() => {
+    if (loadingHistory) return;
+
+    const previousCount = previousMessageCountRef.current;
+
+    if (
+      messages.length > previousCount &&
+      shouldAutoScrollRef.current
+    ) {
+      requestAnimationFrame(() => {
+        scrollToBottom("smooth");
+      });
+    }
+
+    previousMessageCountRef.current = messages.length;
+  }, [messages, loadingHistory, scrollToBottom]);
+
+
+  // Update delivery and read status.
   const updateMessageStatus = useCallback((status) => {
     const id = status?._id || status?.messageId;
     if (!id) return;
@@ -56,7 +120,7 @@ function SupportChat() {
     );
   }, []);
 
-  // Load previous conversation.
+  // Load previous messages.
   useEffect(() => {
     let active = true;
 
@@ -93,7 +157,7 @@ function SupportChat() {
     };
   }, [token]);
 
-  // Socket connection and live events.
+  // Socket connection and live messages.
   useEffect(() => {
     if (!userId) return;
 
@@ -107,41 +171,42 @@ function SupportChat() {
     };
 
     const handleChatNotification = (data) => {
-  console.log("User received notification:", data);
+      if (data?.sender === "admin") {
+        setChatNotice("New reply from Invito Support");
+      }
+    };
 
-  if (data?.sender === "admin") {
-    setChatNotice("New reply from Invito Support");
-  }
-};
-
-socket.on("new_chat_notification", handleChatNotification);
-
-    // Admin sent a message to this user.
     const handleAdminMessage = (data) => {
-  if (!data?._id) return;
+      if (!data?._id) return;
 
-  setMessages((prev) => {
-    if (prev.some((msg) => String(msg._id) === String(data._id))) {
-      return prev;
-    }
-    return [...prev, data];
-  });
+      setMessages((previous) => {
+        if (
+          previous.some(
+            (msg) => String(msg._id) === String(data._id)
+          )
+        ) {
+          return previous;
+        }
 
-  // Only mark as delivered here.
-  socket.emit("message_delivered", {
-    messageId: data._id,
-  });
-};
-    // Replace a temporary user message with its saved database version.
+        return [...previous, data];
+      });
+
+      socket.emit("message_delivered", {
+        messageId: data._id,
+      });
+    };
+
     const handleUserMessageSaved = (savedMessage) => {
       if (!savedMessage?._id) return;
 
       setMessages((previous) => {
-        const alreadySaved = previous.some(
-          (msg) => String(msg._id) === String(savedMessage._id)
-        );
-
-        if (alreadySaved) return previous;
+        if (
+          previous.some(
+            (msg) => String(msg._id) === String(savedMessage._id)
+          )
+        ) {
+          return previous;
+        }
 
         const tempIndex = previous.findIndex(
           (msg) =>
@@ -162,6 +227,7 @@ socket.on("new_chat_notification", handleChatNotification);
 
     socket.on("connect", handleConnect);
     socket.on("disconnect", handleDisconnect);
+    socket.on("new_chat_notification", handleChatNotification);
     socket.on("user_receive_message", handleAdminMessage);
     socket.on("user_message_saved", handleUserMessageSaved);
     socket.on("message_status_update", updateMessageStatus);
@@ -175,39 +241,37 @@ socket.on("new_chat_notification", handleChatNotification);
     return () => {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
+      socket.off("new_chat_notification", handleChatNotification);
       socket.off("user_receive_message", handleAdminMessage);
       socket.off("user_message_saved", handleUserMessageSaved);
       socket.off("message_status_update", updateMessageStatus);
-      socket.off("new_chat_notification", handleChatNotification);
     };
   }, [userId, updateMessageStatus]);
 
-  // Acknowledge existing admin messages when history loads or reconnects.
-   // Acknowledge delivery of existing admin messages.
-// Opening this page means these messages can be viewed.
-useEffect(() => {
-  if (loadingHistory || !connected) return;
+  // Mark admin messages delivered and read when the chat is open.
+  useEffect(() => {
+    if (loadingHistory || !connected) return;
 
-  messages.forEach((msg) => {
-    if (msg.sender === "admin" && msg._id) {
-      // Message has reached the user's chat.
-      socket.emit("message_delivered", {
-        messageId: msg._id,
-      });
+    messages.forEach((msg) => {
+      if (msg.sender === "admin" && msg._id) {
+        socket.emit("message_delivered", {
+          messageId: msg._id,
+        });
 
-      // The support chat is open and its messages are visible.
-      socket.emit("message_read", {
-        messageId: msg._id,
-      });
-    }
-  });
-}, [loadingHistory, connected, messages]);
+        socket.emit("message_read", {
+          messageId: msg._id,
+        });
+      }
+    });
+  }, [loadingHistory, connected, messages]);
 
-  // Send a new user message.
+  // Send a message.
   const sendMessage = () => {
     const text = message.trim();
 
     if (!text || !userId || !socket.connected) return;
+
+    shouldAutoScrollRef.current = true;
 
     const tempId = `temp-${Date.now()}`;
 
@@ -232,7 +296,6 @@ useEffect(() => {
     setMessage("");
   };
 
-  // Tick display for messages sent by the user.
   const renderTicks = (msg) => {
     if (msg.sender !== "user") return null;
 
@@ -283,9 +346,7 @@ useEffect(() => {
 
           <div>
             <h2>Invito Support</h2>
-            <span>
-              {connected ? "Online" : "Connecting..."}
-            </span>
+            <span>{connected ? "Online" : "Connecting..."}</span>
           </div>
         </div>
       </div>
@@ -313,7 +374,11 @@ useEffect(() => {
           </div>
         )}
 
-        <div className="messages">
+        <div
+          className="messages"
+          ref={messagesContainerRef}
+          onScroll={handleMessagesScroll}
+        >
           {messages.map((msg, index) => (
             <div
               key={msg._id || index}
@@ -342,9 +407,7 @@ useEffect(() => {
           <input
             type="text"
             placeholder={
-              connected
-                ? "Type your message..."
-                : "Connecting..."
+              connected ? "Type your message..." : "Connecting..."
             }
             value={message}
             disabled={!connected}

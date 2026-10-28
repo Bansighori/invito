@@ -51,34 +51,26 @@ function PhotoWeddingFloral({
 
         {/* COUPLE PHOTO */}
 
-        <div className="photo-floral-photo-frame">
-
-          <div className="photo-floral-photo-inner">
-
-            {data.couplePhoto ? (
-
-              <img
-                src={data.couplePhoto}
-                alt="Couple"
-              />
-
-            ) : (
-
-              <div className="photo-floral-placeholder">
-
-                <span>♡</span>
-
-                <p>
-                  Couple Photo
-                </p>
-
-              </div>
-
-            )}
-
-          </div>
-
-        </div>
+        {/* COUPLE PHOTO */}
+<div className="photo-floral-photo-frame">
+  <div className="photo-floral-photo-inner">
+    {data.couplePhoto ? (
+      <img
+        src={data.couplePhoto}
+        alt="Couple"
+        onError={(e) => {
+          console.error("Couple photo failed:", data.couplePhoto);
+          e.currentTarget.style.display = "none";
+        }}
+      />
+    ) : (
+      <div className="photo-floral-placeholder">
+        <span>♡</span>
+        <p>Couple Photo</p>
+      </div>
+    )}
+  </div>
+</div>
 
 
         {/* MESSAGE */}

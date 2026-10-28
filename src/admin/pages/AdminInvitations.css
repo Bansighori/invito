@@ -590,12 +590,7 @@
 
   border-radius: inherit;
 
-  background:
-    linear-gradient(
-      90deg,
-      #8b5cf6,
-      #ec4899
-    );
+  background:rgb(86, 83, 83)
 }
 
 .admin-category-empty {
@@ -959,35 +954,7 @@
   font-weight: 700;
 }
 
-.admin-category-badge.wedding {
-  color: #c02670;
 
-  background: #fce7f3;
-}
-
-.admin-category-badge.birthday {
-  color: #b45309;
-
-  background: #fff4d5;
-}
-
-.admin-category-badge.baby {
-  color: #087f9c;
-
-  background: #e2f7fb;
-}
-
-.admin-category-badge.party {
-  color: #6d28d9;
-
-  background: #f0e9ff;
-}
-
-.admin-category-badge.other {
-  color: #64748b;
-
-  background: #f1f5f9;
-}
 
 
 /* =========================================
@@ -1021,7 +988,7 @@
 
   color: #986500;
 
-  background: #fff5ce;
+  
 
   font-size: 9px;
 
@@ -1043,14 +1010,7 @@
   font-size: 11px;
 
   font-weight: 650;
-}
-
-.admin-invitation-status.published {
-  color: #159447;
-}
-
-.admin-invitation-status.draft {
-  color: #c26a16;
+  color:#7f7784;
 }
 
 

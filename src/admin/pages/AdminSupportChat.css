@@ -144,6 +144,7 @@
 .admin-messages {
   flex: 1;
   padding: 25px;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -494,3 +495,67 @@
   }
 }
 
+
+
+/* Remove black border from support chat list items */
+.support-user {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Selected chat */
+.support-user.active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove browser focus outline */
+.support-user:focus,
+.support-user:focus-visible,
+.support-user:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Keep a subtle background for the selected chat */
+.support-user.active {
+  background: #f1edff;
+}
+
+
+/* All unselected chats should be white */
+.support-user {
+  background: #ffffff !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Only the clicked/selected chat */
+.support-user.active {
+  background: #f0ebff !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Hover on unselected chats */
+.support-user:not(.active):hover {
+  background: #f8f8f8 !important;
+}
+
+/* Prevent dark backgrounds on focus or click */
+.support-user:focus,
+.support-user:focus-visible,
+.support-user:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Keep selected chat color even when focused */
+.support-user.active:focus,
+.support-user.active:focus-visible {
+  background: #f0ebff !important;
+}

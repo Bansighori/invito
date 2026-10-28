@@ -831,24 +831,11 @@
 
   border-radius: 7px;
 
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
 }
 
-.admin-user-plan.free {
-  color: #66606a;
-  background: #f1f0f2;
-}
 
-.admin-user-plan.premium {
-  color: #986500;
-  background: #fff5ce;
-}
-
-.admin-user-plan.premium_plus {
-  color: #7134c9;
-  background: #f0e8ff;
-}
 
 /* STATUS */
 
@@ -905,12 +892,7 @@
 
   border-radius: inherit;
 
-  background:
-    linear-gradient(
-      90deg,
-      #8b5cf6,
-      #ec4899
-    );
+  background: rgb(86, 82, 82);
 }
 
 /* DATE */

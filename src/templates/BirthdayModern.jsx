@@ -48,6 +48,16 @@ function BirthdayModern({
           .birthday-location-link svg {
             flex-shrink: 0;
           }
+
+          .birthday-modern .birthday-rsvp-button {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 10 !important;
+  color: #ffffff !important;
+  background: #7c3aed !important;
+}
         `}
       </style>
 
@@ -154,12 +164,17 @@ function BirthdayModern({
           {/* RSVP BUTTON */}
 
           <button
-            type="button"
-            className="birthday-rsvp-button"
-            onClick={onRSVP}
-          >
-            {design?.button?.text || "RSVP"}
-          </button>
+  type="button"
+  className="birthday-rsvp-button"
+  style={{
+    display: "inline-flex",
+    visibility: "visible",
+    opacity: 1,
+  }}
+  onClick={onRSVP}
+>
+  {design?.button?.text || "RSVP"}
+</button>
 
         </div>
 
