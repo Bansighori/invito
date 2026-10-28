@@ -327,3 +327,66 @@
     padding: 8px 12px !important;
   }
 }
+/* MOBILE SUPPORT CHAT FIX */
+@media (max-width: 600px) {
+  .support-page {
+    height: calc(100dvh - 200px) !important;
+    min-height: 0 !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .support-chat-container {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    padding: 0 12px !important;
+    overflow: hidden;
+  }
+
+  .messages {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 12px 4px !important;
+    overflow-y: auto !important;
+  }
+
+  .support-input-area {
+    flex-shrink: 0 !important;
+    padding: 10px 16px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .support-input-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .support-input-box input {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: 0 !important;
+    height: 48px !important;
+    box-sizing: border-box;
+  }
+
+  .support-input-box .send-btn {
+    flex: 0 0 48px !important;
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    height: 48px !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
