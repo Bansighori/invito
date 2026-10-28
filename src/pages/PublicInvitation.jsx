@@ -9,6 +9,7 @@ import api from "../api/axios";
 import {
   LoaderCircle
 } from "lucide-react";
+import { toCanvas } from "html-to-image";
 
 import {
   useParams,
@@ -118,320 +119,184 @@ function PublicInvitation() {
   // DOWNLOAD PDF
   // ==========================================
 
-  const handleDownloadPDF = async () => {
+  
+const handleDownloadPDF = async () => {
+  const element = invitationRef.current;
 
-    if (!invitationRef.current) {
-      return;
+  if (!element || isDownloadingPDF) return;
+
+  setIsDownloadingPDF(true);
+  element.classList.add("pdf-generating");
+
+  try {
+    // Wait for React to update the PDF button and styles
+    await new Promise((resolve) =>
+      requestAnimationFrame(() =>
+        requestAnimationFrame(resolve)
+      )
+    );
+
+    // Wait for fonts
+    if (document.fonts?.ready) {
+      await document.fonts.ready;
     }
 
-    try {
+    // Wait for images
+    const images = Array.from(element.querySelectorAll("img"));
 
-      // ======================================
-      // TURN OFF OPENING ANIMATION
-      // ======================================
+    await Promise.all(
+      images.map(async (img) => {
+        if (!img.complete) {
+          await new Promise((resolve) => {
+            img.addEventListener("load", resolve, { once: true });
+            img.addEventListener("error", resolve, { once: true });
+          });
+        }
 
-      setIsDownloadingPDF(true);
-
-      // Give React time to render the card
-      // without the opening animation.
-
-      await new Promise((resolve) => {
-  requestAnimationFrame(() => {
-    requestAnimationFrame(resolve);
-  });
-});;
-
-
-      const element =
-        invitationRef.current;
-
-
-      // ======================================
-      // ADD PDF MODE CLASS
-      // ======================================
-
-      element.classList.add(
-        "pdf-generating"
-      );
-
-
-      // ======================================
-      // WAIT FOR IMAGES
-      // ======================================
-
-      const images =
-        element.querySelectorAll("img");
-
-
-      await Promise.all(
-        Array.from(images).map(
-          (image) => {
-
-            if (image.complete) {
-              return Promise.resolve();
-            }
-
-            return new Promise(
-              (resolve) => {
-
-                image.onload =
-                  resolve;
-
-                image.onerror =
-                  resolve;
-
-              }
-            );
-
+        if (img.naturalWidth > 0 && img.decode) {
+          try {
+            await img.decode();
+          } catch {
+            // Continue if image decoding fails
           }
-        )
+        }
+      })
+    );
+
+    // Allow styles and layout to settle
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    const rect = element.getBoundingClientRect();
+
+    if (!rect.width || !rect.height) {
+      throw new Error(
+        "Invitation has zero width or height. Check its container CSS."
       );
+    }
+
+    // Render the invitation
+
+    // Render the invitation
+console.log("PDF element:", element);
+console.log("PDF dimensions:", {
+  width: element.getBoundingClientRect().width,
+  height: element.getBoundingClientRect().height,
+});
 
 
-      // ======================================
-      // SMALL RENDER DELAY
-      // ======================================
 
-      await new Promise((resolve) => {
-        setTimeout(resolve, 300);
-      });
+const canvas = await toCanvas(element, {
+  pixelRatio: 2,
+  cacheBust: true,
+  backgroundColor: "#ffffff",
+  skipAutoScale: false,
+  filter: (node) => {
+    return !(
+      node instanceof Element &&
+      node.classList.contains("engagement-gold-shine")
+    );
+  },
+});
+
+if (!canvas.width || !canvas.height) {
+  throw new Error(
+    `Invalid canvas dimensions: ${canvas.width} × ${canvas.height}`
+  );
+}
 
 
-      // ======================================
-      // CREATE CANVAS
-      // ======================================
+if (canvas.width === 0 || canvas.height === 0) {
+  throw new Error(
+    `Invalid generated canvas: ${canvas.width} x ${canvas.height}`
+  );
+}
 
-      const canvas = await html2canvas(
-  invitationRef.current,
-  {
-    scale: 2,
-    useCORS: true,
-    allowTaint: false,
-    backgroundColor: "#ffffff",
-    imageTimeout: 15000,
-    logging: false
+
+
+    // Create PDF
+    const imageData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: [canvas.width, canvas.height],
+      compress: true,
+    });
+
+    pdf.addImage(
+      imageData,
+      "PNG",
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    // Add clickable links using the original element positions
+    const originalRect = element.getBoundingClientRect();
+    const scaleX = canvas.width / originalRect.width;
+    const scaleY = canvas.height / originalRect.height;
+
+    const addPdfLink = (linkElement, url) => {
+      if (!linkElement || !url) return;
+
+      const linkRect = linkElement.getBoundingClientRect();
+
+      if (!linkRect.width || !linkRect.height) return;
+
+      const x = (linkRect.left - originalRect.left) * scaleX;
+      const y = (linkRect.top - originalRect.top) * scaleY;
+      const width = linkRect.width * scaleX;
+      const height = linkRect.height * scaleY;
+
+      pdf.link(x, y, width, height, { url });
+    };
+
+    // Support different RSVP button class names
+    const rsvpButton = element.querySelector(
+      [
+        ".invitation-rsvp-button",
+        ".engagement-gold-rsvp",
+        ".dynamic-rsvp-button",
+        ".photo-floral-rsvp",
+      ].join(", ")
+    );
+
+    if (rsvpButton && slug) {
+      const rsvpUrl =
+        `${window.location.origin}/invite/${slug}?rsvp=true`;
+
+      addPdfLink(rsvpButton, rsvpUrl);
+    }
+
+    // Add Google Maps link if present
+    const locationLink = element.querySelector(
+      'a[href*="google.com/maps"]'
+    );
+
+    if (locationLink) {
+      addPdfLink(locationLink, locationLink.href);
+    }
+
+    // Download PDF
+    const filename = (invitation?.title || "invitation")
+      .replace(/[<>:"/\\|?*]/g, "-");
+
+    pdf.save(`${filename}.pdf`);
+
+  } catch (error) {
+  console.error("PDF error:", error);
+  console.error("PDF stack trace:", error.stack);
+  console.error("PDF element:", invitationRef.current);
+
+  alert(`PDF failed: ${error.message}`);
+
+  } finally {
+    element.classList.remove("pdf-generating");
+    setIsDownloadingPDF(false);
   }
-);
+};
 
-
-      // ======================================
-      // CREATE IMAGE
-      // ======================================
-
-      const imageData =
-        canvas.toDataURL(
-          "image/png"
-        );
-
-
-      // ======================================
-      // CREATE PDF
-      // ======================================
-
-      const pdf =
-        new jsPDF({
-
-          orientation:
-            "portrait",
-
-          unit: "px",
-
-          format: [
-            canvas.width,
-            canvas.height
-          ]
-
-        });
-
-
-      pdf.addImage(
-        imageData,
-        "PNG",
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-
-      // ======================================
-      // CLICKABLE RSVP LINK
-      // ======================================
-
-      const invitationElement =
-        element;
-
-
-      const rsvpButton =
-        invitationElement.querySelector(
-          ".invitation-rsvp-button"
-        );
-
-
-      if (rsvpButton) {
-
-        const invitationRect =
-          invitationElement
-            .getBoundingClientRect();
-
-
-        const buttonRect =
-          rsvpButton
-            .getBoundingClientRect();
-
-
-        const canvasScale =
-          canvas.width /
-          invitationRect.width;
-
-
-        const pdfX =
-          (buttonRect.left -
-            invitationRect.left) *
-          canvasScale;
-
-
-        const pdfY =
-          (buttonRect.top -
-            invitationRect.top) *
-          canvasScale;
-
-
-        const pdfButtonWidth =
-          buttonRect.width *
-          canvasScale;
-
-
-        const pdfButtonHeight =
-          buttonRect.height *
-          canvasScale;
-
-
-        const rsvpUrl =
-          `${window.location.origin}/invite/${slug}?rsvp=true`;
-
-
-        pdf.link(
-          pdfX,
-          pdfY,
-          pdfButtonWidth,
-          pdfButtonHeight,
-          {
-            url: rsvpUrl
-          }
-        );
-
-      }
-
-
-      // ======================================
-      // GOOGLE MAPS LINK
-      // ======================================
-
-      const locationLink =
-        invitationElement.querySelector(
-          'a[href*="google.com/maps"]'
-        );
-
-
-      if (locationLink) {
-
-        const invitationRect =
-          invitationElement
-            .getBoundingClientRect();
-
-
-        const locationRect =
-          locationLink
-            .getBoundingClientRect();
-
-
-        const canvasScale =
-          canvas.width /
-          invitationRect.width;
-
-
-        const relativeX =
-          locationRect.left -
-          invitationRect.left;
-
-
-        const relativeY =
-          locationRect.top -
-          invitationRect.top;
-
-
-        const pdfX =
-          relativeX *
-          canvasScale;
-
-
-        const pdfY =
-          relativeY *
-          canvasScale;
-
-
-        const pdfWidth =
-          locationRect.width *
-          canvasScale;
-
-
-        const pdfHeight =
-          locationRect.height *
-          canvasScale;
-
-
-        pdf.link(
-          pdfX,
-          pdfY,
-          pdfWidth,
-          pdfHeight,
-          {
-            url:
-              locationLink.href
-          }
-        );
-
-      }
-
-
-      // ======================================
-      // SAVE PDF
-      // ======================================
-
-      pdf.save(
-        `${invitation.title || "invitation"}.pdf`
-      );
-
-
-    } catch (error) {
-
-      console.error(
-        "PDF download error:",
-        error
-      );
-
-      alert(
-        "Failed to generate PDF."
-      );
-
-
-    } finally {
-
-      if (invitationRef.current) {
-
-        invitationRef.current.classList.remove(
-          "pdf-generating"
-        );
-
-      }
-
-      // Turn PDF mode OFF
-      setIsDownloadingPDF(false);
-
-    }
-
-  };
 
 
   // ==========================================
@@ -539,6 +404,51 @@ function PublicInvitation() {
   // ==========================================
 
   return (
+    <>
+    <style>
+      {`
+      
+      
+.public-invitation-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+.public-invitation-canvas {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.invitation-pdf-content {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+/* Allow the template to fill the container */
+.invitation-pdf-content > * {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box;
+}
+
+@media (max-width: 700px) {
+  .public-invitation-page {
+    padding: 15px 8px;
+  }
+
+  .public-invitation-canvas {
+    max-width: 100%;
+  }
+}
+`}
+    </style>
     <div className="public-invitation-page">
 
 
@@ -601,6 +511,7 @@ function PublicInvitation() {
       </div>
 
     </div>
+    </>
   );
 
 }

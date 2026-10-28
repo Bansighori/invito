@@ -1,11 +1,11 @@
 
 /* =====================================
    UNIVERSAL TEMPLATE DESIGN SYSTEM
-===================================== */
+===================================== */ 
 
 .template-design-wrapper {
   width: 100%;
-  max-width: 100%;
+   max-width: 600px !important;
   margin: 0 auto;
   box-sizing: border-box;
 
@@ -23,11 +23,13 @@
   position: relative;
   isolation: isolate;
 
-  width: min(var(--template-width, 420px), 100%);
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
   min-height: var(--template-height, 650px);
   padding: var(--template-padding, 30px);
 
-  box-sizing: border-box;
+  
   border: var(--template-border, none);
   border-radius: var(--template-radius, 20px);
 

@@ -265,7 +265,9 @@ function AdminSupportChat() {
             </div>
           ) : (
             chats.map((chat) => {
-              const userId = getUserId(chat);
+              cons
+              
+               userId = getUserId(chat);
               const isActive =
                 getUserId(selectedUser) === userId;
 

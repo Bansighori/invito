@@ -82,9 +82,9 @@ function getDesignStyle(design = {}) {
 
     "--template-radius": `${border.radius ?? 20}px`,
     "--template-padding": `${layout.padding ?? 30}px`,
-    "--template-width": `${layout.width ?? 420}px`,
-    "--template-height": `${layout.height ?? 650}px`,
-    "--template-align": layout.alignment || "center",
+    "--template-width": `${layout.width ?? 600}px`,
+"--template-height": `${layout.height ?? 650}px`,
+"--template-align": layout.alignment || "center",
 
     "--template-button-bg": button.backgroundColor || "#8b4a62",
     "--template-button-color": button.textColor || "#ffffff",
@@ -98,9 +98,10 @@ function getDesignStyle(design = {}) {
 
     "--template-decoration-color": decoration.color || "#c89b3c",
 
-    width: "100%",
-    maxWidth: `${layout.width ?? 420}px`,
-    boxSizing: "border-box",
+    
+width: "100%",
+maxWidth: "600px",
+boxSizing: "border-box",
   };
 }
 

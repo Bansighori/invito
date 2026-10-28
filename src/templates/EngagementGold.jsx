@@ -14,7 +14,8 @@ function EngagementGold({ data, design = {}, onRSVP }) {
       <style>{`
         .engagement-gold {
           width: 100%;
-          min-height: 650px;
+          max-width: 600px;
+          min-width: 0;
           background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
           display: flex;
           align-items: center;
@@ -47,7 +48,7 @@ function EngagementGold({ data, design = {}, onRSVP }) {
 
         .engagement-gold-card {
           width: 100%;
-          max-width: 620px;
+          max-width: 600px;
           min-height: 580px;
           background: linear-gradient(145deg, #1e1e30 0%, #252540 100%);
           position: relative;
@@ -100,7 +101,7 @@ function EngagementGold({ data, design = {}, onRSVP }) {
 
         .engagement-gold-content {
           width: 100%;
-          max-width: 460px;
+          max-width: 600px;
           text-align: center;
           position: relative;
           z-index: 2;

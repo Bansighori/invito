@@ -6756,107 +6756,57 @@ span:not(.recent-table-date) {
    PUBLIC INVITATION
 ========================================= */
 
-.public-invitation-page {
-  width: 100%;
-  min-height: 100vh;
-
-  display: flex;
-  justify-content: center;
-
-  padding: 40px 20px;
-
-  background: #f5f3ef;
-
-  box-sizing: border-box;
-}
-
-
-.public-invitation-preview {
-  width: 100%;
-  max-width: 900px;
-
-  margin: 0 auto;
-
-  box-sizing: border-box;
-}
-
-
-/* Make every template fit the preview */
-
-.public-invitation-preview > * {
-  width: 100%;
-}
-
-
-/* Mobile */
-
-@media (max-width: 700px) {
-
-  .public-invitation-page {
-    padding: 15px 10px;
-  }
-
-  .public-invitation-preview {
-    max-width: 100%;
-  }
-
-}
 /* =========================================
    PUBLIC INVITATION
 ========================================= */
 
+
+/* Public invitation page */
 .public-invitation-page {
   width: 100%;
   min-height: 100vh;
-
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-
-  padding: 40px 20px;
-
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 20px;
   background: #f5f3ef;
-
   box-sizing: border-box;
 }
 
-
+/* Increase invitation card width */
 .public-invitation-canvas {
-  width: 650px;
-  max-width: 100%;
-
+  width: 100%;
+  max-width: 1100px;
   margin: 0 auto;
-
   box-sizing: border-box;
 }
 
-
-/*
-   Keep invitation proportions
-*/
-
-.public-invitation-canvas .wedding-classic,
-.public-invitation-canvas .birthday-modern,
-.public-invitation-canvas .engagement-forever {
+/* PDF content */
+.invitation-pdf-content {
   width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-
-/* =========================================
-   MOBILE
-========================================= */
+/* Allow template to use available width */
+.invitation-pdf-content > * {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box;
+}
 
 @media (max-width: 700px) {
-
   .public-invitation-page {
-    padding: 15px 10px;
+    padding: 15px 8px;
   }
 
   .public-invitation-canvas {
     width: 100%;
+    max-width: 100%;
   }
-
 }
+
 /* ==========================================
    PUBLIC RSVP SECTION
 ========================================== */
