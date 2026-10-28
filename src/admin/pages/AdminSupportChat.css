@@ -368,13 +368,15 @@
     display: flex !important;
     flex-direction: column;
     width: 100%;
-    height: calc(100dvh - 200px);
+    height: calc(100dvh - 68px);
     min-height: 0;
-    flex: 1 1 auto;
+    flex: none;
     overflow: hidden;
     background: #f8f9fc;
     box-sizing: border-box;
   }
+
+
 
   .admin-support-page .support-chat-list {
     display: flex;
