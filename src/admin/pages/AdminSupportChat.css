@@ -368,9 +368,11 @@
     display: flex !important;
     flex-direction: column;
     width: 100%;
-    height: calc(100dvh - 125px);
-    min-height: 400px;
+    height: calc(100dvh - 200px);
+    min-height: 0;
+    flex: 1 1 auto;
     overflow: hidden;
+    background: #f8f9fc;
     box-sizing: border-box;
   }
 
@@ -382,16 +384,19 @@
     height: 100%;
     min-height: 0;
     overflow-y: auto;
+    background: #fff;
     box-sizing: border-box;
   }
 
   .admin-support-page .admin-chat-window {
     display: none;
+    flex-direction: column;
     width: 100%;
     min-width: 0;
     height: 100%;
     min-height: 0;
     overflow: hidden;
+    background: #f8f9fc;
     box-sizing: border-box;
   }
 
@@ -558,4 +563,25 @@
 .support-user.active:focus,
 .support-user.active:focus-visible {
   background: #f0ebff !important;
+}
+
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    background: #fff;
+  }
+
+  .admin-support-page {
+    margin-bottom: 0 !important;
+  }
+
+  .admin-chat-window {
+    background: #f8f9fc;
+  }
+
+  .admin-message-input {
+    flex-shrink: 0;
+    background: #fff;
+  }
 }
