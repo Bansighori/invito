@@ -128,8 +128,10 @@ const handleDownloadPDF = async () => {
   setIsDownloadingPDF(true);
   element.classList.add("pdf-generating");
 
+  const hiddenImages = [];
+
   try {
-    // Wait for React to update the PDF button and styles
+    // Wait for React and CSS updates
     await new Promise((resolve) =>
       requestAnimationFrame(() =>
         requestAnimationFrame(resolve)
@@ -141,101 +143,87 @@ const handleDownloadPDF = async () => {
       await document.fonts.ready;
     }
 
-    // Wait for images
+    // Wait for images and temporarily hide broken ones
     const images = [...element.querySelectorAll("img")];
 
-await Promise.all(
-  images.map(async (img) => {
-    if (!img.complete) {
-      await new Promise((resolve) => {
-        img.addEventListener("load", resolve, { once: true });
-        img.addEventListener("error", resolve, { once: true });
-      });
-    }
+    await Promise.all(
+      images.map(async (img) => {
+        if (!img.complete) {
+          await new Promise((resolve) => {
+            img.addEventListener("load", resolve, { once: true });
+            img.addEventListener("error", resolve, { once: true });
+          });
+        }
 
-    // Hide only images that failed to load.
-    if (img.naturalWidth === 0) {
-      console.warn("Skipping broken image:", img.src);
-      img.style.visibility = "hidden";
-    }
-  })
-);
-    // Allow styles and layout to settle
+        if (img.naturalWidth === 0) {
+          console.warn("Broken image skipped:", img.src);
+
+          hiddenImages.push({
+            img,
+            visibility: img.style.visibility,
+          });
+
+          img.style.visibility = "hidden";
+        }
+      })
+    );
+
+    // Allow layout to settle
     await new Promise((resolve) => setTimeout(resolve, 200));
 
     const rect = element.getBoundingClientRect();
 
     if (!rect.width || !rect.height) {
+      throw new Error("Invitation has zero width or height.");
+    }
+
+    console.log("PDF dimensions:", {
+      width: element.scrollWidth,
+      height: element.scrollHeight,
+    });
+
+    // Render invitation
+    const canvas = await toCanvas(element, {
+      pixelRatio: 2,
+      cacheBust: true,
+      backgroundColor: "#ffffff",
+      skipAutoScale: false,
+      width: element.scrollWidth,
+      height: element.scrollHeight,
+      style: {
+        overflow: "visible",
+      },
+      filter: (node) => {
+        if (!(node instanceof Element)) return true;
+
+        // Exclude decorative animation
+        if (node.classList.contains("engagement-gold-shine")) {
+          return false;
+        }
+
+        // Exclude broken images
+        if (
+          node.tagName === "IMG" &&
+          node instanceof HTMLImageElement &&
+          node.naturalWidth === 0
+        ) {
+          return false;
+        }
+
+        return true;
+      },
+    });
+
+    if (!canvas.width || !canvas.height) {
       throw new Error(
-        "Invitation has zero width or height. Check its container CSS."
+        `Invalid canvas dimensions: ${canvas.width} × ${canvas.height}`
       );
     }
 
-
-    // Render the invitation
-console.log("PDF element:", element);
-console.log("PDF dimensions:", {
-  width: element.getBoundingClientRect().width,
-  height: element.getBoundingClientRect().height,
-});
-
-
-
-const canvas = await toCanvas(element, {
-  pixelRatio: 2,
-  cacheBust: true,
-  backgroundColor: "#ffffff",
-  skipAutoScale: false,
-  // Capture the complete invitation with its button
-  width: element.scrollWidth,
-  height: element.scrollHeight,
-
-  style: {
-    overflow: "visible",
-  },
-  filter: (node) => {
-    if (!(node instanceof Element)) return true;
-
-    // Exclude decorative animation
-    if (node.classList.contains("engagement-gold-shine")) {
-      return false;
-    }
-
-    // Exclude images that failed to load
-    if (
-      node.tagName === "IMG" &&
-      (!node.complete || node.naturalWidth === 0)
-    ) {
-      return false;
-    }
-
-    return true;
-  },
-  
-
-});
-
-if (!canvas.width || !canvas.height) {
-  throw new Error(
-    `Invalid canvas dimensions: ${canvas.width} × ${canvas.height}`
-  );
-}
-
-
-if (canvas.width === 0 || canvas.height === 0) {
-  throw new Error(
-    `Invalid generated canvas: ${canvas.width} x ${canvas.height}`
-  );
-}
-
-
-
-    // Create PDF
-  
     // Convert canvas to image
     const imageData = canvas.toDataURL("image/png");
 
-    // Create PDF using the invitation's original dimensions
+    // Create PDF
     const pdf = new jsPDF({
       orientation:
         canvas.width > canvas.height ? "landscape" : "portrait",
@@ -244,7 +232,6 @@ if (canvas.width === 0 || canvas.height === 0) {
       compress: true,
     });
 
-    // Add the complete invitation without cropping
     pdf.addImage(
       imageData,
       "PNG",
@@ -254,7 +241,7 @@ if (canvas.width === 0 || canvas.height === 0) {
       canvas.height
     );
 
-    // Calculate clickable link positions
+    // Calculate clickable PDF links
     const originalRect = element.getBoundingClientRect();
 
     const scaleX = canvas.width / originalRect.width;
@@ -272,7 +259,6 @@ if (canvas.width === 0 || canvas.height === 0) {
       const width = linkRect.width * scaleX;
       const height = linkRect.height * scaleY;
 
-      // Keep link coordinates inside the PDF page
       const safeX = Math.max(0, Math.min(x, canvas.width));
       const safeY = Math.max(0, Math.min(y, canvas.height));
       const safeWidth = Math.min(width, canvas.width - safeX);
@@ -290,26 +276,23 @@ if (canvas.width === 0 || canvas.height === 0) {
     };
 
     // Clickable RSVP button
-    
-const rsvpButton = element.querySelector(
-  [
-    ".invitation-rsvp-button",
-    ".engagement-gold-rsvp",
-    ".dynamic-rsvp-button",
-    ".photo-floral-rsvp",
-    ".royal-rsvp-button",
-    ".birthday-rsvp-button",
-  ].join(", ")
-);
+    const rsvpButton = element.querySelector(
+      [
+        ".invitation-rsvp-button",
+        ".engagement-gold-rsvp",
+        ".dynamic-rsvp-button",
+        ".photo-floral-rsvp",
+        ".royal-rsvp-button",
+        ".birthday-rsvp-button",
+      ].join(", ")
+    );
 
-if (rsvpButton && slug) {
-  const baseUrl = "https://invito-zeta.vercel.app";
+    if (rsvpButton && slug) {
+      const rsvpUrl =
+        `https://invito-zeta.vercel.app/invite/${slug}?rsvp=true`;
 
-  const rsvpUrl =
-    `${baseUrl}/invite/${slug}?rsvp=true`;
-
-  addPdfLink(rsvpButton, rsvpUrl);
-}
+      addPdfLink(rsvpButton, rsvpUrl);
+    }
 
     // Clickable Google Maps link
     const locationLink = element.querySelector(
@@ -327,21 +310,22 @@ if (rsvpButton && slug) {
     pdf.save(`${filename}.pdf`);
 
   } catch (error) {
-  console.error("PDF error object:", error);
-  console.error("Error type:", error?.type);
-  console.error("Error target:", error?.target);
-  console.error("Target tag:", error?.target?.tagName);
-  console.error("Target source:", error?.target?.src);
-  console.error("Current invitation URL:", window.location.href);
+    console.error("PDF generation failed:", error);
+    console.error("Error type:", error?.type);
+    console.error("Error target:", error?.target);
+    console.error("Failed resource:", error?.target?.src);
+    console.error("Invitation URL:", window.location.href);
 
-  alert(
-    `PDF failed. Check Console for the exact failing resource.`
-  );
-} finally {
-  element?.classList.remove("pdf-generating");
-  setIsDownloadingPDF(false);
-}
-   
+    alert("PDF download failed. Please check the browser Console.");
+  } finally {
+    // Restore image styles
+    hiddenImages.forEach(({ img, visibility }) => {
+      img.style.visibility = visibility;
+    });
+
+    element?.classList.remove("pdf-generating");
+    setIsDownloadingPDF(false);
+  }
 };
   // ==========================================
   // TEMPLATE COMPONENT
