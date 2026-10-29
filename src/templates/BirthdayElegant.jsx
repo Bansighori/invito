@@ -661,9 +661,7 @@ function BirthdayElegant({
                   YOU ARE CORDIALLY INVITED
                 </div>
 
-                <h1 className="elegant-inside-number">
-                  50
-                </h1>
+                
 
                 <div className="elegant-inside-title">
                   Birthday Celebration
@@ -1169,9 +1167,7 @@ function BirthdayElegant({
               YOU ARE CORDIALLY INVITED
             </p>
 
-            <h1 className="birthday-elegant-number">
-              50
-            </h1>
+            
 
             <h2 className="birthday-elegant-title">
               Birthday Celebration

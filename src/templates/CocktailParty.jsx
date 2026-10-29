@@ -13,73 +13,74 @@ function CocktailParty({ data, design = {}, onRSVP }) {
     <>
       <style>{`
         .cocktail-party {
-          width: 100%;
-          min-height: 650px;
-          background: #0a0a0f;
-          background-image:
-            radial-gradient(ellipse at 20% 50%, rgba(0, 255, 200, 0.06) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 50%, rgba(255, 0, 128, 0.06) 0%, transparent 50%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 35px;
-          box-sizing: border-box;
-          font-family: Georgia, "Times New Roman", serif;
-          position: relative;
-          overflow: hidden;
-        }
+  width: 100%;
+  min-height: 650px;
+  background: linear-gradient(
+    135deg,
+    #081713 0%,
+    #0a0a0f 50%,
+    #170916 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 35px;
+  box-sizing: border-box;
+  font-family: Georgia, "Times New Roman", serif;
+  position: relative;
+  overflow: hidden;
+}
 
         .cocktail-party-glow {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(60px);
-          opacity: 0.4;
-          animation: cocktailPartyPulse 4s ease-in-out infinite;
-        }
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.22;
+  filter: none;
+  animation: none;
+}
 
-        .cocktail-party-glow-one {
-          width: 200px;
-          height: 200px;
-          background: #00ffc8;
-          top: 10%;
-          left: 5%;
-          animation-delay: 0s;
-        }
+.cocktail-party-glow-one {
+  width: 200px;
+  height: 200px;
+  background: #064c43;
+  top: 10%;
+  left: 5%;
+}
 
-        .cocktail-party-glow-two {
-          width: 180px;
-          height: 180px;
-          background: #ff0080;
-          bottom: 10%;
-          right: 5%;
-          animation-delay: 2s;
-        }
+.cocktail-party-glow-two {
+  width: 180px;
+  height: 180px;
+  background: #4a1235;
+  bottom: 10%;
+  right: 5%;
+}
 
         @keyframes cocktailPartyPulse {
           0%, 100% { opacity: 0.3; transform: scale(1); }
           50% { opacity: 0.5; transform: scale(1.1); }
         }
 
-        .cocktail-party-card {
-          width: 100%;
-          max-width: 620px;
-          min-height: 580px;
-          background: rgba(15, 15, 25, 0.85);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          position: relative;
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 55px 40px;
-          box-sizing: border-box;
-          border: 1px solid rgba(0, 255, 200, 0.2);
-          border-radius: 4px;
-          box-shadow:
-            0 0 30px rgba(0, 255, 200, 0.08),
-            0 0 60px rgba(255, 0, 128, 0.05);
-        }
+.cocktail-party-card {
+  width: 100%;
+  max-width: 620px;
+  min-height: 580px;
+  background: linear-gradient(
+    135deg,
+    #0b5149 0%,
+    #203b4a 48%,
+    #321b35 100%
+  );
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 55px 40px;
+  box-sizing: border-box;
+  border: 1px solid #17645a;
+  border-radius: 4px;
+  box-shadow: 0 0 25px rgba(0, 255, 200, 0.08);
+}
 
         .cocktail-party-card::before {
           content: "";
@@ -115,7 +116,7 @@ function CocktailParty({ data, design = {}, onRSVP }) {
           font-size: 9px;
           letter-spacing: 5px;
           color: #00ffc8;
-          text-shadow: 0 0 10px rgba(0, 255, 200, 0.5);
+          
         }
 
         .cocktail-party-icon {

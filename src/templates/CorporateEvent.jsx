@@ -115,33 +115,36 @@ function CorporateEvent({ data, design = {}, onRSVP }) {
         }
 
         .corporate-event-venue {
-          margin-top: 24px;
-          display: flex;
-          flex-direction: column;
-          gap: 7px;
-        }
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 7px;
+}
 
-        .corporate-event-venue small {
-          color: #9aa4b1;
-          font-size: 8px;
-          font-weight: 700;
-          letter-spacing: 2px;
-        }
+.corporate-event-venue small {
+  color: #9aa4b1;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
 
-        .corporate-event-venue strong {
-          color: #34465c;
-          font-size: 15px;
-          font-weight: 600;
-        }
+.corporate-event-venue strong {
+  color: #34465c;
+  font-size: 15px;
+  font-weight: 600;
+}
 
-        .corporate-event-venue span {
-          color: #7b8795;
-          font-size: 11px;
-        }
+.corporate-event-venue > span {
+  color: #7b8795;
+  font-size: 11px;
+}
 
-        .corporate-event-location {
+.corporate-event-location {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   margin-top: 3px;
   color: #a57c2f;

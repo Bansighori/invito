@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MapPin, CalendarDays, Clock } from "lucide-react";
 import "./BirthdayPhotoPremiumPlus.css";
 
@@ -7,6 +7,22 @@ export default function BirthdayPhotoPremiumPlus({
   design = {},
   onRSVP = () => {},
 }) {
+  const [photoUrl, setPhotoUrl] = useState("");
+
+  // Support both uploaded files and saved image URLs
+  useEffect(() => {
+    const photo = data.birthdayPhoto || data.photo;
+
+    if (photo instanceof File) {
+      const url = URL.createObjectURL(photo);
+      setPhotoUrl(url);
+
+      return () => URL.revokeObjectURL(url);
+    }
+
+    setPhotoUrl(typeof photo === "string" ? photo : "");
+  }, [data.birthdayPhoto, data.photo]);
+
   const locationText = [data.venue, data.address]
     .filter(Boolean)
     .join(", ");
@@ -19,7 +35,9 @@ export default function BirthdayPhotoPremiumPlus({
 
   return (
     <div className="birthday-photo-premium">
-      <div className="birthday-photo-decoration decoration-top">✦ ❀ ✦</div>
+      <div className="birthday-photo-decoration decoration-top">
+        ✦ ❀ ✦
+      </div>
 
       <p className="birthday-photo-subtitle">
         YOU ARE INVITED TO CELEBRATE
@@ -31,11 +49,13 @@ export default function BirthdayPhotoPremiumPlus({
         <span className="birthday-photo-stars">✦ ✧ ✦</span>
       </div>
 
+      {/* Birthday Photo */}
       <div className="birthday-photo-frame">
-        {data.birthdayPhoto || data.photo ? (
+        {photoUrl ? (
           <img
-            src={data.birthdayPhoto || data.photo}
+            src={photoUrl}
             alt="Birthday person"
+            onError={() => setPhotoUrl("")}
           />
         ) : (
           <div className="birthday-photo-placeholder">
@@ -45,7 +65,9 @@ export default function BirthdayPhotoPremiumPlus({
         )}
       </div>
 
-      <p className="birthday-photo-intro">A special celebration for</p>
+      <p className="birthday-photo-intro">
+        A special celebration for
+      </p>
 
       <h2 className="birthday-photo-name">
         {data.birthdayPerson || data.name || "Your Name"}
@@ -60,11 +82,19 @@ export default function BirthdayPhotoPremiumPlus({
           "Join us for a beautiful day filled with love, laughter and wonderful memories."}
       </p>
 
+      
+
+      {/* Date and Time */}
       <div className="birthday-photo-details">
         <div className="birthday-photo-detail">
           <CalendarDays size={20} />
           <span>DATE</span>
-          <strong>{data.birthdayDate || data.eventDate || data.date || "Date"}</strong>
+          <strong>
+            {data.birthdayDate ||
+              data.eventDate ||
+              data.date ||
+              "Date"}
+          </strong>
         </div>
 
         <div className="birthday-photo-detail-divider" />
@@ -72,15 +102,24 @@ export default function BirthdayPhotoPremiumPlus({
         <div className="birthday-photo-detail">
           <Clock size={20} />
           <span>TIME</span>
-          <strong>{data.partyTime || data.eventTime || data.time || "Time"}</strong>
+          <strong>
+            {data.partyTime ||
+              data.eventTime ||
+              data.time ||
+              "Time"}
+          </strong>
         </div>
       </div>
 
+      {/* Venue and Location */}
       <div className="birthday-photo-location">
         <MapPin size={21} />
 
         <div className="birthday-photo-location-info">
-          <strong>{data.venue || "Celebration Venue"}</strong>
+          <strong>
+            {data.venue || "Celebration Venue"}
+          </strong>
+
           <span>{data.address || "Venue address"}</span>
 
           {locationUrl && (
@@ -97,28 +136,33 @@ export default function BirthdayPhotoPremiumPlus({
         </div>
       </div>
 
-      <button
-        type="button"
-        className="birthday-photo-rsvp invitation-rsvp-button"
-        onClick={onRSVP}
-        style={{
-          display: design.button?.enabled === false ? "none" : undefined,
-          backgroundColor: design.button?.backgroundColor || undefined,
-          color: design.button?.textColor || undefined,
-          borderRadius:
-            design.button?.radius != null
-              ? `${design.button.radius}px`
-              : undefined,
-        }}
-      >
-        {design.button?.text || "RSVP"}
-      </button>
+      {/* RSVP Button */}
+      {design.button?.enabled !== false && (
+        <button
+          type="button"
+          className="birthday-photo-rsvp invitation-rsvp-button"
+          onClick={onRSVP}
+          style={{
+            backgroundColor:
+              design.button?.backgroundColor || undefined,
+            color: design.button?.textColor || undefined,
+            borderRadius:
+              design.button?.radius != null
+                ? `${design.button.radius}px`
+                : undefined,
+          }}
+        >
+          {design.button?.text || "RSVP"}
+        </button>
+      )}
 
       <div className="birthday-photo-footer">
         <span>✦</span> MADE WITH LOVE <span>✦</span>
       </div>
 
-      <div className="birthday-photo-decoration decoration-bottom">❀ ✦ ❀</div>
+      <div className="birthday-photo-decoration decoration-bottom">
+        ❀ ✦ ❀
+      </div>
     </div>
   );
 }

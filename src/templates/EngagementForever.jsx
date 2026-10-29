@@ -161,7 +161,6 @@ function EngagementForever({ data, design = {}, onRSVP }) {
             <p className="engagement-footer">
               WITH LOVE • WITH JOY • FOREVER
             </p>
-
             {/* RSVP BUTTON */}
 
             <button

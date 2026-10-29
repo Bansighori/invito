@@ -184,14 +184,17 @@ const handleDownloadPDF = async () => {
 
     // Render invitation
     const canvas = await toCanvas(element, {
-      pixelRatio: 2,
+      pixelRatio: 3,
       cacheBust: true,
       backgroundColor: "#ffffff",
-      skipAutoScale: false,
+      skipAutoScale: true,
       width: element.scrollWidth,
       height: element.scrollHeight,
       style: {
         overflow: "visible",
+        transform: "none",
+    animation: "none",
+    transition: "none", 
       },
       filter: (node) => {
         if (!(node instanceof Element)) return true;
@@ -277,22 +280,38 @@ const handleDownloadPDF = async () => {
 
     // Clickable RSVP button
     const rsvpButton = element.querySelector(
-      [
-        ".invitation-rsvp-button",
-        ".engagement-gold-rsvp",
-        ".dynamic-rsvp-button",
-        ".photo-floral-rsvp",
-        ".royal-rsvp-button",
-        ".birthday-rsvp-button",
-      ].join(", ")
-    );
+  [
+    ".invitation-rsvp-button",
+    ".engagement-gold-rsvp",
+    ".engagement-rose-rsvp",
+    ".engagement-rsvp-button",
+    ".engagement-rose-rsvp-button",
+    ".garden-rsvp-button",
+    ".dynamic-rsvp-button",
+    ".photo-floral-rsvp",
+    ".vintage-wedding-rsvp",
+    ".minimal-wedding-rsvp",
+    ".cocktail-party-rsvp",
+    ".baby-safari-rsvp",
+    ".little-star-rsvp",
+    ".wedding-rsvp-button",
+    ".sunset-wedding-rsvp",
+    ".birthday-kids-rsvp",
+    ".royal-rsvp-button",
+    ".baby-bloom-rsvp",
+    ".graduation-day-rsvp",
+    ".corporate-event-rsvp",
+    ".party-night-rsvp",
+    ".birthday-rsvp-button",
+  ].join(", ")
+);
 
-    if (rsvpButton && slug) {
-      const rsvpUrl =
-        `https://invito-zeta.vercel.app/invite/${slug}?rsvp=true`;
+if (rsvpButton && slug) {
+  const rsvpUrl =
+    `https://invito-zeta.vercel.app/invite/${slug}?rsvp=true`;
 
-      addPdfLink(rsvpButton, rsvpUrl);
-    }
+  addPdfLink(rsvpButton, rsvpUrl);
+}
 
     // Clickable Google Maps link
     const locationLink = element.querySelector(

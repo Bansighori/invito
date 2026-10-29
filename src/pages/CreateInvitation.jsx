@@ -45,6 +45,7 @@ function CreateInvitation() {
   ] = useSearchParams();
   const [couplePhoto, setCouplePhoto] = useState("");
   const [photoUploading, setPhotoUploading] = useState(false);   
+  const [birthdayPhotoUploading, setBirthdayPhotoUploading] = useState(false);
 
   const draftId =
     searchParams.get("draftId");
@@ -136,6 +137,57 @@ setFormData((previousData) => ({
 
   } finally {
     setPhotoUploading(false);
+  }
+};
+
+const handleBirthdayPhotoUpload = async (e) => {
+  const file = e.target.files?.[0];
+
+  if (!file) return;
+
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    alert("Please select a JPG, PNG or WEBP image.");
+    e.target.value = "";
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Photo must be less than 5MB.");
+    e.target.value = "";
+    return;
+  }
+
+  try {
+    setBirthdayPhotoUploading(true);
+
+    const uploadData = new FormData();
+    uploadData.append("photo", file);
+
+    const response = await api.post(
+      "/invitations/upload-template-photo",
+      uploadData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    const imageUrl = response.data.image.url;
+
+    setFormData((prev) => ({
+      ...prev,
+      birthdayPhoto: imageUrl,
+    }));
+  } catch (error) {
+    console.error("Birthday photo upload error:", error);
+    alert(
+      error.response?.data?.message ||
+        "Birthday photo upload failed."
+    );
+  } finally {
+    setBirthdayPhotoUploading(false);
+    e.target.value = "";
   }
 };
 
@@ -1001,6 +1053,55 @@ const removeGalleryImage = async (
         max-width: 100%;
       }
 
+      .birthday-main-photo-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e9e1f0;
+  border-radius: 16px;
+}
+
+.birthday-main-photo-section h3 {
+  margin: 0 0 8px;
+  color: #302238;
+  font-size: 17px;
+}
+
+.birthday-main-photo-section p {
+  color: #786b82;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.birthday-main-photo-section input {
+  display: block;
+  max-width: 100%;
+  margin-top: 14px;
+}
+
+.birthday-main-photo-preview {
+  margin-top: 16px;
+}
+
+.birthday-main-photo-preview img {
+  display: block;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #e7c9a0;
+}
+
+.birthday-main-photo-preview button {
+  margin-top: 10px;
+  padding: 8px 14px;
+  color: #b42318;
+  background: #fff;
+  border: 1px solid #f0c7c4;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
       @media (max-width: 1000px) {
         .invitation-preview-wrapper {
           min-height: 650px;
@@ -1333,6 +1434,53 @@ const removeGalleryImage = async (
             />
 
           </div>
+
+          
+{/* PREMIUM PLUS BIRTHDAY PERSON PHOTO */}
+{template.component === "BirthdayPhotoPremiumPlus" && (
+  <div className="birthday-main-photo-section">
+    <h3>Birthday Person Photo</h3>
+
+    <p>
+      Upload the main photo shown inside the circular
+      "Your Photo Here" frame.
+    </p>
+
+    <input
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      id="birthday-main-photo-upload"
+      onChange={handleBirthdayPhotoUpload}
+      disabled={birthdayPhotoUploading}
+    />
+
+    {birthdayPhotoUploading && (
+      <p>Uploading birthday photo...</p>
+    )}
+
+    {formData.birthdayPhoto && (
+      <div className="birthday-main-photo-preview">
+        <img
+          src={formData.birthdayPhoto}
+          alt="Birthday person preview"
+        />
+
+        <button
+          type="button"
+          onClick={() =>
+            setFormData((prev) => ({
+              ...prev,
+              birthdayPhoto: "",
+            }))
+          }
+        >
+          Remove Photo
+        </button>
+      </div>
+    )}
+  </div>
+)}
+
           {isPhotoTemplate && (
   <div className="couple-photo-section">
 

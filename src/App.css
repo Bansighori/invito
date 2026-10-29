@@ -8758,14 +8758,17 @@ span:not(.recent-table-date) {
   transform: translateY(0);
 }
 /* ==========================================
+/* ==========================================
    PDF MODE
-   Hide RSVP button while generating PDF
+   Keep RSVP buttons visible in the PDF
    ========================================== */
 
 .pdf-generating .birthday-rsvp-button,
 .pdf-generating .engagement-rsvp-button,
 .pdf-generating .wedding-rsvp-button {
-  display: none !important;
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 /* ==========================================
    ANALYTICS PAGE
