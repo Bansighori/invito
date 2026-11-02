@@ -50,7 +50,6 @@ function PublicInvitation() {
       searchParams.get("rsvp") === "true"
     );
 
-
   // ==========================================
   // CHECK RSVP URL
   // ==========================================
@@ -64,7 +63,6 @@ function PublicInvitation() {
     }
 
   }, [searchParams]);
-
 
   // ==========================================
   // FETCH PUBLIC INVITATION

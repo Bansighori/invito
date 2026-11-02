@@ -699,13 +699,14 @@ const downloadGuestPDF = (type) => {
 }`}
     </style>
     <div className="guests-page">
+      <SupportChatButton />
       
       {/* ======================================
           HEADER
       ====================================== */}
 
       <div className="guests-page-header">
-        <SupportChatButton />
+        
 
         <div>
 

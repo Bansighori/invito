@@ -7,9 +7,11 @@ function SupportChatButton() {
 
   return (
     <button
+      type="button"
       className="support-chat-button"
       onClick={() => navigate("/support")}
       title="Help & Support"
+      aria-label="Open Help and Support"
     >
       <MessageCircle size={24} />
     </button>

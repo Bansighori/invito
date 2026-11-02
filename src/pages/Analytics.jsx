@@ -374,6 +374,7 @@ function Analytics() {
     </style>
 
     <div className="analytics-page">
+      <SupportChatButton />
 
 
       {/* =====================================
@@ -381,7 +382,7 @@ function Analytics() {
           ===================================== */}
 
       <div className="analytics-header">
-  <SupportChatButton />
+  
 
   <div className="analytics-header-content">
     <button
