@@ -467,11 +467,83 @@ const handleUseTemplate = (template) => {
 
       /* Main template page */
 .templates-page {
+  position: relative;
   width: 100%;
   max-width: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 22px 26px;
   box-sizing: border-box;
+  overflow: visible;
+
+  background: linear-gradient(
+    135deg,
+    #fff8fc 0%,
+    #f7f3ff 45%,
+    #fff8ef 100%
+  );
+}
+
+/* Pink glow - top right */
+.templates-page::before {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  top: -180px;
+  right: -120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(236, 72, 153, 0.18),
+    transparent 68%
+  );
+  pointer-events: none;
+  animation: templateGlowOne 9s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Purple glow - bottom left */
+.templates-page::after {
+  content: "";
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  bottom: 0;
+  left: -170px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(124, 58, 237, 0.16),
+    transparent 68%
+  );
+  pointer-events: none;
+  animation: templateGlowTwo 11s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Keep page content above background */
+.templates-page > :not(.support-chat-button) {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes templateGlowOne {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-45px, 35px) scale(1.08);
+  }
+}
+
+@keyframes templateGlowTwo {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, -30px) scale(1.1);
+  }
 }
 
 /* Page heading */

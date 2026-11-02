@@ -2940,6 +2940,7 @@ span:not(.recent-table-date) {
 
 .templates-page {
   width: 100%;
+  background: #f7f7f5;
 }
 
 .templates-header {
@@ -9389,6 +9390,7 @@ span:not(.recent-table-date) {
   padding: 32px;
   max-width: 1000px;
   margin: 0 auto;
+  
 }
 
 
@@ -10147,6 +10149,7 @@ span:not(.recent-table-date) {
 
 .pricing-section {
   margin-bottom: 55px;
+  background: white;
 }
 
 .pricing-heading {
