@@ -48,16 +48,36 @@ function AdminSettings() {
     });
   };
 
-  const saveProfile = async () => {
+const saveProfile = async () => {
   try {
-    await api.put("/admin/settings/profile", {
+    const response = await api.put("/admin/settings/profile", {
       name: admin.name,
       email: admin.email,
     });
 
+    const updatedAdmin = {
+      ...admin,
+      ...(response.data.admin || {}),
+      name: response.data.admin?.name || admin.name,
+      email: response.data.admin?.email || admin.email,
+    };
+
+    setAdmin(updatedAdmin);
+
+    localStorage.setItem(
+      "invitoAdmin",
+      JSON.stringify(updatedAdmin)
+    );
+
+    window.dispatchEvent(
+      new Event("adminProfileUpdated")
+    );
+
     alert("Profile updated successfully");
-    loadProfile();
+
   } catch (error) {
+    console.error("Update profile error:", error);
+
     alert(
       error.response?.data?.message ||
       "Failed to update profile"

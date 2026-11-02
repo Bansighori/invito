@@ -30,12 +30,38 @@ function AdminNavbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [loadingNotifications, setLoadingNotifications] = useState(false);
 
-  const admin = JSON.parse(
+  const [admin, setAdmin] = useState(() => {
+  return JSON.parse(
     localStorage.getItem("invitoAdmin") || "null"
   );
-
+});
   const adminId = admin?.id || admin?._id;
 
+  useEffect(() => {
+  const updateAdminProfile = () => {
+    const updatedAdmin = JSON.parse(
+      localStorage.getItem("invitoAdmin") || "null"
+    );
+
+    setAdmin(updatedAdmin);
+  };
+
+  window.addEventListener(
+    "adminProfileUpdated",
+    updateAdminProfile
+  );
+
+  window.addEventListener("storage", updateAdminProfile);
+
+  return () => {
+    window.removeEventListener(
+      "adminProfileUpdated",
+      updateAdminProfile
+    );
+
+    window.removeEventListener("storage", updateAdminProfile);
+  };
+}, []);
   
 useEffect(() => {
   const handleOutsideClick = (event) => {
