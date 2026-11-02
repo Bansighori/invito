@@ -1,34 +1,23 @@
 /* =========================================================
    GUESTS PAGE
 ========================================================= */
-
-.guests-page {
-  min-height: 100%;
-  padding: 45px 55px;
-  background: #f8f7f9;
-  box-sizing: border-box;
-}
-
-/* =========================================================
-   COLORFUL GUESTS BACKGROUND
-========================================================= */
-
 .guests-page {
   position: relative;
-
-  min-height: 100vh;
-
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 45px 55px;
+  margin: 0;
+  box-sizing: border-box;
   overflow: visible;
 
-  background:
-    linear-gradient(
-      135deg,
-      #fff8fc 0%,
-      #f7f3ff 45%,
-      #fff8ef 100%
-    );
+  background: linear-gradient(
+    135deg,
+    #fff8fc 0%,
+    #f7f3ff 45%,
+    #fff8ef 100%
+  );
 }
-
 
 /* Decorative glowing circles */
 
@@ -61,28 +50,19 @@
 
 .guests-page::after {
   content: "";
-
   position: absolute;
-
   width: 480px;
   height: 480px;
-
-  bottom: -250px;
+  bottom: 0;
   left: -170px;
-
   border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(124, 58, 237, 0.16),
-      transparent 68%
-    );
-
+  background: radial-gradient(
+    circle,
+    rgba(124, 58, 237, 0.16),
+    transparent 68%
+  );
   pointer-events: none;
-
-  animation:
-    guestsGlowTwo 11s ease-in-out infinite;
+  animation: guestsGlowTwo 11s ease-in-out infinite;
 }
 
 

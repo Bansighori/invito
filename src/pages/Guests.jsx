@@ -706,8 +706,6 @@ const downloadGuestPDF = (type) => {
       ====================================== */}
 
       <div className="guests-page-header">
-        
-
         <div>
 
           <button
