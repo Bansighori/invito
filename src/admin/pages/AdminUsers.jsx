@@ -205,18 +205,7 @@ function AdminUsers() {
       return;
     }
 
-    if (action === "disable") {
-      alert(
-        `Disable ${user.name} functionality will be connected to the backend next.`
-      );
-      return;
-    }
-
-    if (action === "enable") {
-      alert(
-        `Enable ${user.name} functionality will be connected to the backend next.`
-      );
-    }
+    
   };
 
   if (loading) {
@@ -700,33 +689,7 @@ function AdminUsers() {
                                   View User
                                 </button>
 
-                                <button
-                                  onClick={() =>
-                                    handleUserAction(
-                                      user.isActive === false
-                                        ? "enable"
-                                        : "disable",
-                                      user
-                                    )
-                                  }
-                                >
-                                  {user.isActive ===
-                                  false ? (
-                                    <>
-                                      <UserCheck
-                                        size={15}
-                                      />
-                                      Enable User
-                                    </>
-                                  ) : (
-                                    <>
-                                      <UserX
-                                        size={15}
-                                      />
-                                      Disable User
-                                    </>
-                                  )}
-                                </button>
+                                
 
                               </div>
 
