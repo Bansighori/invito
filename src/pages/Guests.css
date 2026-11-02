@@ -9,7 +9,7 @@
   padding: 45px 55px;
   margin: 0;
   box-sizing: border-box;
-  overflow: visible;
+  overflow-x: clip;
 
   background: linear-gradient(
     135deg,

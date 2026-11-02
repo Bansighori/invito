@@ -7,18 +7,14 @@
   min-height: 100vh;
   background: #f7f7f5;
 }
-
-
 /* =========================================================
    INVITO SIDEBAR
 ========================================================= */
-
 .sidebar {
   position: fixed;
 
   top: 0;
   left: 0;
-
   width: 270px;
   height: 100vh;
 
@@ -66,8 +62,6 @@
 
   opacity: 1;
 }
-
-
 /* =========================================================
    HAMBURGER
 ========================================================= */
@@ -98,7 +92,6 @@
       #7c3aed,
       #ec4899
     );
-
   color: white;
 
   cursor: pointer;
@@ -112,8 +105,6 @@
     transform 0.25s ease,
     box-shadow 0.25s ease;
 }
-
-
 .sidebar-menu-button:hover {
   transform:
     translateY(-2px)
@@ -137,7 +128,6 @@
     );
 }
 
-
 /* =========================================================
    OVERLAY
 ========================================================= */
@@ -158,7 +148,6 @@
   animation:
     overlayAppear 0.25s ease;
 }
-
 
 /* =========================================================
    LOGO
@@ -183,7 +172,6 @@
   letter-spacing: -0.5px;
 }
 
-
 .logo-icon {
   width: 43px;
   height: 43px;
@@ -205,7 +193,6 @@
       #ec4899,
       #f97316
     );
-
   box-shadow:
     0 10px 25px rgba(236, 72, 153, 0.25);
 
@@ -213,13 +200,11 @@
     transform 0.3s ease;
 }
 
-
 .sidebar-logo:hover .logo-icon {
   transform:
     rotate(-6deg)
     scale(1.06);
 }
-
 
 /* =========================================================
    MAIN
@@ -2941,6 +2926,9 @@ span:not(.recent-table-date) {
 .templates-page {
   width: 100%;
   background: #f7f7f5;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: visible;
 }
 
 .templates-header {
