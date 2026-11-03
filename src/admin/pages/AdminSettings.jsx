@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../../api/axios";
+import adminApi from "../api/adminAxios";
 import "./AdminSettings.css";
 
 import AdminSidebar from "../components/AdminSidebar";
@@ -16,15 +16,24 @@ function AdminSettings() {
     systemNotifications: true
   });
 
-
   // ==========================================
  // LOAD ADMIN PROFILE
   // ==========================================
 
-  const loadProfile = async () => {
+ 
+// LOAD ADMIN PROFILE
+const loadProfile = async () => {
   try {
-    const response = await api.get("/admin/settings/profile");
-    setAdmin(response.data.admin);
+    const response = await adminApi.get("/admin/settings/profile");
+
+    const updatedAdmin = response.data.admin;
+
+    setAdmin(updatedAdmin);
+
+    localStorage.setItem(
+      "invitoAdmin",
+      JSON.stringify(updatedAdmin)
+    );
   } catch (error) {
     console.error(
       "Load profile error:",
@@ -33,34 +42,30 @@ function AdminSettings() {
   }
 };
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
+useEffect(() => {
+  loadProfile();
+}, []);
 
-  // ==========================================
-  // UPDATE PROFILE
-  // ==========================================
+// HANDLE INPUT CHANGE
+const handleChange = (e) => {
+  setAdmin((prev) => ({
+    ...prev,
+    [e.target.name]: e.target.value,
+  }));
+};
 
-  const handleChange = (e) => {
-    setAdmin({
-      ...admin,
-      [e.target.name]: e.target.value
-    });
-  };
-
+// SAVE PROFILE
 const saveProfile = async () => {
   try {
-    const response = await api.put("/admin/settings/profile", {
-      name: admin.name,
-      email: admin.email,
-    });
+    const response = await adminApi.put(
+      "/admin/settings/profile",
+      {
+        name: admin.name.trim(),
+        email: admin.email.trim(),
+      }
+    );
 
-    const updatedAdmin = {
-      ...admin,
-      ...(response.data.admin || {}),
-      name: response.data.admin?.name || admin.name,
-      email: response.data.admin?.email || admin.email,
-    };
+    const updatedAdmin = response.data.admin;
 
     setAdmin(updatedAdmin);
 
@@ -74,7 +79,6 @@ const saveProfile = async () => {
     );
 
     alert("Profile updated successfully");
-
   } catch (error) {
     console.error("Update profile error:", error);
 
@@ -84,6 +88,7 @@ const saveProfile = async () => {
     );
   }
 };
+
 
   // ==========================================
   // LOGOUT

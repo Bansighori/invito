@@ -30,38 +30,16 @@ function AdminNavbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [loadingNotifications, setLoadingNotifications] = useState(false);
 
-  const [admin, setAdmin] = useState(() => {
+
+const [admin, setAdmin] = useState(() => {
   return JSON.parse(
     localStorage.getItem("invitoAdmin") || "null"
   );
 });
-  const adminId = admin?.id || admin?._id;
 
-  useEffect(() => {
-  const updateAdminProfile = () => {
-    const updatedAdmin = JSON.parse(
-      localStorage.getItem("invitoAdmin") || "null"
-    );
+const adminId = admin?.id || admin?._id;
 
-    setAdmin(updatedAdmin);
-  };
-
-  window.addEventListener(
-    "adminProfileUpdated",
-    updateAdminProfile
-  );
-
-  window.addEventListener("storage", updateAdminProfile);
-
-  return () => {
-    window.removeEventListener(
-      "adminProfileUpdated",
-      updateAdminProfile
-    );
-
-    window.removeEventListener("storage", updateAdminProfile);
-  };
-}, []);
+ 
   
 useEffect(() => {
   const handleOutsideClick = (event) => {
@@ -80,6 +58,49 @@ useEffect(() => {
   };
 }, []);
 
+// LOAD LATEST ADMIN PROFILE
+const loadAdminProfile = async () => {
+  try {
+    const response = await adminApi.get(
+      "/admin/settings/profile"
+    );
+
+    const updatedAdmin = response.data.admin;
+
+    setAdmin(updatedAdmin);
+
+    localStorage.setItem(
+      "invitoAdmin",
+      JSON.stringify(updatedAdmin)
+    );
+  } catch (error) {
+    console.error(
+      "Navbar profile error:",
+      error.response?.data || error.message
+    );
+  }
+};
+
+// REFRESH PROFILE
+useEffect(() => {
+  loadAdminProfile();
+
+  const updateAdminProfile = () => {
+    loadAdminProfile();
+  };
+
+  window.addEventListener(
+    "adminProfileUpdated",
+    updateAdminProfile
+  );
+
+  return () => {
+    window.removeEventListener(
+      "adminProfileUpdated",
+      updateAdminProfile
+    );
+  };
+}, []);
 
   // ==========================================
   // LOAD ADMIN NOTIFICATIONS
