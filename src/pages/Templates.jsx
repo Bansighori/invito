@@ -293,7 +293,7 @@ const handleUseTemplate = (template) => {
 
   const isPaid =
     user.plan === "premium" ||
-    user.plan === "premium_plus";
+    user.plan === "premium_plus";                               
 
   const isExpired =
     !user.planExpiresAt ||
@@ -474,7 +474,8 @@ const handleUseTemplate = (template) => {
   margin: 0;
   padding: 22px 26px;
   box-sizing: border-box;
-  overflow: visible;
+  overflow-x: clip;
+overflow-y: visible;
 
   background: linear-gradient(
     135deg,
@@ -570,8 +571,10 @@ const handleUseTemplate = (template) => {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 22px;
   width: 100%;
+  max-width: 100%;
   margin-top: 0;
   align-items: start;
+  box-sizing: border-box;
 }
 
 /* Individual card */
@@ -627,7 +630,23 @@ const handleUseTemplate = (template) => {
 .templates-back-button svg {
   width: 18px;
   height: 18px;
-}`}
+}
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+}
+
+.template-card {
+  min-width: 0;
+  max-width: 100%;
+}
+`}
     </style>
 
     <div className="templates-page">
