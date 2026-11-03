@@ -796,8 +796,17 @@ const changePassword = async (req, res) => {
 
 const getCurrentUser = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId)
-      .select("-password");
+    // Support both JWT payload formats
+    const userId = req.user.userId || req.user.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "User ID not found in token."
+      });
+    }
+
+    const user = await User.findById(userId).select("-password");
 
     if (!user) {
       return res.status(404).json({
@@ -806,10 +815,7 @@ const getCurrentUser = async (req, res) => {
       });
     }
 
-    // ============================================
-    // CHECK PLAN EXPIRY
-    // ============================================
-
+    // Check plan expiry
     if (
       user.plan !== "free" &&
       user.planExpiresAt &&
@@ -817,13 +823,8 @@ const getCurrentUser = async (req, res) => {
     ) {
       user.plan = "free";
       user.planExpiresAt = null;
-
       await user.save();
     }
-
-    // ============================================
-    // RETURN CURRENT USER
-    // ============================================
 
     res.status(200).json({
       success: true,
@@ -833,21 +834,16 @@ const getCurrentUser = async (req, res) => {
         email: user.email,
         plan: user.plan,
         planExpiresAt: user.planExpiresAt,
-        freeInvitationsUsed:
-          user.freeInvitationsUsed
+        freeInvitationsUsed: user.freeInvitationsUsed
       }
     });
 
   } catch (error) {
-    console.error(
-      "Get Current User Error:",
-      error
-    );
+    console.error("Get Current User Error:", error);
 
     res.status(500).json({
       success: false,
-      message:
-        "Unable to get current user."
+      message: "Unable to get current user."
     });
   }
 };

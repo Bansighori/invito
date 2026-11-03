@@ -41,30 +41,25 @@ function Dashboard() {
   const [error, setError] =
     useState("");
 
-const [user, setUser] = useState(() => {
-  return JSON.parse(
-    localStorage.getItem("invitoUser") || "null"
-  ) || { name: "User" };
-});
+const [user, setUser] = useState(
+  () => JSON.parse(localStorage.getItem("invitoUser") || "null") || {
+    name: "User"
+  }
+);
 
 useEffect(() => {
   const fetchUser = async () => {
     try {
-      const response = await api.get("/current-user");
+      const res = await api.get("/auth/me");
 
-      const updatedUser = response.data.user;
-
-      setUser(updatedUser);
+      setUser(res.data.user);
 
       localStorage.setItem(
         "invitoUser",
-        JSON.stringify(updatedUser)
+        JSON.stringify(res.data.user)
       );
     } catch (error) {
-      console.error(
-        "Dashboard profile error:",
-        error.response?.data || error.message
-      );
+      console.error("Failed to fetch user:", error);
     }
   };
 
@@ -895,26 +890,6 @@ useEffect(() => {
               </p>
 
             </div>
-
-
-            <select
-              className="dashboard-period-select"
-              defaultValue="all"
-            >
-
-              <option value="all">
-                All time
-              </option>
-
-              <option value="last30">
-                Last 30 days
-              </option>
-
-              <option value="last7">
-                Last 7 days
-              </option>
-
-            </select>
 
           </div>
 
