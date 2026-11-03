@@ -564,57 +564,32 @@ function AdminTemplateEdit() {
       setSuccess("");
 
 
-      const plan =
-        template.isPremiumPlus
-          ? "premium_plus"
-          : template.isPremium
-          ? "premium"
-          : "free";
+      const plan = template.isPremiumPlus
+  ? "premium_plus"
+  : template.isPremium
+  ? "premium"
+  : "free";
 
+const payload = {
+  name: template.title,
+  description: template.description || "",
+  category: template.category,
+  type: template.type || "Modern",
+  component: template.component,
+  fields: template.fields || [],
+  design: template.design || {},
 
-      const payload = {
+  plan: plan,
 
-        name:
-          template.title,
+  // Important: Save both flags
+  isPremium: plan !== "free",
+  isPremiumPlus: plan === "premium_plus",
 
-        description:
-          template.description || "",
-
-        category:
-          template.category,
-
-        type:
-          template.type || "Modern",
-
-        component:
-          template.component,
-
-        fields:
-          template.fields || [],
-
-        design:
-          template.design || {},
-
-        plan,
-
-        status:
-          template.status ||
-          "published",
-
-        featured:
-          Boolean(
-            template.featured
-          ),
-
-        displayOrder:
-          Number(
-            template.displayOrder || 1
-          ),
-
-        isActive:
-          template.isActive !== false
-
-      };
+  status: template.status || "published",
+  featured: Boolean(template.featured),
+  displayOrder: Number(template.displayOrder || 1),
+  isActive: template.isActive !== false
+};
 
 
       const response =

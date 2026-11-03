@@ -360,17 +360,17 @@ onRSVP={() => {}}
 
               <strong>
 
-                {isPhotoTemplate
-                  ? "Premium Plus Template"
-                  : "Premium Template"}
+                {isPhotoTemplate || template.isPremiumPlus
+  ? "Premium Plus Template"
+  : "Premium Template"}
 
               </strong>
 
               <span>
 
-                {isPhotoTemplate
-                  ? "Upgrade to Premium Plus"
-                  : "Upgrade to unlock"}
+                {isPhotoTemplate || template.isPremiumPlus
+  ? "Upgrade to Premium Plus"
+  : "Upgrade to Premium"}
 
               </span>
 
@@ -399,7 +399,7 @@ onRSVP={() => {}}
   {isLocked ? (
     <>
       <Lock size={15} />
-      {isPhotoTemplate
+      {isPhotoTemplate || template.isPremiumPlus
         ? "Upgrade to Premium Plus"
         : "Upgrade to Premium"}
     </>
