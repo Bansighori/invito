@@ -286,6 +286,46 @@ const handlePasswordChange = async (event) => {
   // ==========================================
 
   return (
+    <>
+    <style>
+      {`
+      /* Back Button */
+.drafts-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  margin-bottom: 18px;
+  background: #ffffff;
+  color: #4f46e5;
+  border: 1px solid #e0e7ff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.drafts-back-button:hover {
+  background: #4f46e5;
+  color: #ffffff;
+  border-color: #4f46e5;
+  transform: translateX(-3px);
+}
+
+.drafts-back-button svg {
+  transition: transform 0.3s ease;
+}
+
+.drafts-back-button:hover svg {
+  transform: translateX(-3px);
+}
+
+.drafts-back-button:focus-visible {
+  outline: 3px solid #c7d2fe;
+  outline-offset: 3px;
+}`}
+    </style>
 
     <div className="settings-page">
 
@@ -301,7 +341,7 @@ const handlePasswordChange = async (event) => {
           <button
               type="button"
               className="drafts-back-button"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/dashboard")}
             >
               <ArrowLeft size={18} />
               <span>Back</span>
@@ -602,6 +642,7 @@ const handlePasswordChange = async (event) => {
   </form>
 </div>
 </div>
+</>
   );
 
 }
