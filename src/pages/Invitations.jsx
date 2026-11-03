@@ -436,20 +436,7 @@ const handleWhatsAppShare = () => {
 
         </div>
 
-        <button
-          className="invitations-create-button"
-          onClick={() =>
-            navigate(
-              "/templates"
-            )
-          }
-        >
-
-          <Plus size={18} />
-
-          Create Invitation
-
-        </button>
+        
 
       </div>
 

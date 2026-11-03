@@ -657,23 +657,6 @@ useEffect(() => {
 
         </div>
 
-
-        <button
-          type="button"
-          className="dashboard-create-button"
-          onClick={() =>
-            navigate("/templates")
-          }
-        >
-
-          <span>
-            +
-          </span>
-
-          Create Invitation
-
-        </button>
-
       </div>
 
 

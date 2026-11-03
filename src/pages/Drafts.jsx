@@ -193,15 +193,6 @@ function Drafts() {
               Continue working on your unfinished invitations.
             </p>
           </div>
-
-          <button
-            className="invitations-create-button"
-            type="button"
-            onClick={() => navigate("/templates")}
-          >
-            <Plus size={18} />
-            Create Invitation
-          </button>
         </div>
 
         {/* LOADING */}

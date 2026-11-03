@@ -1002,7 +1002,7 @@ function PaymentHistory() {
 
           <button
   className="payment-back-button"
-  onClick={() => navigate("/home")}
+  onClick={() => navigate("/pricing")}
 >
   <ArrowLeft size={18} />
   Back
