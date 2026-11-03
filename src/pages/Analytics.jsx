@@ -388,7 +388,7 @@ function Analytics() {
     <button
       type="button"
       className="analytics-back-button"
-      onClick={() => navigate("/home")}
+      onClick={() => navigate("/dashboard")}
     >
       <ArrowLeft size={18} />
       Back
