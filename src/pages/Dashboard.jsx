@@ -41,12 +41,56 @@ function Dashboard() {
   const [error, setError] =
     useState("");
 
-  const user =
-  JSON.parse(
-    localStorage.getItem("invitoUser")
-  ) || {
-    name: "User"
+const [user, setUser] = useState(() => {
+  return JSON.parse(
+    localStorage.getItem("invitoUser") || "null"
+  ) || { name: "User" };
+});
+
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const response = await api.get("/current-user");
+
+      const updatedUser = response.data.user;
+
+      setUser(updatedUser);
+
+      localStorage.setItem(
+        "invitoUser",
+        JSON.stringify(updatedUser)
+      );
+    } catch (error) {
+      console.error(
+        "Dashboard profile error:",
+        error.response?.data || error.message
+      );
+    }
   };
+
+  fetchUser();
+}, []);
+
+useEffect(() => {
+  const fetchUserProfile = async () => {
+    try {
+      const response = await api.get("/YOUR_USER_PROFILE_ENDPOINT");
+
+      const updatedUser = response.data.user;
+
+      setUser(updatedUser);
+
+      localStorage.setItem(
+        "invitoUser",
+        JSON.stringify(updatedUser)
+      );
+    } catch (error) {
+      console.error("Dashboard profile error:", error);
+    }
+  };
+
+  fetchUserProfile();
+}, []);
   // ==========================================
   // FETCH REAL DATA
   // ==========================================
