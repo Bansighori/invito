@@ -196,20 +196,14 @@ function Invitations() {
   // PUBLIC URL
   // =========================================
 
-  const getPublicUrl =
-    () => {
+const getPublicUrl = () => {
+  if (!shareInvitation) return "";
 
-      if (!shareInvitation) {
-        return "";
-      }
-
-
-      return (
-        `${window.location.origin}/invite/${shareInvitation.slug}`
-      );
-
-    };
-
+  return new URL(
+    `/invite/${shareInvitation.slug}`,
+    window.location.origin
+  ).href;
+};
 
   // =========================================
   // COPY LINK
@@ -258,30 +252,22 @@ function Invitations() {
   // WHATSAPP SHARE
   // =========================================
 
-  const handleWhatsAppShare =
-    () => {
+const handleWhatsAppShare = () => {
+  const publicUrl = getPublicUrl();
 
-      const publicUrl =
-        getPublicUrl();
+  const message =
+    `You're Invited!\n\n` +
+    `We are delighted to invite you to our special occasion.\n\n` +
+    `View your invitation here:\n\n` +
+    `${publicUrl}\n\n` +
+    `We look forward to celebrating with you!`;
+    console.log("Invitation URL:", publicUrl);
 
+  const whatsappUrl =
+    `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
 
-      const message =
-        `You're invited! 🎉\n\n${shareInvitation.title}\n\nView the invitation and RSVP here:\n${publicUrl}`;
-
-
-      const whatsappUrl =
-        `https://wa.me/?text=${encodeURIComponent(
-          message
-        )}`;
-
-
-      window.open(
-        whatsappUrl,
-        "_blank"
-      );
-
-    };
-
+  window.open(whatsappUrl, "_blank");
+};
 
   // =========================================
   // NATIVE SHARE
@@ -292,7 +278,6 @@ function Invitations() {
 
       const publicUrl =
         getPublicUrl();
-
 
       if (!navigator.share) {
 
@@ -450,7 +435,6 @@ function Invitations() {
           </p>
 
         </div>
-
 
         <button
           className="invitations-create-button"
