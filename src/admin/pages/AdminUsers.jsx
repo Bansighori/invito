@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import {
   Search,
   Users,
@@ -39,6 +39,26 @@ function AdminUsers() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const usersPerPage = 8;
+
+  const menuRef = useRef(null);
+
+useEffect(() => {
+  const handleOutsideClick = (event) => {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(event.target) &&
+      !event.target.closest(".admin-more-button")
+    ) {
+      setOpenMenu(null);
+    }
+  };
+
+  document.addEventListener("pointerdown", handleOutsideClick);
+
+  return () => {
+    document.removeEventListener("pointerdown", handleOutsideClick);
+  };
+}, []);
 
   useEffect(() => {
     loadUsers();
@@ -673,7 +693,10 @@ function AdminUsers() {
                             {openMenu ===
                               user._id && (
 
-                              <div className="admin-user-menu">
+                              <div
+  className="admin-user-menu"
+  ref={menuRef}
+>
 
                                 <button
                                   onClick={() =>

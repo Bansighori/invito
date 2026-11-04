@@ -317,7 +317,7 @@ function BirthdayKids({ data, design = {}, onRSVP }) {
 
         <div className="birthday-kids-card">
           <div className="birthday-kids-content">
-            <p className="birthday-kids-top">YOU&apos;RE INVITED TO A</p>
+            <p className="birthday-kids-top">YOU&apos;RE INVITED</p>
 
             <div className="birthday-kids-emoji-row">
               <span>🎂</span>

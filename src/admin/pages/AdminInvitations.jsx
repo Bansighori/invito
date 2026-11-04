@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import {
   Search,
   FileText,
@@ -52,6 +52,26 @@ function AdminInvitations() {
   const [openMenu, setOpenMenu] =
     useState(null);
 
+    const menuRef = useRef(null);
+
+useEffect(() => {
+  const handleOutsideClick = (event) => {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(event.target) &&
+      !event.target.closest(".admin-invitation-more")
+    ) {
+      setOpenMenu(null);
+    }
+  };
+
+  document.addEventListener("pointerdown", handleOutsideClick);
+
+  return () => {
+    document.removeEventListener("pointerdown", handleOutsideClick);
+  };
+}, []);
+
   const [currentPage, setCurrentPage] =
     useState(1);
 
@@ -60,8 +80,11 @@ function AdminInvitations() {
 
   const [error, setError] =
     useState("");
+    
 
   const invitationsPerPage = 8;
+
+
 
   useEffect(() => {
     loadInvitations();
@@ -926,7 +949,10 @@ const owners = useMemo(() => {
                             {openMenu ===
                               invitation._id && (
 
-                              <div className="admin-invitation-menu">
+                              <div
+  className="admin-invitation-menu"
+  ref={menuRef}
+>
 
                                 <button
                                   onClick={() =>
