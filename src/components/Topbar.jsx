@@ -52,7 +52,6 @@ useEffect(() => {
 }, []);
 
 
-
 useEffect(() => {
   const userId = user?.id || user?._id;
   if (!userId) return;
@@ -384,6 +383,23 @@ const markAsRead = async (notification) => {
 
 
   return (
+    <>
+    <style>
+      {`.profile {
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-radius: 10px;
+}
+
+.profile:hover {
+  background: #f3f4f6;
+}
+
+.profile:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 3px;
+}`}
+    </style>
     <header className="topbar">
       
 
@@ -667,29 +683,42 @@ const markAsRead = async (notification) => {
             PROFILE
         =================================== */}
 
-        <div className="profile">
+        {/* ===================================
+    PROFILE
+=================================== */}
 
-          <div className="profile-avatar">
-            {initials}
-          </div>
+<div
+  className="profile"
+  onClick={() => navigate("/settings")}
+  role="button"
+  tabIndex={0}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      navigate("/settings");
+    }
+  }}
+  title="Open Settings"
+>
+  <div className="profile-avatar">
+    {initials}
+  </div>
 
-          <div className="profile-info">
+  <div className="profile-info">
+    <p className="profile-name">
+      {user.name}
+    </p>
 
-            <p className="profile-name">
-              {user.name}
-            </p>
-
-            <p className="profile-role">
-              User
-            </p>
-
-          </div>
-
-        </div>
+    <p className="profile-role">
+      User
+    </p>
+  </div>
+</div>
 
       </div>
 
     </header>
+    </>
   );
 }
 
