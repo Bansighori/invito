@@ -12,6 +12,7 @@ import {
 
 import DynamicTemplate from "../../templates/DynamicTemplate";
 
+
 import "./AdminTemplateDesigner.css";
 
 function AdminTemplateDesigner({
@@ -22,6 +23,47 @@ function AdminTemplateDesigner({
   const [previewData, setPreviewData] = useState({
   title: "You're Invited"
 });
+// Separate design for the new Visual Elements Editor
+const [visualDesign, setVisualDesign] = useState(
+  () =>
+    design.visualEditor || {
+      background: {
+        type: "solid",
+        color: "#ffffff",
+        color1: "#ffffff",
+        color2: "#f8e8ef",
+        overlayColor: "#000000",
+        overlayOpacity: 0
+      },
+      elements: [],
+      layout: {
+        width: 420,
+        height: 650
+      }
+    }
+);
+const handleVisualDesignChange = (updater) => {
+  setVisualDesign((previous) => {
+    const updated =
+      typeof updater === "function"
+        ? updater(previous)
+        : updater;
+
+    setDesign((oldDesign) => ({
+      ...oldDesign,
+      visualEditor: updated
+    }));
+
+    return updated;
+  });
+};
+// Save visual editor changes separately
+useEffect(() => {
+  setDesign((previous) => ({
+    ...previous,
+    visualEditor: visualDesign
+  }));
+}, [visualDesign, setDesign]);
 useEffect(() => {
   setPreviewData((previous) => {
     const next = {
@@ -286,8 +328,10 @@ useEffect(() => {
     ))}
 
   </div>
+  
 
 </div>
+
 
           {/* BACKGROUND */}
 

@@ -15,6 +15,9 @@ const authMiddleware =
 
 const upload =
   require("../middleware/uploadMiddleware");
+
+const requirePremiumPlus = require("../middleware/requirePremiumPlus");
+
 const User =
   require("../models/User");
 const cloudinary =
@@ -478,6 +481,72 @@ router.post(
 
   }
 ); 
+
+// ==========================================
+// CUSTOM FRAME PHOTO UPLOAD
+// PREMIUM PLUS ONLY
+// ==========================================
+
+router.post(
+  "/upload-frame-photo",
+  authMiddleware,
+
+  async (req, res, next) => {
+    try {
+      const user = await User.findById(req.user.userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found."
+        });
+      }
+
+      const isPremiumPlus =
+        user.plan === "premium_plus" &&
+        user.planExpiresAt &&
+        new Date(user.planExpiresAt) > new Date();
+
+      if (!isPremiumPlus) {
+        return res.status(403).json({
+          success: false,
+          code: "PREMIUM_PLUS_REQUIRED",
+          message: "Custom frame uploads are available only for Premium Plus users."
+        });
+      }
+
+      next();
+
+    } catch (error) {
+      console.error("Frame photo access error:", error);
+
+      return res.status(500).json({
+        success: false,
+        message: "Unable to verify Premium Plus access."
+      });
+    }
+  },
+
+  uploadTemplatePhoto.single("photo"),
+
+  (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select a photo."
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Frame photo uploaded successfully.",
+      image: {
+        url: req.file.path,
+        publicId: req.file.filename
+      }
+    });
+  }
+);
 
 router.delete(
   "/template-photo",

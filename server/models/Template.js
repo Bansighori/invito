@@ -179,6 +179,16 @@ const templateSchema = new mongoose.Schema(
         }
       },
 
+      elements: {
+  type: [mongoose.Schema.Types.Mixed],
+  default: []
+},
+
+visualEditor: {
+  type: mongoose.Schema.Types.Mixed,
+  default: {}
+},
+
       layout: {
         width: {
           type: Number,

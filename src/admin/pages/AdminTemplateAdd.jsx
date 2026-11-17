@@ -226,58 +226,49 @@ function AdminTemplateAdd() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setError("");
+  setError("");
 
-    if (!form.name.trim()) {
-      setError("Template name is required.");
-      return;
-    }
+  if (!form.name.trim()) {
+    setError("Template name is required.");
+    return;
+  }
 
+  const validFields = fields.filter(
+    (field) =>
+      field.name.trim() && field.label.trim()
+  );
 
-    const validFields = fields.filter(
-      (field) =>
-        field.name.trim() &&
-        field.label.trim()
+  try {
+    setSaving(true);
+
+    console.log("Submitting template...");
+
+    const response = await api.post("/admin/templates", {
+      ...form,
+      component: "DynamicTemplate",
+      displayOrder: Number(form.displayOrder),
+      featured: Boolean(form.featured),
+      fields: validFields,
+      design
+    });
+
+    console.log("Template created:", response.data);
+
+    navigate("/admin/templates");
+  } catch (error) {
+    console.error("Create template error:", error.response || error);
+
+    setError(
+      error.response?.data?.message ||
+      error.message ||
+      "Failed to create template."
     );
-
-    try {
-      setSaving(true);
-
-      await api.post("/admin/templates", {
-  ...form,
-
-  component: "DynamicTemplate",
-
-  displayOrder: Number(
-    form.displayOrder
-  ),
-
-  featured:
-    form.featured === true ||
-    form.featured === "true",
-
-  fields: validFields,
-
-  design
-});
-
-      navigate("/admin/templates");
-    } catch (error) {
-      console.error(
-        "Create template error:",
-        error
-      );
-
-      setError(
-        error.response?.data?.message ||
-          "Failed to create template."
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
+  } finally {
+    setSaving(false);
+  }
+};
 
   return (
     <div className="admin-template-add-page">

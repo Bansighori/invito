@@ -66,26 +66,7 @@ useEffect(() => {
   fetchUser();
 }, []);
 
-useEffect(() => {
-  const fetchUserProfile = async () => {
-    try {
-      const response = await api.get("/YOUR_USER_PROFILE_ENDPOINT");
 
-      const updatedUser = response.data.user;
-
-      setUser(updatedUser);
-
-      localStorage.setItem(
-        "invitoUser",
-        JSON.stringify(updatedUser)
-      );
-    } catch (error) {
-      console.error("Dashboard profile error:", error);
-    }
-  };
-
-  fetchUserProfile();
-}, []);
   // ==========================================
   // FETCH REAL DATA
   // ==========================================

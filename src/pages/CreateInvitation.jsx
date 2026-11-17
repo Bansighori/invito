@@ -668,6 +668,65 @@ setCouplePhoto(
     user?.plan === "premium_plus" &&
     user?.planExpiresAt &&
     new Date(user.planExpiresAt) > now;
+
+  const handleFramePhotoUpload = async (event, elementId) => {
+  const file = event.target.files?.[0];
+
+  if (!file) return;
+
+  if (!isPremiumPlus) {
+    alert("Upgrade to Premium Plus to upload photos into custom frames.");
+    navigate("/pricing");
+    event.target.value = "";
+    return;
+  }
+
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    alert("Please select a JPG, PNG or WEBP image.");
+    event.target.value = "";
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Photo must be less than 5MB.");
+    event.target.value = "";
+    return;
+  }
+
+  try {
+    const uploadData = new FormData();
+    uploadData.append("photo", file);
+
+    const response = await api.post(
+  "/invitations/upload-frame-photo",
+  uploadData,
+  {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  }
+);
+
+    const imageUrl = response.data.image.url;
+
+    setFormData((previous) => ({
+      ...previous,
+      framePhotos: {
+        ...(previous.framePhotos || {}),
+        [elementId]: imageUrl
+      }
+    }));
+  } catch (error) {
+    console.error("Frame photo upload error:", error);
+
+    alert(
+      error.response?.data?.message ||
+      "Photo upload failed."
+    );
+  } finally {
+    event.target.value = "";
+  }
+};
 const [uploadingGallery, setUploadingGallery] =
   useState(false);
 
@@ -1102,6 +1161,62 @@ const removeGalleryImage = async (
   cursor: pointer;
 }
 
+.custom-frame-upload-section {
+  margin-top: 20px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e9e1f0;
+  border-radius: 16px;
+}
+
+.custom-frame-upload-section h3 {
+  margin-top: 0;
+  color: #302238;
+}
+
+.custom-frame-upload-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee8f1;
+}
+
+.custom-frame-upload-item label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.custom-frame-upload-item img {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.custom-frame-locked {
+  display: flex;
+  gap: 12px;
+  padding: 15px;
+  background: #faf7ff;
+  border-radius: 12px;
+  color: #6547e8;
+}
+
+.custom-frame-locked p {
+  color: #786b82;
+  font-size: 13px;
+}
+
+.custom-frame-locked button {
+  padding: 9px 14px;
+  background: #6547e8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
       @media (max-width: 1000px) {
         .invitation-preview-wrapper {
           min-height: 650px;
@@ -1369,6 +1484,67 @@ const removeGalleryImage = async (
             )}
 
           </div>
+          {/* PREMIUM PLUS CUSTOM PHOTO FRAMES */}
+
+{(template.design?.elements || []).filter(
+  (element) =>
+    element.type === "photo" &&
+    element.allowUserUpload !== false
+).length > 0 && (
+  <div className="custom-frame-upload-section">
+    <h3>Customize Your Photo Frames</h3>
+
+    {!isPremiumPlus ? (
+      <div className="custom-frame-locked">
+        <Lock size={20} />
+
+        <div>
+          <strong>Premium Plus Feature</strong>
+          <p>
+            Upgrade to Premium Plus to upload photos
+            into your invitation's custom frames.
+          </p>
+
+          <button
+            type="button"
+            onClick={() => navigate("/pricing")}
+          >
+            Upgrade to Premium Plus
+          </button>
+        </div>
+      </div>
+    ) : (
+      template.design.elements
+        .filter(
+          (element) =>
+            element.type === "photo" &&
+            element.allowUserUpload !== false
+        )
+        .map((element, index) => (
+          <div className="custom-frame-upload-item" key={element.id}>
+            <label>
+              Photo Frame {index + 1}
+            </label>
+
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={(event) =>
+                handleFramePhotoUpload(event, element.id)
+              }
+            />
+
+            {formData.framePhotos?.[element.id] && (
+              <img
+                src={formData.framePhotos[element.id]}
+                alt={`Frame ${index + 1}`}
+              />
+            )}
+          </div>
+        ))
+    )}
+  </div>
+)}
 
 
           <div className="form-field">

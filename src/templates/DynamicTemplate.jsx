@@ -16,30 +16,39 @@ function DynamicTemplate({
   const image = design.image || {};
 
   const getBackground = () => {
-    if (background.type === "gradient") {
-      return `linear-gradient(
-        ${background.direction || "135deg"},
-        ${background.color1 || "#ffffff"},
-        ${background.color2 || "#f8e8ef"}
-      )`;
-    }
+  // User-uploaded background takes priority
+  if (data.backgroundPhoto) {
+    return `url("${data.backgroundPhoto}")`;
+  }
 
-    if (
-      background.type === "image" &&
-      background.image
-    ) {
-      return `url(${background.image}) center/cover`;
-    }
+  if (background.type === "gradient") {
+    return `linear-gradient(
+      ${background.direction || "135deg"},
+      ${background.color1 || "#ffffff"},
+      ${background.color2 || "#f8e8ef"}
+    )`;
+  }
 
-    return background.color || "#ffffff";
-  };
+  if (background.type === "image" && background.image) {
+    return `url("${background.image}")`;
+  }
+
+  return background.color || "#ffffff";
+};
 
   const cardStyle = {
+     position: "relative",
     width: `${layout.width || 420}px`,
     minHeight: `${layout.height || 650}px`,
     padding: `${layout.padding || 30}px`,
     background: getBackground(),
-
+backgroundSize:
+  data.backgroundPhoto || background.type === "image"
+    ? background.size || "cover"
+    : undefined,
+backgroundPosition: background.position || "center",
+backgroundRepeat: "no-repeat",
+overflow: "hidden",
     border: border.enabled
       ? `${border.width || 2}px ${
           border.style || "solid"
@@ -120,6 +129,22 @@ function DynamicTemplate({
         className="dynamic-template"
         style={cardStyle}
       >
+      {/* BACKGROUND OVERLAY */}
+
+{Number(background.overlayOpacity) > 0 && (
+  <div
+    style={{
+      position: "absolute",
+      inset: 0,
+      backgroundColor:
+        background.overlayColor || "#000000",
+      opacity:
+        Number(background.overlayOpacity) / 100,
+      pointerEvents: "none",
+      zIndex: 1
+    }}
+  />
+)}
 
         {/* DECORATION */}
 
@@ -168,9 +193,112 @@ function DynamicTemplate({
           </div>
         )}
 
+        {/* ADMIN CREATED VISUAL ELEMENTS */}
+
+{(design.elements || []).map((element) => {
+  const framePhoto = data.framePhotos?.[element.id];
+
+  const elementStyle = {
+    position: "absolute",
+    left: `${element.x || 0}px`,
+    top: `${element.y || 0}px`,
+    width: `${element.width || 100}px`,
+    height: `${element.height || 100}px`,
+    zIndex: 5,
+    boxSizing: "border-box"
+  };
+
+  if (element.type === "text") {
+    return (
+      <div
+        key={element.id}
+        style={{
+          ...elementStyle,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: `${element.fontSize || 24}px`,
+          color: element.color || "#8b4a62",
+          fontFamily: element.fontFamily || "Poppins",
+          textAlign: "center"
+        }}
+      >
+        {element.content}
+      </div>
+    );
+  }
+
+  if (element.type === "shape") {
+    return (
+      <div
+        key={element.id}
+        style={{
+          ...elementStyle,
+          background: element.backgroundColor || "#f4dce5",
+          borderRadius:
+            element.shape === "circle"
+              ? "50%"
+              : `${element.borderRadius || 0}px`
+        }}
+      />
+    );
+  }
+
+  if (element.type === "photo") {
+    return (
+      <div
+        key={element.id}
+        style={{
+          ...elementStyle,
+          overflow: "hidden",
+          borderRadius:
+  Number(element.borderRadius) >= 100
+    ? "50%"
+    : `${element.borderRadius || 12}px`,
+          border: "2px dashed #c9b5df",
+          background: "#f8f4fc"
+        }}
+      >
+        {framePhoto ? (
+          <img
+            src={framePhoto}
+            alt="Uploaded invitation"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover"
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#8064ad",
+              fontSize: "12px"
+            }}
+          >
+            Photo Frame
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return null;
+})}
+
         {/* CONTENT */}
 
-        <div className="dynamic-content">
+        <div
+  className="dynamic-content"
+  style={{
+    position: "relative",
+    zIndex: 2
+  }}
+>
 
           {/* TITLE */}
 
